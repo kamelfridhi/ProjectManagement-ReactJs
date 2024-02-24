@@ -52,7 +52,7 @@ class login extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100" style={{ maxWidth: "32rem" , backgroundColor: "#4c3575"}} >
+                                    <div className="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100" style={{ maxWidth: "32rem", backgroundColor: "#4c3575" }} >
                                         <div
                                             className="w-100 p-3 p-md-5 card border-0 bg-dark text-light"
                                             style={{ maxWidth: "32rem" }}
@@ -68,14 +68,14 @@ class login extends Component {
                                                         className="btn btn-lg btn-outline-secondary btn-block"
                                                         href="#"
                                                     >
-                      <span className="d-flex justify-content-center align-items-center">
-                        <img
-                            className="avatar xs me-2"
-                            src="../../assets/images/google.svg"
-                            alt="Image Description"
-                        />
-                        Sign in with Google
-                      </span>
+                                                        <span className="d-flex justify-content-center align-items-center">
+                                                            <img
+                                                                className="avatar xs me-2"
+                                                                src="../../assets/images/google.svg"
+                                                                alt="Image Description"
+                                                            />
+                                                            Sign in with Google
+                                                        </span>
                                                     </a>
                                                     <span className="dividers text-muted mt-4">OR</span>
                                                 </div>
@@ -92,15 +92,15 @@ class login extends Component {
                                                 <div className="col-12">
                                                     <div className="mb-2">
                                                         <div className="form-label">
-                        <span className="d-flex justify-content-between align-items-center">
-                          Password
-                          <a
-                              className="text-secondary"
-                              href="auth-password-reset.html"
-                          >
-                            Forgot Password?
-                          </a>
-                        </span>
+                                                            <span className="d-flex justify-content-between align-items-center">
+                                                                Password
+                                                                <a
+                                                                    className="text-secondary"
+                                                                    href="auth-password-reset.html"
+                                                                >
+                                                                    Forgot Password?
+                                                                </a>
+                                                            </span>
                                                         </div>
                                                         <input
                                                             type="password"
@@ -135,12 +135,12 @@ class login extends Component {
                                                     </a>
                                                 </div>
                                                 <div className="col-12 text-center mt-4">
-                    <span className="text-muted">
-                      Don't have an account yet?{" "}
-                        <a href="auth-signup.html" className="text-secondary">
-                        Sign up here
-                      </a>
-                    </span>
+                                                    <span className="text-muted">
+                                                        Don't have an account yet?{" "}
+                                                        <a href="auth-signup.html" className="text-secondary">
+                                                            Sign up here
+                                                        </a>
+                                                    </span>
                                                 </div>
                                             </form>
                                             {/* End Form */}

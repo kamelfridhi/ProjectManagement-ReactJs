@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 
-
-class login extends Component {
+class Login extends Component{
     render() {
         return (
-
             <>
-                {/* Mirrored from pixelwibes.com/template/my-pages/html/dist/ui-elements/auth-signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Feb 2024 11:39:00 GMT */}
+                {/* Mirrored from pixelwibes.com/template/my-task/html/dist/ui-elements/auth-signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Feb 2024 11:39:00 GMT */}
                 <meta charSet="utf-8" />
                 <meta httpEquiv="X-UA-Compatible" content="IE=Edge" />
                 <meta
@@ -16,12 +15,12 @@ class login extends Component {
                 <title>:: My-Task:: Signin</title>
                 <link rel="icon" href="../favicon.ico" type="image/x-icon" /> {/* Favicon*/}
                 {/* project css file  */}
-                <link rel="stylesheet" href="../../assets/css/my-task.style.min.css" />
+                <link rel="stylesheet" href="/assets/css/my-task.style.min.css" />
                 <div id="mytask-layout">
                     {/* main body area */}
-                    <div className="main p-2 py-3 p-xl-5 " >
+                    <div className="main p-2 py-3 p-xl-5 ">
                         {/* Body: Body */}
-                        <div className="body d-flex p-0 p-xl-5" >
+                        <div className="body d-flex p-0 p-xl-5" style={{marginLeft: "300px"}}>
                             <div className="container-xxl">
                                 <div className="row g-0">
                                     <div className="col-lg-6 d-none d-lg-flex justify-content-center align-items-center rounded-lg auth-h100">
@@ -43,16 +42,17 @@ class login extends Component {
                                             </div>
                                             <div className="mb-5">
                                                 <h2 className="color-900 text-center">
-                                                    My-Task Let's Management Better
+                                                    My-Task Lets Management Better
                                                 </h2>
                                             </div>
                                             {/* Image block */}
                                             <div className="">
-                                                <img src="../../assets/images/login-img.svg" alt="login-img" />
+                                                <img src="/assets/images/login-img.svg" alt="login-img" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100" style={{ maxWidth: "32rem", backgroundColor: "#4c3575" }} >
+
+                                    <div className="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100" style={{ backgroundColor: "#4c3575" }}>
                                         <div
                                             className="w-100 p-3 p-md-5 card border-0 bg-dark text-light"
                                             style={{ maxWidth: "32rem" }}
@@ -68,14 +68,16 @@ class login extends Component {
                                                         className="btn btn-lg btn-outline-secondary btn-block"
                                                         href="#"
                                                     >
-                                                        <span className="d-flex justify-content-center align-items-center">
-                                                            <img
-                                                                className="avatar xs me-2"
-                                                                src="../../assets/images/google.svg"
-                                                                alt="Image Description"
-                                                            />
-                                                            Sign in with Google
-                                                        </span>
+
+                      <span className="d-flex justify-content-center align-items-center">
+                        <img
+                            className="avatar xs me-2"
+                            src="/assets/images/google.svg"
+                            alt="Image Description"
+                        />
+                        Sign in with Google
+                      </span>
+
                                                     </a>
                                                     <span className="dividers text-muted mt-4">OR</span>
                                                 </div>
@@ -126,13 +128,13 @@ class login extends Component {
                                                     </div>
                                                 </div>
                                                 <div className="col-12 text-center mt-4">
-                                                    <a
-                                                        href="/task"
+                                                    <Link
+                                                        to={'/Home/dashboard'}
                                                         className="btn btn-lg btn-block btn-light lift text-uppercase"
                                                         atl="signin"
                                                     >
                                                         SIGN IN
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                                 <div className="col-12 text-center mt-4">
                                                     <span className="text-muted">
@@ -153,11 +155,11 @@ class login extends Component {
                     </div>
                 </div>
                 {/* Jquery Core Js */}
-                {/* Mirrored from pixelwibes.com/template/my-pages/html/dist/ui-elements/auth-signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Feb 2024 11:39:00 GMT */}
+                {/* Mirrored from pixelwibes.com/template/my-task/html/dist/ui-elements/auth-signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Feb 2024 11:39:00 GMT */}
             </>
 
         );
     }
 }
 
-export default login;
+export default Login;

@@ -5,10 +5,9 @@ import logoImage from '/public/assets/images/logots.png';
 
 
 
-class Sidebar extends Component {
+export default function Sidebar() {
 
 
-    render() {
 
         return (
             <div>
@@ -51,7 +50,7 @@ class Sidebar extends Component {
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link className="ms-link" to="/Home/task">
+                                            <Link className="ms-link" to="/Home/project-dashboard">
                                                 <span>Project Dashboard</span>
                                             </Link>
                                         </li>
@@ -71,24 +70,19 @@ class Sidebar extends Component {
                                     {/* Menu: Sub menu ul */}
                                     <ul className="sub-menu collapse" id="project-Components">
                                         <li>
-                                            <a className="ms-link" href="projects.html">
+                                            <Link className="ms-link" to="/Home/project">
                                                 <span>Projects</span>
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a className="ms-link" href="task.html">
+                                            <Link className="ms-link" to="/Home/task">
                                                 <span>Tasks</span>
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a className="ms-link" href="timesheet.html">
-                                                <span>Timesheet</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="team-leader.html">
+                                            <Link className="ms-link" to="/Home/team-leader">
                                                 <span>Leaders</span>
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </li>
@@ -105,16 +99,16 @@ class Sidebar extends Component {
                                     {/* Menu: Sub menu ul */}
                                     <ul className="sub-menu collapse" id="tikit-Components">
                                         <li>
-                                            <a className="ms-link" href="tickets.html">
+                                            <Link className="ms-link" to="/Home/ticket">
                                                 {" "}
                                                 <span>Tickets View</span>
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a className="ms-link" href="ticket-detail.html">
+                                            <Link className="ms-link" to="/Home/ticket-details">
                                                 {" "}
                                                 <span>Ticket Detail</span>
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </li>
@@ -131,10 +125,10 @@ class Sidebar extends Component {
                                     {/* Menu: Sub menu ul */}
                                     <ul className="sub-menu collapse" id="client-Components">
                                         <li>
-                                            <a className="ms-link" href="ourclients.html">
+                                            <Link className="ms-link" to="our-clients">
                                                 {" "}
                                                 <span>Clients</span>
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             <a className="ms-link" href="profile.html">
@@ -157,193 +151,14 @@ class Sidebar extends Component {
                                     {/* Menu: Sub menu ul */}
                                     <ul className="sub-menu collapse" id="emp-Components">
                                         <li>
-                                            <a className="ms-link" href="members.html">
+                                            <Link className="ms-link" to="our-teams">
                                                 {" "}
-                                                <span>Members</span>
-                                            </a>
+                                                <span>Teams</span>
+                                            </Link>
                                         </li>
-                                        <li>
-                                            <a className="ms-link" href="employee-profile.html">
-                                                {" "}
-                                                <span>Members Profile</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="holidays.html">
-                                                {" "}
-                                                <span>Holidays</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="attendance-employees.html">
-                                                {" "}
-                                                <span>Attendance Employees</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="attendance.html">
-                                                {" "}
-                                                <span>Attendance</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="leave-request.html">
-                                                {" "}
-                                                <span>Leave Request</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="department.html">
-                                                {" "}
-                                                <span>Department</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="loan.html">
-                                                {" "}
-                                                <span>Loan</span>
-                                            </a>
-                                        </li>
+
+
                                     </ul>
-                                </li>
-                                <li className="collapsed">
-                                    <a
-                                        className="m-link"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#menu-Componentsone"
-                                        href="#"
-                                    >
-                                        <i className="icofont-ui-calculator" /> <span>Accounts</span>{" "}
-                                        <span className="arrow icofont-dotted-down ms-auto text-end fs-5" />
-                                    </a>
-                                    {/* Menu: Sub menu ul */}
-                                    <ul className="sub-menu collapse" id="menu-Componentsone">
-                                        <li>
-                                            <a className="ms-link" href="invoices.html">
-                                                <span>Invoices</span>{" "}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="payments.html">
-                                                <span>Payments</span>{" "}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="expenses.html">
-                                                <span>Expenses</span>{" "}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="create-invoice.html">
-                                                <span>Create Invoice</span>{" "}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li className="collapsed">
-                                    <a
-                                        className="m-link"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#payroll-Components"
-                                        href="#"
-                                    >
-                                        <i className="icofont-users-alt-5" /> <span>Payroll</span>{" "}
-                                        <span className="arrow icofont-dotted-down ms-auto text-end fs-5" />
-                                    </a>
-                                    {/* Menu: Sub menu ul */}
-                                    <ul className="sub-menu collapse" id="payroll-Components">
-                                        <li>
-                                            <a className="ms-link" href="salaryslip.html">
-                                                <span>Employee Salary</span>{" "}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li className="collapsed">
-                                    <a
-                                        className="m-link"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#app-Components"
-                                        href="#"
-                                    >
-                                        <i className="icofont-contrast" /> <span>App</span>{" "}
-                                        <span className="arrow icofont-dotted-down ms-auto text-end fs-5" />
-                                    </a>
-                                    {/* Menu: Sub menu ul */}
-                                    <ul className="sub-menu collapse" id="app-Components">
-                                        <li>
-                                            <a className="ms-link" href="calendar.html">
-                                                {" "}
-                                                <span>Calander</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="chat.html">
-                                                <span>Chat App</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li className="collapsed">
-                                    <a
-                                        className="m-link"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#extra-Components"
-                                        href="#"
-                                    >
-                                        <i className="icofont-code-alt" /> <span>Other Pages</span>{" "}
-                                        <span className="arrow icofont-dotted-down ms-auto text-end fs-5" />
-                                    </a>
-                                    {/* Menu: Sub menu ul */}
-                                    <ul className="sub-menu collapse" id="extra-Components">
-                                        <li>
-                                            <a className="ms-link" href="charts.html">
-                                                {" "}
-                                                <span>Apex Charts</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="forms.html">
-                                                <span>Forms Example</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="table.html">
-                                                {" "}
-                                                <span>Table Example</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="review.html">
-                                                <span>Reviews Page</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="icon.html">
-                                                <span>Icons</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="contact.html">
-                                                <span>Contact</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="widgets.html">
-                                                <span>Widgets</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="ms-link" href="todo-list.html">
-                                                <span>Todo-List</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a className="m-link" href="ui-elements/ui-alerts.html">
-                                        <i className="icofont-paint" /> <span>UI Components</span>
-                                    </a>
                                 </li>
                             </ul>
                             {/* Menu: menu collepce btn */}
@@ -723,6 +538,5 @@ class Sidebar extends Component {
             </div>
         );
     }
-}
 
-export default Sidebar;
+

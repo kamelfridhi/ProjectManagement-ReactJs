@@ -77,6 +77,7 @@ export default function ShowTasks() {
 
 
 
+
                                             <tr>
                                                 <td key={task._id}>
                                                     <a
@@ -101,8 +102,8 @@ export default function ShowTasks() {
                                                 </td>
 
                                                 <td key={task._id}>{task.creationDate}</td>
-                                                <td>
-                                                    <span className="badge bg-warning">In Progress</span>
+                                                <td key={task._id}>
+                                                    <span className="badge bg-warning">{task.status.length > 0 ? task.status[task.status.length - 1].status: 'Aucun statut'}</span>
                                                 </td>
                                                 <td>
                                                     <div

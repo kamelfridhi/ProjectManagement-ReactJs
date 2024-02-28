@@ -1,10 +1,66 @@
-import  { Component } from 'react';
+import React, {useEffect, useState} from "react";
+import * as TaskService from "../../_services/TaskService.jsx";
+import {addTask} from "../../_services/TaskService.jsx";
+
+export default function Task() {
+
+    const [tasks, setTasks] = useState([]);
+    const [taskName, setTaskName] = useState('');
+    const [taskCategory, setTaskCategory] = useState('');
+    const [taskDescription, setTaskDescription] = useState('');
+    const [taskpriority, setTaskPriority] = useState('');
+    const [taskStartDate, setTaskStartDate] = useState('');
+    const [taskEndDate, setTaskEndDate] = useState('');
+    // Autres états pour les autres champs du formulaire
+    const handlePriorityChange = (e) => {
+        setTaskPriority(e.target.value);
+    };
+    const handleCategorieChange = (e) => {
+        setTaskCategory(e.target.value);
+    };
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const data = await TaskService.getAllTasks();
+            setTasks(data);
+        };
+        fetchTasks();
+    }, []);
+
+    const handleAddTask = async () => {
+        try {
+            // Créer un objet de données pour la nouvelle tâche
+            const newTaskData = {
+                name: taskName,
+                category: taskCategory,
+                description: taskDescription,
+                priority: taskpriority,
+                startDate: taskStartDate,
+                endDate: taskEndDate,
+                // Ajoutez d'autres propriétés de tâche nécessaires
+            };
+
+            // Envoyer la requête POST pour créer une nouvelle tâche
+            const createdTask = await TaskService.addTask(newTaskData);
+
+            // Réinitialiser les champs du formulaire après la création de la tâche
+            setTaskName('');
+            setTaskCategory('');
+            // Réinitialiser d'autres champs du formulaire si nécessaire
+
+            // Faites quelque chose avec la tâche créée, par exemple, affichez un message de succès
+            console.log('Task created successfully:', createdTask);
+        } catch (error) {
+            // Gérer les erreurs lors de la création de la tâche, par exemple, affichez un message d'erreur
+            console.error('Error creating task:', error);
+        }
+    };
 
 
-class Task extends Component {
-    render() {
-        return (
+    return (
+
             <>
+
 
                 {/* Mirrored from pixelwibes.com/template/my-pages/html/dist/pages.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Feb 2024 11:38:38 GMT */}
                 <meta charSet="utf-8" />
@@ -600,11 +656,15 @@ class Task extends Component {
                                                 <div className="progress_task">
                                                     <div className="dd" data-plugin="nestable">
                                                         <ol className="dd-list">
-                                                            <li className="dd-item" data-id={1}>
+
+                                                            {tasks.map(task => (
+
+
+                                                            <li className="dd-item" key={task._id} data-id={1}>
                                                                 <div className="dd-handle">
                                                                     <div className="task-info d-flex align-items-center justify-content-between">
                                                                         <h6 className="light-success-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
-                                                                            Quality Assurance
+                                                                            {task.category}
                                                                         </h6>
                                                                         <div className="task-priority d-flex flex-column align-items-center justify-content-center">
                                                                             <div className="avatar-list avatar-list-stacked m-0">
@@ -620,13 +680,12 @@ class Task extends Component {
                                                                                 />
                                                                             </div>
                                                                             <span className="badge bg-warning text-end mt-2">
-                                                                                MEDIUM
+                                                                                {task.priority}
                                                                             </span>
                                                                         </div>
                                                                     </div>
                                                                     <p className="py-2 mb-0">
-                                                                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                                        elit. In id nec scelerisque massa.
+                                                                        {task.description}
                                                                     </p>
                                                                     <div className="tikit-info row g-3 align-items-center">
                                                                         <div className="col-sm">
@@ -660,121 +719,20 @@ class Task extends Component {
                                                                     </div>
                                                                 </div>
                                                             </li>
-                                                            <li className="dd-item" data-id={2}>
-                                                                <div className="dd-handle">
-                                                                    <div className="task-info d-flex align-items-center justify-content-between">
-                                                                        <h6 className="bg-lightgreen py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
-                                                                            Website Design
-                                                                        </h6>
-                                                                        <div className="task-priority d-flex flex-column align-items-center justify-content-center">
-                                                                            <div className="avatar-list avatar-list-stacked m-0">
-                                                                                <img
-                                                                                    className="avatar rounded-circle small-avt"
-                                                                                    src="assets/images/xs/avatar8.jpg"
-                                                                                    alt=""
-                                                                                />
-                                                                            </div>
-                                                                            <span className="badge bg-success text-end mt-2">
-                                                                                LOW
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <p className="py-2 mb-0">
-                                                                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                                        elit. In id nec scelerisque massa.
-                                                                    </p>
-                                                                    <div className="tikit-info row g-3 align-items-center">
-                                                                        <div className="col-sm">
-                                                                            <ul className="d-flex list-unstyled align-items-center flex-wrap">
-                                                                                <li className="me-2">
-                                                                                    <div className="d-flex align-items-center">
-                                                                                        <i className="icofont-flag" />
-                                                                                        <span className="ms-1">12 Feb</span>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <li className="me-2">
-                                                                                    <div className="d-flex align-items-center">
-                                                                                        <i className="icofont-ui-text-chat" />
-                                                                                        <span className="ms-1">3</span>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <div className="d-flex align-items-center">
-                                                                                        <i className="icofont-paper-clip" />
-                                                                                        <span className="ms-1">4</span>
-                                                                                    </div>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                        <div className="col-sm text-end">
-                                                                            <div className="small text-truncate light-danger-bg py-1 px-2 rounded-1 d-inline-block fw-bold small">
-                                                                                {" "}
-                                                                                Practice to Perfect{" "}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li className="dd-item" data-id={3}>
-                                                                <div className="dd-handle">
-                                                                    <div className="task-info d-flex align-items-center justify-content-between">
-                                                                        <h6 className="light-info-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
-                                                                            UI/UX Design
-                                                                        </h6>
-                                                                        <div className="task-priority d-flex flex-column align-items-center justify-content-center">
-                                                                            <div className="avatar-list avatar-list-stacked m-0">
-                                                                                <img
-                                                                                    className="avatar rounded-circle small-avt"
-                                                                                    src="assets/images/xs/avatar3.jpg"
-                                                                                    alt=""
-                                                                                />
-                                                                                <img
-                                                                                    className="avatar rounded-circle small-avt"
-                                                                                    src="assets/images/xs/avatar1.jpg"
-                                                                                    alt=""
-                                                                                />
-                                                                            </div>
-                                                                            <span className="badge bg-warning text-end mt-2">
-                                                                                MEDIUM
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <p className="py-2 mb-0">
-                                                                        Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                                        elit. In id nec scelerisque massa.
-                                                                    </p>
-                                                                    <div className="tikit-info row g-3 align-items-center">
-                                                                        <div className="col-sm">
-                                                                            <ul className="d-flex list-unstyled align-items-center flex-wrap">
-                                                                                <li className="me-2">
-                                                                                    <div className="d-flex align-items-center">
-                                                                                        <i className="icofont-flag" />
-                                                                                        <span className="ms-1">03 Apr</span>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <li className="me-2">
-                                                                                    <div className="d-flex align-items-center">
-                                                                                        <i className="icofont-ui-text-chat" />
-                                                                                        <span className="ms-1">7</span>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <div className="d-flex align-items-center">
-                                                                                        <i className="icofont-paper-clip" />
-                                                                                        <span className="ms-1">2</span>
-                                                                                    </div>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                        <div className="col-sm text-end">
-                                                                            <div className="small text-truncate light-danger-bg py-1 px-2 rounded-1 d-inline-block fw-bold small">
-                                                                                {" "}
-                                                                                Social Geek Made{" "}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
+
+                                                             ))}
+
+
+
+
+
+
+
+
+
+
+
+
 
                                                         </ol>
                                                     </div>
@@ -1229,7 +1187,30 @@ class Task extends Component {
                                 </div>
                             </div>
                         </div>
+
+
+
+
+
+
+
+
                         {/* Create pages*/}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <div
                             className="modal fade"
                             id="createtask"
@@ -1251,7 +1232,7 @@ class Task extends Component {
                                         />
                                     </div>
                                     <div className="modal-body">
-                                        <div className="mb-3">
+                                        {/* <div className="mb-3">
                                             <label className="form-label">Project Name</label>
                                             <select
                                                 className="form-select"
@@ -1266,37 +1247,38 @@ class Task extends Component {
                                                 <option value={6}>Rhinestone</option>
                                                 <option value={7}>Social Geek Made</option>
                                             </select>
+                                        </div>*/}
+                                        <div className="mb-3">
+                                            <label className="form-label">Task Name</label>
+                                            <input type="text" className="form-control" value={taskName} onChange={(e) => setTaskName(e.target.value)} placeholder="Task Name" />
+
                                         </div>
+
                                         <div className="mb-3">
                                             <label className="form-label">Task Category</label>
+
                                             <select
                                                 className="form-select"
                                                 aria-label="Default select Project Category"
+                                                value={taskCategory}
+                                                onChange={handleCategorieChange}
                                             >
-                                                <option selected="">UI/UX Design</option>
-                                                <option value={1}>Website Design</option>
-                                                <option value={2}>App Development</option>
-                                                <option value={3}>Quality Assurance</option>
-                                                <option value={4}>Development</option>
-                                                <option value={5}>Backend Development</option>
-                                                <option value={6}>Software Testing</option>
-                                                <option value={7}>Website Design</option>
-                                                <option value={8}>Marketing</option>
-                                                <option value={9}>SEO</option>
-                                                <option value={10}>Other</option>
+
+                                                <option value="APP">App Development</option>
+                                                <option value="UIUX">UI/UX Design</option>
+                                                <option value="MARKETING">Marketing</option>
+                                                <option value="SEO">SEO</option>
+                                                <option value="SOFTTEST">Soft Testing</option>
+                                                <option value="QUALITY">Quality Assurance</option>
+                                                <option value="WEBSITEDESIGN">Website Design</option>
+                                                <option value="OTHER">Other</option>
+
+
                                             </select>
+
                                         </div>
-                                        <div className="mb-3">
-                                            <label htmlFor="formFileMultipleone" className="form-label">
-                                                Task Images &amp; Document
-                                            </label>
-                                            <input
-                                                className="form-control"
-                                                type="file"
-                                                id="formFileMultipleone"
-                                                multiple=""
-                                            />
-                                        </div>
+
+
                                         <div className="deadline-form mb-3">
                                             <form>
                                                 <div className="row">
@@ -1308,6 +1290,7 @@ class Task extends Component {
                                                             type="date"
                                                             className="form-control"
                                                             id="datepickerded"
+                                                            value={taskStartDate} onChange={(e) => setTaskStartDate(e.target.value)}
                                                         />
                                                     </div>
                                                     <div className="col">
@@ -1318,11 +1301,13 @@ class Task extends Component {
                                                             type="date"
                                                             className="form-control"
                                                             id="datepickerdedone"
+                                                            value={taskEndDate} onChange={(e) => setTaskEndDate(e.target.value)}
                                                         />
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
+                                        {/*
                                         <div className="row g-3 mb-3">
                                             <div className="col-sm">
                                                 <label className="form-label">Task Assign Person</label>
@@ -1341,17 +1326,19 @@ class Task extends Component {
                                                 </select>
                                             </div>
                                         </div>
+                                        */}
                                         <div className="row g-3 mb-3">
                                             <div className="col-sm">
                                                 <label className="form-label">Task Priority</label>
                                                 <select
                                                     className="form-select"
                                                     aria-label="Default select Priority"
+                                                    value={taskpriority}
+                                                    onChange={handlePriorityChange}
                                                 >
-                                                    <option selected="">Highest</option>
-                                                    <option value={1}>Medium</option>
-                                                    <option value={2}>Low</option>
-                                                    <option value={3}>Lowest</option>
+                                                    <option value="High">Highest</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="Low">Low</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1363,11 +1350,13 @@ class Task extends Component {
                                                 Description (optional)
                                             </label>
                                             <textarea
+
                                                 className="form-control"
                                                 id="exampleFormControlTextarea786"
                                                 rows={3}
                                                 placeholder="Add any extra details about the request"
                                                 defaultValue={""}
+                                                onChange={(e) => setTaskDescription(e.target.value)}
                                             />
                                         </div>
                                     </div>
@@ -1376,6 +1365,7 @@ class Task extends Component {
                                             type="button"
                                             className="btn btn-secondary"
                                             data-bs-dismiss="modal"
+                                            onClick={handleAddTask}
                                         >
                                             Done
                                         </button>
@@ -1387,6 +1377,21 @@ class Task extends Component {
                             </div>
                         </div>
                         {/* Modal  Remove Task*/}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <div
                             className="modal fade"
                             id="dremovetask"
@@ -1522,8 +1527,6 @@ class Task extends Component {
 
 
 
-        );
-    }
-}
+    );
 
-export default Task;
+}

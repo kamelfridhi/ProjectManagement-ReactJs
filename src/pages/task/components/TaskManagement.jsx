@@ -18,12 +18,28 @@ export default function TaskManagement() {
         return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'todo').length;
     };
 
+    // Fonction pour compter le nombre de tâches avec le statut "In Progress"
+    const countInProgressTasks = () => {
+        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'inprogress').length;
+    };
+
+    // Fonction pour compter le nombre de tâches avec le statut "Done"
+    const countDoneTasks = () => {
+        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'done').length;
+    };
+
+
 
     // Calcul du pourcentage de tâches "To Do" par rapport au nombre total de tâches
     const todoTasksCount = countToDoTasks();
     const totalTasksCount = tasks.length;
     const todoTasksPercentage = totalTasksCount > 0 ? (todoTasksCount / totalTasksCount) * 100 : 0;
+    const inProgressTasksCount = countInProgressTasks();
+    const inProgressTasksPercentage = tasks.length > 0 ? (inProgressTasksCount / tasks.length) * 100 : 0;
 
+    // Calcul du pourcentage de tâches "Done" par rapport au nombre total de tâches
+    const doneTasksCount = countDoneTasks();
+    const doneTasksPercentage = tasks.length > 0 ? (doneTasksCount / tasks.length) * 100 : 0;
 
     return (
 
@@ -45,10 +61,49 @@ export default function TaskManagement() {
                             </div>
                             <div className="progress" style={{ height: 10 }}>
                                 <div
-                                    className="progress-bar light-info-bg"
+                                    className="progress-bar danger-info-bg"
                                     role="progressbar"
                                     style={{ width: `${todoTasksPercentage}%` }}
                                     aria-valuenow={todoTasksPercentage}
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="progress-count mb-4">
+                            <div className="d-flex justify-content-between align-items-center mb-1">
+                                <h6 className="mb-0 fw-bold d-flex align-items-center">
+                                    In Progress
+                                </h6>
+                                <span className="small text-muted">{`${inProgressTasksCount}/${totalTasksCount}`}</span>
+                            </div>
+                            <div className="progress" style={{ height: 10 }}>
+                                <div
+                                    className="progress-bar danger-info-bg"
+                                    role="progressbar"
+                                    style={{ width: `${inProgressTasksPercentage}%` }}
+                                    aria-valuenow={inProgressTasksPercentage}
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                />
+                            </div>
+                        </div>
+
+
+                        <div className="progress-count mb-4">
+                            <div className="d-flex justify-content-between align-items-center mb-1">
+                                <h6 className="mb-0 fw-bold d-flex align-items-center">
+                                    Done
+                                </h6>
+                                <span className="small text-muted">{`${doneTasksCount}/${totalTasksCount}`}</span>
+                            </div>
+                            <div className="progress" style={{ height: 10 }}>
+                                <div
+                                    className="progress-bar danger-info-bg"
+                                    role="progressbar"
+                                    style={{ width: `${doneTasksPercentage}%` }}
+                                    aria-valuenow={doneTasksPercentage}
                                     aria-valuemin={0}
                                     aria-valuemax={100}
                                 />

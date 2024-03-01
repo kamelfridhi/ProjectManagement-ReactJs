@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import * as TaskService from "../../_services/TaskService.jsx";
+import * as TaskService from "../../../_services/TaskService.jsx";
 
 export default function AddTask() {
 

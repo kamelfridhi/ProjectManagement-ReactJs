@@ -2,7 +2,7 @@ import React from 'react';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from "../_shared/sidebar/Sidebar.jsx";
-import Task from "../pages/task/Task.jsx";
+import Task from "../pages/task/pages/Task.jsx";
 import Login from "../pages/Login/Login.jsx";
 import Dashboard from "../pages/Dashboard/Dashboard.jsx";
 import ProjectDashboard from "../pages/Dashboard/ProjectDashboard.jsx";
@@ -14,8 +14,11 @@ import OurClients from "../pages/user/OurClients.jsx";
 import Teams from "../pages/team/Teams.jsx";
 import TeamMembers from "../pages/team/TeamMembers.jsx";
 import Signup from "../pages/user/Signup.jsx";
-import TaskList from "../pages/task/ShowTask.jsx";
-import ShowTasks from "../pages/task/ShowTasks.jsx";
+import TaskList from "../pages/task/components/ShowTask.jsx";
+import ShowTasks from "../pages/task/pages/ShowTasks.jsx";
+import TaskManagement from "../pages/task/components/TaskManagement.jsx";
+import UpdateTask from "../pages/task/components/UpdateTask.jsx";
+import UpdateTaskForm from "../pages/task/components/UpdateTask.jsx";
 
 
 const AppRouter = () => {
@@ -25,6 +28,8 @@ const AppRouter = () => {
                 <Route path="/" element={<Login />} />
                 <Route path="/showtask" element={<TaskList />} />
                 <Route path="/showtasks" element={<ShowTasks />} />
+                <Route path="/prog" element={<TaskManagement />} />
+                <Route path="/update" element={<UpdateTaskForm />} />
                 <Route path="Signup" element={<Signup />} />
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}

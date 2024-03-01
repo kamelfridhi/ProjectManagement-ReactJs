@@ -27,7 +27,7 @@ export const addTask = async (data) => {
 
 export const getTaskById = async (id) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/onetask/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/${id}`);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -37,7 +37,7 @@ export const getTaskById = async (id) => {
 
 export const updateTask = async (data, id) => {
     try {
-        const response = await axios.patch(`${API_BASE_URL}/update/${id}`, data);
+        const response = await axios.patch(`${API_BASE_URL}/${id}`, data);
         return response.data;
     } catch (error) {
         console.error(error);

@@ -36,8 +36,10 @@ export const getTaskById = async (id) => {
 };
 
 export const updateTask = async (data, id) => {
+    console.log(data.name);
     try {
         const response = await axios.patch(`${API_BASE_URL}/${id}`, data);
+
         return response.data;
     } catch (error) {
         console.error(error);

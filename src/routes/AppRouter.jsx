@@ -14,6 +14,7 @@ import OurClients from "../pages/user/OurClients.jsx";
 import Teams from "../pages/team/Teams.jsx";
 import TeamMembers from "../pages/team/TeamMembers.jsx";
 import Signup from "../pages/user/Signup.jsx";
+import ProjectList from "../pages/projects/showProjects.jsx";
 
 
 const AppRouter = () => {
@@ -21,6 +22,7 @@ const AppRouter = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/showProject" element={<ProjectList />} />
                 <Route path="Signup" element={<Signup />} />
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}

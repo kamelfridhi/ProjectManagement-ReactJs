@@ -5,13 +5,16 @@ export default function UpdateTeam({ id,fetchTeams }) {
     const [team, setTeam] = useState({});
 
     const [description, setdescription] = useState('');
+    const [nameteam, setnameteam] = useState('');
     const [teamCategory, setTeamCategory] = useState('');
     const categories = ["marketing", "developement", "test",'sales','it']; // Example of static categories
+    const [errors, setErrors] = useState({});
 
     const getData = async () => {
         console.log(id);
         const fetchedData = await TeamService.getOneTeam(id);
         setTeam(fetchedData);
+        setnameteam(fetchedData.name);
         setTeamCategory(fetchedData.category);
         setdescription(fetchedData.description);
         console.log("Team name: ", fetchedData.name);
@@ -23,11 +26,36 @@ export default function UpdateTeam({ id,fetchTeams }) {
 
     const handleUpdate = async () => {
         try {
-            const updatedTeam = { ...team, category: teamCategory, description: description }; // Update category and description in team object
+            let valid = true;
+            const newErrors = {};
+            if (!nameteam) {
+                valid = false;
+                newErrors.teamName = 'Team name is required';
+            }
 
-            await TeamService.updateTeam(id, updatedTeam); // Supposons que vous ayez une fonction de service pour mettre à jour l'équipe
-            fetchTeams();
-            console.log("Team updated successfully");
+
+            // Perform input validation
+            if (!teamCategory) {
+                valid = false;
+                newErrors.teamCategory = 'Team category is required';
+            }
+
+            if (description && description.length < 5) {
+                valid = false;
+                newErrors.description = 'Description should be at least 5 characters long';
+            }
+
+            // Update errors state
+            setErrors(newErrors);
+
+            // If form is valid, proceed with the update
+            if (valid) {
+                const updatedTeam = { name:nameteam, category: teamCategory, description: description };
+
+                await TeamService.updateTeam(id, updatedTeam);
+                fetchTeams();
+                console.log("Team updated successfully");
+            }
         } catch (error) {
             console.error("Error updating team:", error);
         }
@@ -61,17 +89,18 @@ export default function UpdateTeam({ id,fetchTeams }) {
                                     type="text"
                                     className="form-control"
                                     id="exampleFormControlInput78"
-                                    value={team.name || ""} // Utiliser value au lieu de defaultValue
-                                    onChange={(e) => setTeam({ ...team, name: e.target.value })} // Mettre à jour le nom de l'équipe lors de la saisie
+                                    value={nameteam}
+                                    onChange={(e) => setnameteam(e.target.value)}
                                 />
+                                {errors.teamName && <div className="text-danger">{errors.teamName}</div>} {/* Display error for team name */}
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Team Category</label>
                                 <select
                                     className="form-select"
                                     aria-label="Default select Project Category"
-                                    value={teamCategory} // Assuming you have state for selected category
-                                    onChange={(e) => setTeamCategory(e.target.value)} // Assuming you have a function to set the selected category
+                                    value={teamCategory}
+                                    onChange={(e) => setTeamCategory(e.target.value)}
                                 >
                                     <option value="">Select a category</option>
                                     {categories.map((category, index) => (
@@ -80,12 +109,10 @@ export default function UpdateTeam({ id,fetchTeams }) {
                                         </option>
                                     ))}
                                 </select>
+                                {errors.teamCategory && <div className="text-danger">{errors.teamCategory}</div>} {/* Display error for team category */}
                             </div>
                             <div className="mb-3">
-                                <label
-                                    htmlFor="exampleFormControlTextarea786"
-                                    className="form-label"
-                                >
+                                <label htmlFor="exampleFormControlTextarea786" className="form-label">
                                     Description (optional)
                                 </label>
                                 <textarea
@@ -95,8 +122,8 @@ export default function UpdateTeam({ id,fetchTeams }) {
                                     placeholder="Add any extra details about the request"
                                     value={description}
                                     onChange={(e) => setdescription(e.target.value)}
-                                    defaultValue={""}
                                 />
+                                {errors.description && <div className="text-danger">{errors.description}</div>} {/* Display error for description */}
                             </div>
                         </div>
                         <div className="modal-footer">

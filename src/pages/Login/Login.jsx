@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import * as jwt_decode from 'jwt-decode';
 import BACK_END_URL from "../../config.jsx";
 import { getUserById } from "../../_services/UserService.jsx";
-
+import {useNavigate} from 'react-router-dom'
 
 export default function Login() {
 
 const [formData, setFormData] = useState({})
 const [error, setError] = useState(false)
 const [loading, setLoading] = useState(false)
+    const navigate = useNavigate();
     const handleChange = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value });
     }
@@ -27,13 +28,16 @@ try {
 
     });
     const data = await res.json();
+    console.log("dataaa : "+data.message);
     setLoading(false);
-    if (data.success===false) {
+    if (data.message!=='success') {
         setError(true)
         return;
+    }else if(data.message ==='success'){
+        navigate('/Home/dashboard');
+        setError(false)
     }
-    setError(false)
-    console.log(data);
+
 }catch (error){
     setLoading(false);
     setError(true)

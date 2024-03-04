@@ -10,7 +10,9 @@ export default function Sidebar() {
 
 
         return (
-            <div>
+
+    <div>
+
                 <div id="mytask-layout">
                     {/* sidebar */}
                     <div className="sidebar px-4 py-4 py-md-5 me-0" style={{backgroundColor: '#4c3575'}}>
@@ -532,10 +534,12 @@ export default function Sidebar() {
                         </div>
                         {/* Modal Members*/}
                     </div>
+
                 </div>
 
 
             </div>
+
         );
     }
 

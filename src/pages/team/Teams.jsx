@@ -8,7 +8,11 @@ export default function Teams() {
     const [description, setdescription] = useState('');
     const [teamCategory, setTeamCategory] = useState('');
     const [teams, setTeams] = useState([]);
-
+    const [errors, setErrors] = useState({
+        teamName: '',
+        teamCategory: '',
+        description: '',
+    });
     const categories = ["marketing", "developement", "test",'sales','it']; // Example of static categories
     useEffect(() => {
         // Fetch teams when the component mounts
@@ -27,33 +31,66 @@ export default function Teams() {
 
     const handleAddTeam = async () => {
         try {
-            // Créer un objet de données pour la nouvelle tâche
-            const newTeamData = {
-                name: teamName,
-                description:description,
-                category: teamCategory // Include the teamCategory
+            let valid = true;
+            const newErrors = {};
 
-                // Ajoutez d'autres propriétés de tâche nécessaires
-            };
+            if (!teamName) {
+                valid = false;
+                newErrors.teamName = 'Team name is required';
+            }
+            else if( teamName.length < 5)
+            {
+                valid = false;
+                newErrors.teamName = 'Team should be at least 5 characters long';
+            }
+            if (!teamCategory) {
+                valid = false;
+                newErrors.teamCategory = 'Team category is required';
+            }
 
-            // Envoyer la requête POST pour créer une nouvelle tâche
-            const createdTeam = await TeamService.addTeam(newTeamData);
+            // Validate description field if it exists
+            if (!description) {
+                valid = false;
+                newErrors.description = 'Description is required';
+            }
+            else if( description.length < 5)
+            {
+                valid = false;
+                newErrors.description = 'description should be at least 5 characters long';
+            }
+            // Update errors state
+            setErrors(newErrors);
 
-            // Réinitialiser les champs du formulaire après la création de la tâche
-            setTeamName('');
-            setdescription('');
-            setTeamCategory('');
-            //setTaskCategory('');
-            // Réinitialiser d'autres champs du formulaire si nécessaire
-            // Fetch teams again to update the list
-            fetchTeams();
-            // Faites quelque chose avec la tâche créée, par exemple, affichez un message de succès
-            console.log('Team created successfully:', createdTeam);
+            // If form is valid, proceed
+            if (valid) {
+                // Create a data object for the new team
+                const newTeamData = {
+                    name: teamName,
+                    description: description,
+                    category: teamCategory
+                    // Add other necessary task properties
+                };
+
+                // Send POST request to create a new team
+                const createdTeam = await TeamService.addTeam(newTeamData);
+
+                // Reset form fields after creating the team
+                setTeamName('');
+                setdescription('');
+                setTeamCategory('');
+
+                // Fetch teams again to update the list
+                fetchTeams();
+
+                // Do something with the created team, for example, display a success message
+                console.log('Team created successfully:', createdTeam);
+            }
         } catch (error) {
-            // Gérer les erreurs lors de la création de la tâche, par exemple, affichez un message d'erreur
-            console.error('Error creating team:', error);
+            // Handle errors when creating the team, for example, display an error message
+            console.error('Error creating team:', error.message);
         }
     };
+
 
     return (
 
@@ -118,16 +155,22 @@ export default function Teams() {
                         <div className="modal-body">
                             <div className="mb-3">
                                 <label className="form-label">Team Name</label>
-                                <input type="text" className="form-control" value={teamName} onChange={(e) => setTeamName(e.target.value)} placeholder="Team Name" />
-
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={teamName}
+                                    onChange={(e) => setTeamName(e.target.value)}
+                                    placeholder="Team Name"
+                                />
+                                {errors.teamName && <div className="text-danger">{errors.teamName}</div>}
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Team Category</label>
                                 <select
                                     className="form-select"
                                     aria-label="Default select Project Category"
-                                    value={teamCategory} // Assuming you have state for selected category
-                                    onChange={(e) => setTeamCategory(e.target.value)} // Assuming you have a function to set the selected category
+                                    value={teamCategory}
+                                    onChange={(e) => setTeamCategory(e.target.value)}
                                 >
                                     <option value="">Select a category</option>
                                     {categories.map((category, index) => (
@@ -136,14 +179,10 @@ export default function Teams() {
                                         </option>
                                     ))}
                                 </select>
+                                {errors.teamCategory && <div className="text-danger">{errors.teamCategory}</div>}
                             </div>
-                             <div className="mb-3">
-                                <label
-                                    htmlFor="exampleFormControlTextarea786"
-                                    className="form-label"
-                                >
-                                    Description (optional)
-                                </label>
+                            <div className="mb-3">
+                                <label htmlFor="exampleFormControlTextarea786" className="form-label">Description (optional)</label>
                                 <textarea
                                     className="form-control"
                                     id="exampleFormControlTextarea786"
@@ -151,8 +190,10 @@ export default function Teams() {
                                     placeholder="Add any extra details about the request"
                                     value={description}
                                     onChange={(e) => setdescription(e.target.value)}
-                                    defaultValue={""}
+
                                 />
+                                {errors.description && <div className="text-danger">{errors.description}</div>}
+
                             </div>
                         </div>
                         <div className="modal-footer">
@@ -164,7 +205,6 @@ export default function Teams() {
                             >
                                 Done
                             </button>
-
                         </div>
                     </div>
                 </div>

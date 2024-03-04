@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import * as TaskService from "../../../_services/TaskService.jsx";
 import task from "../../../_models/Task.jsx";
 
 export default function ShowTasks() {
     const [tasks, setTasks] = useState([]);
-     const [selectedTask, setSelectedTask] = useState('');
+    const [selectedTask, setSelectedTask] = useState('');
 
 
     // const [tasks, setTasks] = useState([]);
@@ -12,11 +12,16 @@ export default function ShowTasks() {
 
     useEffect(() => {
         const fetchTasks = async () => {
-            const data = await TaskService.getAllTasks();
-            setTasks(data);
+            try {
+                const data = await TaskService.getAllTasks();
+                setTasks(data);
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
         };
         fetchTasks();
     }, []);
+
     useEffect(() => {
         if (selectedTask) {
             // Attendre que le composant soit monté dans le DOM avant d'initialiser le modal
@@ -25,22 +30,24 @@ export default function ShowTasks() {
         }
 
     }, [selectedTask]);
-    const HandeDelete = async (_id) =>{
-        try{
+    const HandeDelete = async (_id) => {
+        try {
             await TaskService.deleteTask(_id);
-        }catch (error) {
+            // Mettre à jour la liste des tâches après la suppression
+            const updatedTasks = tasks.filter(task => task._id !== _id);
+            setTasks(updatedTasks);
+        } catch (error) {
             console.error(error);
-            throw error;
         }
+    };
 
-    }
 
 
     const handleEditClick = async (_id) => {
         try {
             const task = await TaskService.getTaskById(_id);
             setSelectedTask(task);
-            console.log("errrrrrrrrrrrrrrrr"+ selectedTask.name)
+            console.log("errrrrrrrrrrrrrrrr" + selectedTask.name)
         } catch (error) {
             console.error(error);
         }
@@ -49,48 +56,51 @@ export default function ShowTasks() {
 
     const handleUpdate1 = async () => {
         try {
-            await TaskService.updateTask(selectedTask, selectedTask._id); // Supposons que vous ayez une fonction de service pour mettre à jour l'équipe
-            console.log("Team updated successfully");
+            await TaskService.updateTask(selectedTask, selectedTask._id);
+            console.log("Task updated successfully");
+            // Mettre à jour la liste des tâches après la modification
+            const updatedTasks = tasks.map(task => {
+                if (task._id === selectedTask._id) {
+                    return selectedTask;
+                }
+                return task;
+            });
+            setTasks(updatedTasks);
+            window.location.reload();
         } catch (error) {
-            console.error("Error updating team:", error);
+            console.error("Error updating task:", error);
         }
     };
 
-// Fonction pour mettre à jour les données de la tâche
+
+    // Fonction pour mettre à jour les données de la tâche
 
     const handleStatusChange = async (taskId, newStatus) => {
         try {
-            // Trouver la tâche dans le tableau des tâches
-            const taskToUpdate = tasks.find(task => task.id === taskId);
-
-            if (!taskToUpdate) {
-                console.error('Task not found');
-                return;
-            }
-
-            // Mettre à jour le statut de la tâche
-            taskToUpdate.status.push({ status: newStatus, date: new Date() });
-
-            // Appeler le service pour mettre à jour la tâche dans la base de données
-            await TaskService.updateTask(taskToUpdate);
-
-            // Mettre à jour l'état des tâches dans le composant
-            const updatedTasks = tasks.map(task =>
-                task.id === taskId ? { ...task, status: taskToUpdate.status } : task
-            );
+            await TaskService.changeTaskStatus(taskId, newStatus);
+            // Mettre à jour localement le statut de la tâche modifiée
+            const updatedTasks = tasks.map(task => {
+                if (task._id === taskId) {
+                    return {
+                        ...task,
+                        status: [{ status: newStatus }] // Mettre à jour le statut de la tâche
+                    };
+                }
+                return task;
+            });
             setTasks(updatedTasks);
-
-            console.log('Task status updated successfully');
         } catch (error) {
             console.error('Error updating task status:', error);
         }
     };
 
 
-    return(
+
+
+    return (
         <>
             {/* main body area */}
-            <div className="main px-lg-4 px-md-4">
+            <div className="main px-lg-4 px-md-4" >
                 {/* Body: Body */}
                 <div className="body d-flex py-lg-3 py-md-2">
                     <div className="container-xxl">
@@ -123,99 +133,99 @@ export default function ShowTasks() {
                                             style={{ width: "100%" }}
                                         >
                                             <thead>
-                                            <tr>
-                                                <th>Task Name</th>
-                                                <th>Description</th>
-                                                <th>Priority</th>
-                                                <th>Assigned</th>
-                                                <th>Created Date</th>
-                                                <th>Status</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>Task Name</th>
+                                                    <th>Description</th>
+                                                    <th>Priority</th>
+                                                    <th>Assigned</th>
+                                                    <th>Created Date</th>
+
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
 
-                                            {tasks.map(task => (
+                                                {tasks.map(task => (
 
 
 
 
 
 
-                                                <tr  key={task._id}>
-                                                    <td>
-                                                        <a
-                                                            href="ticket-detail.html"
-                                                            className="fw-bold text-secondary"
-                                                        >
-                                                            {task.name}
-                                                        </a>
+                                                    <tr key={task._id}>
+                                                        <td>
+                                                            <a
+                                                                href="ticket-detail.html"
+                                                                className="fw-bold text-secondary"
+                                                            >
+                                                                {task.name}
+                                                            </a>
 
 
 
-                                                    </td>
-                                                    <td  style={{ width: "25%" }}>{task.description}</td>
-                                                    <td >{task.priority}</td>
-                                                    <td >
-                                                        <img
-                                                            className="avatar rounded-circle"
-                                                            src="assets/images/xs/avatar1.jpg"
-                                                            alt=""
-                                                        />
-                                                        <span className="fw-bold ms-1">Joan Dyer</span>
-                                                    </td>
+                                                        </td>
+                                                        <td style={{ width: "20%" }}>{task.description}</td>
+                                                        <td >{task.priority}</td>
+                                                        <td >
+                                                            <img
+                                                                className="avatar rounded-circle"
+                                                                src="../../../../public/assets/images/xs/avatar1.jpg"
+                                                                alt=""
+                                                            />
+                                                            <span className="fw-bold ms-1">Joan Dyer</span>
+                                                        </td>
 
-                                                    <td >{task.creationDate}</td>
-                                                    <td >
-                                                        <span className="badge bg-warning">{task.status.length > 0 ? task.status[task.status.length - 1].status: 'Aucun statut'}</span>
-                                                    </td>
+                                                        <td style={{ width: "15%" }} >{task.creationDate.split("T")[0].split("-").reverse().join("-")}</td>
 
-                                                    <td>
-                                                        <select
-                                                            className="form-select"
-                                                            value={task.status.length > 0 ? task.status[task.status.length - 1].status : 'Aucun statut'}
-                                                            onChange={(e) => handleStatusChange(task.id, e.target.value)}
-                                                        >
-                                                            <option value="todo">To Do</option>
-                                                            <option value="inprogress">In Progress</option>
-                                                            <option value="done">Done</option>
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                onClick={() => {
-                                                                    handleEditClick(task._id); // Appeler handleEditClick avec l'ID de la tâche sélectionnée
 
-                                                                }}
+                                                        <td>
+                                                            <select
+                                                                className="form-select bg-warning"
+                                                                value={task.status.length > 0 ? task.status[task.status.length - 1].status : 'Aucun statut'}
+                                                                onChange={(e) => handleStatusChange(task._id, e.target.value)} // Appeler handleStatusChange avec l'ID de la tâche et le nouveau statut sélectionné
                                                             >
 
-                                                                <i className="icofont-edit text-success" />
-                                                            </button>
-
-
-
-                                                            <button
-                                                                type="button"
-                                                                onClick={()=> HandeDelete(task._id)}
-                                                                className="btn btn-outline-secondary deleterow"
+                                                                <option selected="">{task.status.length > 0 ? task.status[task.status.length - 1].status : 'Aucun statut'}</option>
+                                                                <option value="65e32059108ea868f1285327">To Do</option>
+                                                                <option value="65e32181108ea868f1285329">In Progress</option>
+                                                                <option value="65e321a5108ea868f128532a">done</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <div
+                                                                className="btn-group"
+                                                                role="group"
+                                                                aria-label="Basic outlined example"
                                                             >
-                                                                <i className="icofont-ui-delete text-danger" />
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-outline-secondary"
+                                                                    data-bs-toggle="modal"
+                                                                    onClick={() => {
+                                                                        handleEditClick(task._id); // Appeler handleEditClick avec l'ID de la tâche sélectionnée
+
+                                                                    }}
+                                                                >
+
+                                                                    <i className="icofont-edit text-success" />
+                                                                </button>
 
 
-                                            ))}
+
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => HandeDelete(task._id)}
+                                                                    className="btn btn-outline-secondary deleterow"
+                                                                >
+                                                                    <i className="icofont-ui-delete text-danger" />
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+
+                                                ))}
 
 
 
@@ -233,35 +243,35 @@ export default function ShowTasks() {
                 </div>
             </div>
 
-                 <div
-                    key={selectedTask._id}
-                    className={`modal fade show' : ''}`}
-                    id={`edittickit-${selectedTask._id}`}
-                    tabIndex={-1}
-                    aria-hidden="true"
+            <div
+                key={selectedTask._id}
+                className={`modal fade show' : ''}`}
+                id={`edittickit-${selectedTask._id}`}
+                tabIndex={-1}
+                aria-hidden="true"
 
-                >
-                    <div className="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title  fw-bold" id="createprojectlLabel" style={{color:'#4c3575'}}>
-                                    {" "}
-                                    {selectedTask.name + " Edit"}
+            >
+                <div className="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title  fw-bold" id="createprojectlLabel" style={{ color: '#4c3575' }}>
+                                {" "}
+                                {selectedTask.name + " Edit"}
 
-                                </h5>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                />
-                            </div>
-
-
+                            </h5>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            />
+                        </div>
 
 
-                            <div className="modal-body">
-                                {/* <div className="mb-3">
+
+
+                        <div className="modal-body">
+                            {/* <div className="mb-3">
                                             <label className="form-label">Project Name</label>
                                             <select
                                                 className="form-select"
@@ -277,45 +287,45 @@ export default function ShowTasks() {
                                                 <option value={7}>Social Geek Made</option>
                                             </select>
                                         </div>*/}
-                                <div className="mb-3">
-                                    <label className="form-label" key={selectedTask._id}>Task Name</label>
-                                    <input type="text"   className="form-control"  value={selectedTask.name}
-                                           onChange={(e) => setSelectedTask({ ...selectedTask, name: e.target.value })}/>
-                                </div>
+                            <div className="mb-3">
+                                <label className="form-label" key={selectedTask._id}>Task Name</label>
+                                <input type="text" className="form-control" value={selectedTask.name}
+                                    onChange={(e) => setSelectedTask({ ...selectedTask, name: e.target.value })} />
+                            </div>
 
-                                <div className="mb-3">
-                                    <label className="form-label" key={selectedTask._id}>Task Category</label>
+                            <div className="mb-3">
+                                <label className="form-label" key={selectedTask._id}>Task Category</label>
 
-                                    <select className="form-select" aria-label="Default select Project Category" value={selectedTask.category} onChange={(e) => setSelectedTask({ ...selectedTask, category: e.target.value })}>
-                                        <option selected="">Select Category</option>
-                                        <option value="App Development">App Development</option>
-                                        <option value="UI/UX Design">UI/UX Design</option>
-                                        <option value="MARKETING">Marketing</option>
-                                        <option value="SEO">SEO</option>
-                                        <option value="SOFTTEST">Soft Testing</option>
-                                        <option value="QUALITY">Quality Assurance</option>
-                                        <option value="WEBSITEDESIGN">Website Design</option>
-                                        <option value="OTHER">Other</option>
-                                    </select>
+                                <select className="form-select" aria-label="Default select Project Category" value={selectedTask.category} onChange={(e) => setSelectedTask({ ...selectedTask, category: e.target.value })}>
+                                    <option selected="">Select Category</option>
+                                    <option value="App Development">App Development</option>
+                                    <option value="UI/UX Design">UI/UX Design</option>
+                                    <option value="MARKETING">Marketing</option>
+                                    <option value="SEO">SEO</option>
+                                    <option value="SOFTTEST">Soft Testing</option>
+                                    <option value="QUALITY">Quality Assurance</option>
+                                    <option value="WEBSITEDESIGN">Website Design</option>
+                                    <option value="OTHER">Other</option>
+                                </select>
 
-                                </div>
+                            </div>
 
 
-                                <div className="deadline-form mb-3">
-                                    <form>
-                                        <div className="row">
-                                            <div className="col">
-                                                <label htmlFor="datepickerded" className="form-label" key={selectedTask._id}>Task Start Date</label>
-                                                <input type="datetime" className="form-control" id="datepickerded" value={selectedTask.startDate} onChange={(e) =>  setSelectedTask({ ...selectedTask, startDate: e.target.value })} />
-                                            </div>
-                                            <div className="col">
-                                                <label htmlFor="datepickerdedone" className="form-label" key={selectedTask._id}>Task End Date</label>
-                                                <input type="datetime" className="form-control" id="datepickerdedone" value={selectedTask.endDate} onChange={(e) =>  setSelectedTask({ ...selectedTask, endDate: e.target.value })} />
-                                            </div>
+                            <div className="deadline-form mb-3">
+                                <form>
+                                    <div className="row">
+                                        <div className="col">
+                                            <label htmlFor="datepickerded" className="form-label" key={selectedTask._id}>Task Start Date</label>
+                                            <input type="datetime" className="form-control" id="datepickerded" value={selectedTask.startDate} onChange={(e) => setSelectedTask({ ...selectedTask, startDate: e.target.value })} />
                                         </div>
-                                    </form>
-                                </div>
-                                {/*
+                                        <div className="col">
+                                            <label htmlFor="datepickerdedone" className="form-label" key={selectedTask._id}>Task End Date</label>
+                                            <input type="datetime" className="form-control" id="datepickerdedone" value={selectedTask.endDate} onChange={(e) => setSelectedTask({ ...selectedTask, endDate: e.target.value })} />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            {/*
                                         <div className="row g-3 mb-3">
                                             <div className="col-sm">
                                                 <label className="form-label">Task Assign Person</label>
@@ -335,30 +345,30 @@ export default function ShowTasks() {
                                             </div>
                                         </div>
                                         */}
-                                <div className="row g-3 mb-3">
-                                    <div className="col-sm">
-                                        <label className="form-label" key={selectedTask._id}>Task Priority</label>
-                                        <select className="form-select" aria-label="Default select Priority" value={selectedTask.priority} onChange={(e) => setSelectedTask({ ...selectedTask, priority: e.target.value })}>
-                                            <option value="High">Highest</option>
-                                            <option value="Medium">Medium</option>
-                                            <option value="Low">Low</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="exampleFormControlTextarea786" className="form-label" key={selectedTask._id}>Description (optional)</label>
-                                    <textarea className="form-control" id="exampleFormControlTextarea78116" rows={3} value={selectedTask.description} onChange={(e) => setSelectedTask({ ...selectedTask, description: e.target.value })} placeholder="Add any extra details about the request" />
+                            <div className="row g-3 mb-3">
+                                <div className="col-sm">
+                                    <label className="form-label" key={selectedTask._id}>Task Priority</label>
+                                    <select className="form-select" aria-label="Default select Priority" value={selectedTask.priority} onChange={(e) => setSelectedTask({ ...selectedTask, priority: e.target.value })}>
+                                        <option value="High">Highest</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Low">Low</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary" onClick={handleUpdate1} style={{backgroundColor:'#4c3575'}}>Update Task</button>
+                            <div className="mb-3">
+                                <label htmlFor="exampleFormControlTextarea786" className="form-label" key={selectedTask._id}>Description (optional)</label>
+                                <textarea className="form-control" id="exampleFormControlTextarea78116" rows={3} value={selectedTask.description} onChange={(e) => setSelectedTask({ ...selectedTask, description: e.target.value })} placeholder="Add any extra details about the request" />
                             </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary" onClick={handleUpdate1} style={{ backgroundColor: '#4c3575' }}>Update Task</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-         </>
+        </>
 
     )
 }

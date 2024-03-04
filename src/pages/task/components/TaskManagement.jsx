@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import * as TaskService from "../../../_services/TaskService.jsx";
 
+
+
 export default function TaskManagement() {
 
     const [tasks, setTasks] = useState([]);
@@ -15,17 +17,17 @@ export default function TaskManagement() {
 
     // Fonction pour compter le nombre de tâches avec le statut "To Do"
     const countToDoTasks = () => {
-        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'todo').length;
+        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'TODO').length;
     };
 
     // Fonction pour compter le nombre de tâches avec le statut "In Progress"
     const countInProgressTasks = () => {
-        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'inprogress').length;
+        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'INPROGRESS').length;
     };
 
     // Fonction pour compter le nombre de tâches avec le statut "Done"
     const countDoneTasks = () => {
-        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'done').length;
+        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'DONE').length;
     };
 
 
@@ -63,7 +65,7 @@ export default function TaskManagement() {
                                 <div
                                     className="progress-bar danger-info-bg"
                                     role="progressbar"
-                                    style={{ width: `${todoTasksPercentage}%` }}
+                                    style={{ width: `${todoTasksPercentage}%` , backgroundColor: '#4c3575'}}
                                     aria-valuenow={todoTasksPercentage}
                                     aria-valuemin={0}
                                     aria-valuemax={100}
@@ -82,7 +84,7 @@ export default function TaskManagement() {
                                 <div
                                     className="progress-bar danger-info-bg"
                                     role="progressbar"
-                                    style={{ width: `${inProgressTasksPercentage}%` }}
+                                    style={{ width: `${inProgressTasksPercentage}%` , backgroundColor: '#4c3575'}}
                                     aria-valuenow={inProgressTasksPercentage}
                                     aria-valuemin={0}
                                     aria-valuemax={100}
@@ -102,7 +104,7 @@ export default function TaskManagement() {
                                 <div
                                     className="progress-bar danger-info-bg"
                                     role="progressbar"
-                                    style={{ width: `${doneTasksPercentage}%` }}
+                                    style={{ width: `${doneTasksPercentage}%` , backgroundColor: '#4c3575'}}
                                     aria-valuenow={doneTasksPercentage}
                                     aria-valuemin={0}
                                     aria-valuemax={100}

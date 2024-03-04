@@ -56,3 +56,24 @@ export const deleteTask = async (id) => {
         throw error;
     }
 };
+
+export const changeTaskStatus = async (taskId, statusId) => {
+    try {
+        const response = await axios.patch(`${API_BASE_URL}/${taskId}/${statusId}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+
+export const changeTaskStatusByName = async (taskId, statusName) => {
+    try {
+        const response = await axios.patch(`${API_BASE_URL}/changeTaskStatusByName/${taskId}/${statusName}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};

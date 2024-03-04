@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter, BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Sidebar from "../_shared/sidebar/Sidebar.jsx";
 import Task from "../pages/task/pages/Task.jsx";
 import Login from "../pages/Login/Login.jsx";
@@ -19,6 +19,10 @@ import ShowTasks from "../pages/task/pages/ShowTasks.jsx";
 import TaskManagement from "../pages/task/components/TaskManagement.jsx";
 import UpdateTask from "../pages/task/components/UpdateTask.jsx";
 import UpdateTaskForm from "../pages/task/components/UpdateTask.jsx";
+import TestDrag from "../pages/task/components/TestDrag.jsx";
+import Mehdidrag from "../pages/task/components/StatusBoard.jsx";
+import StatusPage from "../pages/task/components/StatusPage.jsx";
+import StatusBoard from "../pages/task/components/StatusBoard.jsx";
 
 
 const AppRouter = () => {
@@ -27,7 +31,10 @@ const AppRouter = () => {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/showtask" element={<TaskList />} />
+                <Route path="/status" element={<StatusPage />} />
                 <Route path="/showtasks" element={<ShowTasks />} />
+                <Route path="/board" element={<StatusBoard />} />
+                <Route path="/testdrag" element={<TestDrag />} />
                 <Route path="/prog" element={<TaskManagement />} />
                 <Route path="/update" element={<UpdateTaskForm />} />
                 <Route path="Signup" element={<Signup />} />
@@ -51,7 +58,6 @@ const AppRouter = () => {
 
             </Routes>
         </Router>
-
 
 
     );

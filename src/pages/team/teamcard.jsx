@@ -13,14 +13,16 @@ export default function Teamcard ({ team ,fetchTeams}){
         fetchUsersInfo();
         fetchallusers();
     }, [team]);
-     const fetchallusers = async ()=>{
+    const fetchallusers = async () => {
         try {
             const fetchedUsers = await TeamService.getAllUser(); // Assuming you have a function to get teams from your service
-            setUsers(fetchedUsers);
+            const filteredUsers = fetchedUsers.filter(user => !user.teams || user.teams.length === 0);
+            setUsers(filteredUsers);
         } catch (error) {
             console.error('Error fetching teams:', error);
         }
     }
+
     const fetchUsersInfo = async () => {
         try {
             const users = team.users; // Assuming team.users contains user IDs
@@ -53,6 +55,12 @@ export default function Teamcard ({ team ,fetchTeams}){
             // Handle error appropriately
         }
     };
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Filter users based on the search query
+    const filteredUsers = users.filter(user =>
+        user.username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
      return (
         <>
 
@@ -148,55 +156,50 @@ export default function Teamcard ({ team ,fetchTeams}){
                                                 <div className="inviteby_email">
                                                     <div className="input-group mb-3">
                                                         <input
-                                                            type="email"
+                                                            type="text"
                                                             className="form-control"
-                                                            placeholder="Email address"
-                                                            id="exampleInputEmail1"
-                                                            aria-describedby="exampleInputEmail1"
+                                                            placeholder="Search by username"
+                                                            value={searchQuery}
+                                                            onChange={(e) => setSearchQuery(e.target.value)}
                                                         />
-                                                        <button className="btn btn-dark" type="button" id="button-addon2">
-                                                            Sent
-                                                        </button>
                                                     </div>
                                                 </div>
                                                 <div className="members_list">
                                                     <h6 className="fw-bold">Employee</h6>
                                                     <ul className="list-unstyled list-group list-group-custom list-group-flush mb-0">
-                                                        {users
-                                                            .filter(user => !user.teams || user.teams.length === 0) // Filter out users with teams
-                                                            .map((user, index) => (
-                                                                <li key={index} className="list-group-item py-3 text-center text-md-start">
-                                                                    <div className="d-flex align-items-center flex-column flex-sm-column flex-md-column flex-lg-row">
-                                                                        <div className="no-thumbnail mb-2 mb-md-0">
-                                                                            <img
-                                                                                className="avatar lg rounded-circle"
-                                                                                src="/assets/images/xs/avatar2.jpg" // Replace 'avatarSrc' with the appropriate property that holds the user's avatar URL
-                                                                            />
-                                                                        </div>
-                                                                        <div className="flex-fill ms-3 text-truncate">
-                                                                            <h6 className="mb-0 fw-bold">{user.username}</h6> {/* Replace 'username' with the appropriate property that holds the user's name */}
-                                                                            <span className="text-muted">{user.email}</span> {/* Replace 'email' with the appropriate property that holds the user's email */}
-                                                                        </div>
-                                                                        <div className="members-action">
-                                                                            <span className="members-role">Admin</span>
-                                                                            <div className="btn-group">
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className="btn bg-transparent dropdown-toggle"
-                                                                                     aria-expanded="false"
-                                                                                    onClick={() => handleAddMember(team._id, user._id)}// Provide a callback function
-                                                                                >
-                                                                                    Invite
-                                                                                </button>
-                                                                            </div>
+                                                        {filteredUsers.map((user, index) => (
+                                                            <li key={index} className="list-group-item py-3 text-center text-md-start">
+                                                                <div className="d-flex align-items-center flex-column flex-sm-column flex-md-column flex-lg-row">
+                                                                    <div className="no-thumbnail mb-2 mb-md-0">
+                                                                        <img
+                                                                            className="avatar lg rounded-circle"
+                                                                            src="/assets/images/xs/avatar2.jpg" // Replace 'avatarSrc' with the appropriate property that holds the user's avatar URL
+                                                                            alt={`Avatar of ${user.username}`}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="flex-fill ms-3 text-truncate">
+                                                                        <h6 className="mb-0 fw-bold">{user.username}</h6> {/* Replace 'username' with the appropriate property that holds the user's name */}
+                                                                        <span className="text-muted">{user.email}</span> {/* Replace 'email' with the appropriate property that holds the user's email */}
+                                                                    </div>
+                                                                    <div className="members-action">
+                                                                        <span className="members-role">Admin</span>
+                                                                        <div className="btn-group">
+                                                                            <button
+                                                                                type="button"
+                                                                                className="btn bg-transparent dropdown-toggle"
+                                                                                aria-expanded="false"
+                                                                                onClick={() => handleAddMember(team._id, user._id)}
+                                                                            >
+                                                                                Invite
+                                                                            </button>
                                                                         </div>
                                                                     </div>
-                                                                </li>
-                                                            ))}
+                                                                </div>
+                                                            </li>
+                                                        ))}
                                                     </ul>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>

@@ -16,8 +16,7 @@ export default function TeamMembers() {
     const getData = async () => {
         try {
             const fetchedTeam = await TeamService.getOneTeam(id);
-            console.log("Fetched Team:", fetchedTeam); // Verification: Log fetched team
-            setTeam(fetchedTeam);
+             setTeam(fetchedTeam);
             if (fetchedTeam.users && fetchedTeam.users.length > 0) {
                 fetchUsersInfo(fetchedTeam.users);
             }
@@ -31,9 +30,9 @@ export default function TeamMembers() {
             const usersDetails = await Promise.all(
                 userIds.map((userId) => TeamService.getOneUser(userId))
             );
-            console.log("Users Details:", usersDetails); // Log fetched user details
             setUsersInfo(usersDetails); // Update usersInfo state
-            console.log("Updated Users Info:", usersInfo); // Log updated usersInfo state
+            console.log("Teams:", team); // Log fetched user details
+
         } catch (error) {
             console.error("Error fetching user details:", error);
         }
@@ -42,10 +41,9 @@ export default function TeamMembers() {
     const kickMember = async (teamId, userId) => {
         try {
             await removeMember(teamId, userId);
-            console.log("Member kicked successfully");
-            await getData(); // Fetch updated team data
-            console.log("Team data after kicking member:", team);
-            console.log("Users info after kicking member:", usersInfo);
+             await getData(); // Fetch updated team data
+            console.log("Teams:", team); // Log fetched user details
+
         } catch (error) {
             console.error("Error kicking member:", error);
             // Handle error if needed
@@ -81,8 +79,7 @@ export default function TeamMembers() {
                         </div>
                         {/* Row End */}
                         <div className="row g-3 row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck py-1 pb-4">
-                            {console.log("Users Info:", usersInfo)}
-                            {usersInfo.length > 0 && usersInfo.map((user, index) => (
+                             {team.users && team.users.length > 0 && usersInfo.length > 0 && usersInfo.map((user, index) => (
                                 <div className="col" key={index}>
                                     <div className="card teacher-card">
                                         <div className="card-body d-flex">

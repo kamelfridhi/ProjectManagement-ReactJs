@@ -5,12 +5,19 @@ import BACK_END_URL from "../../config.jsx";
 import { getUserById } from "../../_services/UserService.jsx";
 import {useNavigate} from 'react-router-dom'
 
+import {signInStart,singInSuccess,signInFailure} from "../../redux/user/userSlice.js";
+import {useDispatch, useSelector} from "react-redux";
 export default function Login() {
 
 const [formData, setFormData] = useState({})
-const [error, setError] = useState(false)
-const [loading, setLoading] = useState(false)
+
+    const {loading,error} = useSelector((state)=>state.user)        //    name:'user',
+
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+
+
     const handleChange = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value });
     }
@@ -18,8 +25,8 @@ const [loading, setLoading] = useState(false)
     const handleSubmit = async (e) => {
     e.preventDefault(); //stop the refresh of the page
 try {
-    setLoading(true);
-    const res = await fetch(`/auth/login`,{
+    dispatch(signInStart());
+        const res = await fetch(`/auth/login`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -28,19 +35,16 @@ try {
 
     });
     const data = await res.json();
-    console.log("dataaa : "+data.message);
-    setLoading(false);
+    dispatch(singInSuccess(data));
     if (data.message!=='success') {
-        setError(true)
-        return;
+        dispatch(signInFailure())
     }else if(data.message ==='success'){
         navigate('/Home/dashboard');
-        setError(false)
+       // setError(false)
     }
 
 }catch (error){
-    setLoading(false);
-    setError(true)
+   dispatch(signInFailure(error))
 }
 
         }

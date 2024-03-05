@@ -1,7 +1,8 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import userReducer from "./user/userSlice.js";
-import storage from "redux-persist/lib/storage";
 import {persistReducer, persistStore} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
 //userSlice.reducer ama khatrha default donc najm nbadl lesm kima nheeb
 
 const rootReducer = combineReducers({user:userReducer});
@@ -20,6 +21,8 @@ const initialState = {
 };
 
  */
+
+
 export const store = configureStore({
     //reducer: { user: userReducer },
     //preloadedState: initialState,

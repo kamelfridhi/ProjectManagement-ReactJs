@@ -1,11 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Link, Outlet} from 'react-router-dom';
-import Dashboard from "../../pages/Dashboard/Dashboard.jsx"; // Import Link and withRouter from react-router-dom
 import logoImage from '/public/assets/images/logots.png';
+import {useSelector} from "react-redux";
+import { selectUserObject } from '../../redux/user/userSelector.js';
 
 
 
 export default function Sidebar() {
+    const currentUser = useSelector(selectUserObject);
 
 
 
@@ -382,7 +384,7 @@ export default function Sidebar() {
                                         <div className="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center">
                                             <div className="u-info me-2">
                                                 <p className="mb-0 text-end line-height-sm ">
-                                                    <span className="font-weight-bold">Dylan Hunter</span>
+                                                    <span className="font-weight-bold">{currentUser ? currentUser.email : null}</span>
                                                 </p>
                                                 <small>Admin Profile</small>
                                             </div>

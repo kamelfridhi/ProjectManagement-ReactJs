@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import { selectUserObject } from '../../redux/user/userSelector.js';
 import { signOut }  from "../../redux/user/userSlice.js";
+import {ToastContainer} from "react-toastify";
 
 
 
@@ -19,7 +20,10 @@ export default function Sidebar() {
 
 
         return (
+
             <div>
+                <ToastContainer />
+
                 <div id="mytask-layout">
                     {/* sidebar */}
                     <div className="sidebar px-4 py-4 py-md-5 me-0" style={{backgroundColor: '#4c3575'}}>

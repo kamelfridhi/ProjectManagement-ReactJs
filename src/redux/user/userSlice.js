@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {toast} from "react-toastify";
 
 const initialState = {
     currentUser: null,
@@ -17,6 +18,7 @@ const userSlice = createSlice({
             state.currentUser = action.payload;
             state.loading = false;
             state.error = false;
+
 
             // Save user data to local storage
             //localStorage.setItem('currentUser', JSON.stringify(action.payload));

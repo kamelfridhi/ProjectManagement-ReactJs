@@ -3,6 +3,11 @@ import {Link, useNavigate} from 'react-router-dom'
 
 import {signInStart,signInSuccess,signInFailure} from "../../redux/user/userSlice.js";
 import {useDispatch, useSelector} from "react-redux";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 export default function Login() {
 
 const [formData, setFormData] = useState({})
@@ -14,12 +19,35 @@ const [formData, setFormData] = useState({})
 
     const navigate = useNavigate();
 
+    // Validate email format using regex
+    const isEmailValid = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+    // Validate password length
+    const isPasswordValid = (password) => {
+        return password.length >= 2; // Adjust the minimum password length as needed
+    };
+
     const handleChange = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value });
     }
 
     const handleSubmit = async (e) => {
     e.preventDefault(); //stop the refresh of the page
+        const { email, password } = formData;
+
+        // Check if email is valid
+        if (!email || !isEmailValid(email)) {
+            toast.error('Please enter a valid email address');
+            return;
+        }
+
+        // Check if password is valid
+        if (!password || !isPasswordValid(password)) {
+            toast.error('Password must be at least 2 characters long');
+            return;
+        }
 try {
     dispatch(signInStart());
         const res = await fetch(`/auth/login`,{
@@ -32,19 +60,21 @@ try {
     });
     const data = await res.json();
     if (data.message!=='success') {
+        toast.error(data.message);
         dispatch(signInFailure(data))
     }else if(data.message ==='success'){
         dispatch(signInSuccess(data.data))
-        navigate('/Home/dashboard');
     }
 
 }catch (error){
     dispatch(signInFailure('An error occurred'));
+    toast.error(error?error.message || 'something went wrong' : '');
 }
     }
 
     return (
         <>
+            <ToastContainer />
             {/* Mirrored from pixelwibes.com/template/my-task/html/dist/ui-elements/auth-signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Feb 2024 11:39:00 GMT */}
             <meta charSet="utf-8" />
             <meta httpEquiv="X-UA-Compatible" content="IE=Edge" />
@@ -58,6 +88,7 @@ try {
             <link rel="stylesheet" href="/assets/css/my-task.style.min.css" />
             <div id="mytask-layout">
                 {/* main body area */}
+
                 <div className="main p-2 py-3 p-xl-5 ">
                     {/* Body: Body */}
                     <div className="body d-flex p-0 p-xl-5" style={{ marginLeft: "300px" }}>
@@ -130,9 +161,12 @@ try {
                                                         className="form-control form-control-lg"
                                                         placeholder="name@example.com"
                                                         id='email'
+
                                                     />
                                                 </div>
                                             </div>
+                                            {error && error.email && <div className="text-danger">{error.email}</div>}
+
                                             <div className="col-12">
                                                 <div className="mb-2">
                                                     <div className="form-label">
@@ -180,7 +214,7 @@ try {
                                                     {loading ? 'Loading...' : 'Sign in'}
                                                 </button>
 
-                                                {error?error.message || 'something went wrong' : ''}
+
                                             </div>
                                             <div className="col-12 text-center mt-4">
                                                 <span className="text-muted">

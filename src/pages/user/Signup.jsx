@@ -1,6 +1,7 @@
 import * as UserService from "./../../_services/UserService";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import {Link} from "react-router-dom";
 export default function Signup() {
 
     const validationSchema = Yup.object().shape({
@@ -176,13 +177,13 @@ export default function Signup() {
                                         <div className="col-12 text-center mt-4">
                                             <span className="text-muted">
                                                 Already have an account?{" "}
-                                                <a
-                                                    href="auth-signin.html"
+                                                <Link
+                                                    to="/"
                                                     title="Sign in"
                                                     className="text-secondary"
                                                 >
                                                     Sign in here
-                                                </a>
+                                                </Link>
                                             </span>
                                         </div>
                                     </form>

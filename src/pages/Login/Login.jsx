@@ -1,5 +1,5 @@
 import React, {  useState } from 'react';
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 import {signInStart,signInSuccess,signInFailure} from "../../redux/user/userSlice.js";
 import {useDispatch, useSelector} from "react-redux";
@@ -184,9 +184,9 @@ try {
                                             <div className="col-12 text-center mt-4">
                                                 <span className="text-muted">
                                                     Dont have an account yet?{" "}
-                                                    <a href="auth-signup.html" className="text-secondary">
+                                                    <Link to="signup" className="text-secondary">
                                                         Sign up here
-                                                    </a>
+                                                    </Link>
                                                 </span>
 
                                             </div>

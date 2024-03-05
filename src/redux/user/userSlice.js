@@ -17,6 +17,8 @@ const userSlice = createSlice({
             state.currentUser=action.payload;
             state.loading = false;
             state.error = false;
+            // Save user data to local storage
+            //localStorage.setItem('user', JSON.stringify(action.payload));
         },
         signInFailure: (state,action) => {
             state.loading=false;

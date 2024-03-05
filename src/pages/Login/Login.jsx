@@ -1,11 +1,7 @@
-import React, { Component, useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
-import * as jwt_decode from 'jwt-decode';
-import BACK_END_URL from "../../config.jsx";
-import { getUserById } from "../../_services/UserService.jsx";
+import React, {  useState } from 'react';
 import {useNavigate} from 'react-router-dom'
 
-import {signInStart,singInSuccess,signInFailure} from "../../redux/user/userSlice.js";
+import {signInStart,signInSuccess,signInFailure} from "../../redux/user/userSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 export default function Login() {
 
@@ -13,10 +9,10 @@ const [formData, setFormData] = useState({})
 
     const {loading,error} = useSelector((state)=>state.user)        //    name:'user',
 
-    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value });
@@ -35,23 +31,17 @@ try {
 
     });
     const data = await res.json();
-    dispatch(singInSuccess(data));
     if (data.message!=='success') {
-        dispatch(signInFailure())
+        dispatch(signInFailure(data))
     }else if(data.message ==='success'){
+        dispatch(signInSuccess(data.data))
         navigate('/Home/dashboard');
-       // setError(false)
     }
 
 }catch (error){
-   dispatch(signInFailure(error))
+    dispatch(signInFailure('An error occurred'));
 }
-
-        }
-
-
-
-    console.log(formData);
+    }
 
     return (
         <>
@@ -189,11 +179,7 @@ try {
                                                     {loading ? 'Loading...' : 'Sign in'}
                                                 </button>
 
-                                                {
-                                                    error &&
-                                                    <p>erroooooooooooooor</p>
-
-                                                }
+                                                {error?error.message || 'something went wrong' : ''}
                                             </div>
                                             <div className="col-12 text-center mt-4">
                                                 <span className="text-muted">

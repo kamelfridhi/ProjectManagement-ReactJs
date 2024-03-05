@@ -125,7 +125,8 @@ try {
                                                 <div className="mb-2">
                                                     <label className="form-label">Email address</label>
                                                     <input
-                                                        type="email"  onChange={handleChange}
+                                                        type="email"
+                                                        onChange={handleChange}
                                                         className="form-control form-control-lg"
                                                         placeholder="name@example.com"
                                                         id='email'

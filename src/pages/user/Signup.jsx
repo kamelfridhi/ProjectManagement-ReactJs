@@ -1,8 +1,8 @@
-import * as UserService from "./../../_services/UserService";
 import * as Yup from 'yup';
-import { useFormik } from 'formik';
 import {Link} from "react-router-dom";
+import {useState} from "react";
 export default function Signup() {
+    const [formData, setFormData] = useState({})
 
     const validationSchema = Yup.object().shape({
         username: Yup.string()
@@ -11,27 +11,30 @@ export default function Signup() {
                 /^[a-zA-Z0-9]{5,}$/,
                 'Folder name must be at least 5 characters long and contain only alphanumeric characters.',
             ),
-
     });
 
-    const formik = useFormik({
-        initialValues: {
-            username: '',
-            email: '',
-            password: '',
-        },
-        validationSchema,
-        onSubmit: async (values) => {
-            console.log(values);
-            try {
-                await UserService.addUser(values);
-                formik.resetForm();
-            } catch (error) {
-                console.error(error);
-            }
-        },
-    });
 
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.id]: e.target.value });
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); //stop the refresh of the page
+        try {
+            const res = await fetch(`/auth`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+
+            });
+            const data = await res.json();
+
+        }catch (error){
+            console.log(error)
+        }
+    }
     return (
         <>
             {/* main body area */}
@@ -74,7 +77,7 @@ export default function Signup() {
                                     style={{ maxWidth: "32rem" }}
                                 >
                                     {/* Form */}
-                                    <form onSubmit={formik.handleSubmit} className="row g-1 p-3 p-md-4">
+                                    <form onSubmit={handleSubmit} className="row g-1 p-3 p-md-4">
                                         <div className="col-12 text-center mb-1 mb-lg-5">
                                             <h1>Create your account</h1>
                                             <span>Free access to our dashboard.</span>
@@ -86,10 +89,8 @@ export default function Signup() {
                                                     type="text"
                                                     className="form-control form-control-lg"
                                                     placeholder="John"
-                                                    value={formik.values.username}
-                                                        id='username'
-                                                    onChange={formik.handleChange} // Assurez-vous que les changements sont gérés par formik
-                                                    onBlur={formik.handleBlur}
+                                                    onChange={handleChange}
+                                                    id="username"
                                                 />
                                             </div>
                                         </div>
@@ -110,10 +111,8 @@ export default function Signup() {
                                                     type="email"
                                                     className="form-control form-control-lg"
                                                     placeholder="name@example.com"
-                                                    value={formik.values.email}
-                                                    id='email'
-                                                    onChange={formik.handleChange} // Assurez-vous que les changements sont gérés par formik
-                                                    onBlur={formik.handleBlur}
+                                                    onChange={handleChange}
+                                                    id="email"
                                                 />
                                             </div>
                                         </div>
@@ -124,10 +123,8 @@ export default function Signup() {
                                                     type="password"
                                                     className="form-control form-control-lg"
                                                     placeholder="8+ characters required"
-                                                    value={formik.values.password}
-                                                    id='password'
-                                                    onChange={formik.handleChange} // Assurez-vous que les changements sont gérés par formik
-                                                    onBlur={formik.handleBlur}
+                                                    onChange={handleChange}
+                                                    id="password"
                                                 />
                                             </div>
                                         </div>

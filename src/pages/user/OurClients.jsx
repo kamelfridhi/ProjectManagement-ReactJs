@@ -95,7 +95,7 @@ export default function OurClients() {
 
                             {
                                 users.length > 0 ? (
-                                    users.map(user => <UserCard key={user.id} user={user} />)
+                                    users.map(user => <UserCard key={user.id} user={user} fetchUsers={fetchUsers} />)
                                 ) : (
                                     <p>No users found</p>
                                 )

@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import * as UserService from "./../../_services/UserService";
 
 
-export default function UserCard({ user }) {
+export default function UserCard({ user ,fetchUsers}) {
 
-  function handleDelete(id) {
-    UserService.deleteUser(id);
+ async function handleDelete(id) {
+    await UserService.deleteUser(id);
+    await fetchUsers();
   }
 
   return (

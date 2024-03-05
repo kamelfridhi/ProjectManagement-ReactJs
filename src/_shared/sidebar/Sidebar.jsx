@@ -1,14 +1,21 @@
 import React from 'react';
-import {Link, Outlet} from 'react-router-dom';
+import {Link, Outlet, useNavigate} from 'react-router-dom';
 import logoImage from '/public/assets/images/logots.png';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+
 import { selectUserObject } from '../../redux/user/userSelector.js';
+import { signOut }  from "../../redux/user/userSlice.js";
 
 
 
 export default function Sidebar() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const currentUser = useSelector(selectUserObject);
-
+    const handleSignOut = () => {
+        dispatch(signOut());
+        navigate("/");
+    };
 
 
         return (
@@ -436,13 +443,14 @@ export default function Sidebar() {
                                                             <i className="icofont-ui-user-group fs-6 me-3" />
                                                             members
                                                         </a>
-                                                        <a
-                                                            href="ui-elements/auth-signin.html"
+                                                        <button
+                                                            onClick={handleSignOut}
+
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
                                                             <i className="icofont-logout fs-6 me-3" />
                                                             Signout
-                                                        </a>
+                                                        </button>
                                                         <div>
                                                             <hr className="dropdown-divider border-dark" />
                                                         </div>

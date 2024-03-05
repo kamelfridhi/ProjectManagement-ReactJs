@@ -1,47 +1,39 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import * as TaskService from "../../../_services/TaskService.jsx";
+import * as StatusService from "../../../_services/StatusService.jsx"; // Import de la fonction getAllStatus
+import io from 'socket.io-client';
 
-
-
-export default function TaskManagement() {
-
+export default function TaskManagement({ refresh }) {
     const [tasks, setTasks] = useState([]);
+    const [statuses, setStatuses] = useState([]);
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            const data = await TaskService.getAllTasks();
-            setTasks(data);
+        const fetchData = async () => {
+            try {
+                const taskData = await TaskService.getAllTasks();
+                setTasks(taskData);
+
+                const statusData = await StatusService.getAllStatus();
+                setStatuses(statusData);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
-        fetchTasks();
-    }, []);
 
-    // Fonction pour compter le nombre de tâches avec le statut "To Do"
-    const countToDoTasks = () => {
-        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'TODO').length;
+        fetchData();
+    }, [refresh]);
+
+    // Fonction pour compter le nombre de tâches avec un statut donné
+    const countTasksByStatus = (status) => {
+        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === status).length;
     };
 
-    // Fonction pour compter le nombre de tâches avec le statut "In Progress"
-    const countInProgressTasks = () => {
-        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'INPROGRESS').length;
+    // Calcul du pourcentage de tâches avec un statut donné par rapport au nombre total de tâches
+    const calculatePercentage = (status) => {
+        const totalCount = tasks.length;
+        const count = countTasksByStatus(status);
+        return totalCount > 0 ? (count / totalCount) * 100 : 0;
     };
-
-    // Fonction pour compter le nombre de tâches avec le statut "Done"
-    const countDoneTasks = () => {
-        return tasks.filter(task => task.status.length > 0 && task.status[task.status.length - 1].status === 'DONE').length;
-    };
-
-
-
-    // Calcul du pourcentage de tâches "To Do" par rapport au nombre total de tâches
-    const todoTasksCount = countToDoTasks();
-    const totalTasksCount = tasks.length;
-    const todoTasksPercentage = totalTasksCount > 0 ? (todoTasksCount / totalTasksCount) * 100 : 0;
-    const inProgressTasksCount = countInProgressTasks();
-    const inProgressTasksPercentage = tasks.length > 0 ? (inProgressTasksCount / tasks.length) * 100 : 0;
-
-    // Calcul du pourcentage de tâches "Done" par rapport au nombre total de tâches
-    const doneTasksCount = countDoneTasks();
-    const doneTasksPercentage = tasks.length > 0 ? (doneTasksCount / tasks.length) * 100 : 0;
 
     return (
 
@@ -49,70 +41,41 @@ export default function TaskManagement() {
 
 
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
+
                 <div className="card">
+
+
                     <div className="card-header py-3">
-                        <h6 className="mb-0 fw-bold ">Status Progress</h6>
-                    </div>
+
                     <div className="card-body mem-list">
+
+                        {statuses.map((status) => (
                         <div className="progress-count mb-4">
                             <div className="d-flex justify-content-between align-items-center mb-1">
                                 <h6 className="mb-0 fw-bold d-flex align-items-center">
-                                    To Do
+                                    {status.status}
                                 </h6>
-                                <span className="small text-muted">{`${todoTasksCount}/${totalTasksCount}`}</span>
+                                <span className="small text-muted">{`${countTasksByStatus(status.status)}/${tasks.length}`}</span>
                             </div>
                             <div className="progress" style={{ height: 10 }}>
                                 <div
                                     className="progress-bar danger-info-bg"
                                     role="progressbar"
-                                    style={{ width: `${todoTasksPercentage}%` , backgroundColor: '#4c3575'}}
-                                    aria-valuenow={todoTasksPercentage}
+                                    style={{ width: `${calculatePercentage(status.status)}%`, backgroundColor: '#4c3575' }}
+                                    aria-valuenow={calculatePercentage(status.status)}
                                     aria-valuemin={0}
                                     aria-valuemax={100}
                                 />
                             </div>
                         </div>
-
-                        <div className="progress-count mb-4">
-                            <div className="d-flex justify-content-between align-items-center mb-1">
-                                <h6 className="mb-0 fw-bold d-flex align-items-center">
-                                    In Progress
-                                </h6>
-                                <span className="small text-muted">{`${inProgressTasksCount}/${totalTasksCount}`}</span>
-                            </div>
-                            <div className="progress" style={{ height: 10 }}>
-                                <div
-                                    className="progress-bar danger-info-bg"
-                                    role="progressbar"
-                                    style={{ width: `${inProgressTasksPercentage}%` , backgroundColor: '#4c3575'}}
-                                    aria-valuenow={inProgressTasksPercentage}
-                                    aria-valuemin={0}
-                                    aria-valuemax={100}
-                                />
-                            </div>
-                        </div>
-
-
-                        <div className="progress-count mb-4">
-                            <div className="d-flex justify-content-between align-items-center mb-1">
-                                <h6 className="mb-0 fw-bold d-flex align-items-center">
-                                    Done
-                                </h6>
-                                <span className="small text-muted">{`${doneTasksCount}/${totalTasksCount}`}</span>
-                            </div>
-                            <div className="progress" style={{ height: 10 }}>
-                                <div
-                                    className="progress-bar danger-info-bg"
-                                    role="progressbar"
-                                    style={{ width: `${doneTasksPercentage}%` , backgroundColor: '#4c3575'}}
-                                    aria-valuenow={doneTasksPercentage}
-                                    aria-valuemin={0}
-                                    aria-valuemax={100}
-                                />
-                            </div>
-                        </div>
+                        ))}
                     </div>
+                    </div>
+
+
+
                 </div>
+
             </div>
 
         </>

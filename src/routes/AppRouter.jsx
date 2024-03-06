@@ -13,6 +13,7 @@ import OurClients from "../pages/user/OurClients.jsx";
 import Teams from "../pages/team/Teams.jsx";
 import TeamMembers from "../pages/team/TeamMembers.jsx";
 import Signup from "../pages/user/Signup.jsx";
+import ProjectList from "../pages/projects/showProjects.jsx";
 import Teamcard from "../pages/team/teamcard.jsx";
 import TaskList from "../pages/task/components/ShowTask.jsx";
 import ShowTasks from "../pages/task/pages/ShowTasks.jsx";
@@ -30,7 +31,6 @@ const AppRouter = () => {
     return (
         <Router>
             <Routes>
-
                 <Route element={<DontLogin/>}>
                     <Route path="/" element={<Login />} />
                 </Route>
@@ -45,9 +45,11 @@ const AppRouter = () => {
                 <Route path="/update" element={<UpdateTaskForm />} />
                 <Route path="signup" element={<Signup />} />
                 <Route element={<PrivateRoute/>}>
+
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}
                     <Route path="project-dashboard" element={<ProjectDashboard />} />
+                    <Route path="/showProject" element={<ProjectList />} />
                     <Route path="project" element={<Project />} />
                     <Route path="team-leader" element={<TeamLeader />} />
                     <Route path="ticket" element={<Ticket />} />

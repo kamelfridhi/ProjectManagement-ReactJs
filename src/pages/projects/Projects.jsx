@@ -1,5 +1,94 @@
+import React, {useEffect, useState} from "react";
+import * as ProjectService from "../../_services/ProjectService";
+import addProject from "./addProject.jsx";
+import updateProject from "./updateProject.jsx";
+import project from "../../_models/Project.jsx";
+
+
 export default function Project() {
+    const [projects, setProjects] = useState([]);
+    const [projectIdToDelete, setProjectIdToDelete] = useState(null);
+    const [projectData, setProjectData] = useState({});
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            const data = await ProjectService.getAllProject();
+            setProjects(data);
+
+        };
+        fetchProjects();
+    }, []);
+    const handleUpdateProject = async (projectId) => {
+        try {
+            console.log('Before updating project:', projectData);
+
+            // Log the project object
+            console.log('Project:', project);
+
+            // Check if any of the required fields are empty before sending the request
+            // Add additional checks as needed based on your validation logic
+
+            await ProjectService.updateProject(projectId, projectData);
+            // Notify the parent component to update its state
+            updateProject(projectData);
+
+            console.log('After updating project:', projectData);
+        } catch (error) {
+            console.error('Error updating project:', error);
+        }
+    };
+
+
+
+
+
+
+
+    const handleAddProject = async () => {
+        try {
+            console.log('Before adding project:', projectData);
+
+            // Check if any of the required fields are empty before sending the request
+            if (!projectData.projectName || !projectData.startDate || !projectData.endDate) {
+                console.error('Required fields are empty. Cannot create project.');
+                return;
+            }
+
+            await ProjectService.createProject(projectData);
+            // Notify the parent component to update its state
+            addProject(projectData);
+
+            console.log('After adding project:', projectData);
+        } catch (error) {
+            console.error('Error creating project:', error);
+        }
+    };
+
+    const handleChange = (e, fieldName) => {
+        const {value} = e.target;
+        setProjectData((prevData) => ({
+            ...prevData,
+            [fieldName]: value,
+        }));
+    };
+    const handleDelete = async (projectId) => {
+        try {
+            // Delete project on the server
+            await ProjectService.deleteProject(projectId);
+
+            // Remove the deleted project from the state
+            setProjects((prevProjects) =>
+                prevProjects.filter((project) => project.projectName !== projectId)
+            );
+        } catch (error) {
+            console.error('Error deleting project:', error);
+        }
+    };
+
+
     return (
+
+
         <div className="main px-lg-4 px-md-4">
             {/* Body: Body */}
             <div className="body d-flex py-lg-3 py-md-2">
@@ -15,10 +104,12 @@ export default function Project() {
                                         className="btn btn-dark w-sm-100"
                                         data-bs-toggle="modal"
                                         data-bs-target="#createproject"
+
                                     >
                                         <i className="icofont-plus-circle me-2 fs-6"/>
                                         Create Project
                                     </button>
+
                                     <ul
                                         className="nav nav-tabs tab-body-header rounded ms-3 prtab-set w-sm-100"
                                         role="tablist"
@@ -75,1672 +166,159 @@ export default function Project() {
                             <div className="tab-content mt-4">
                                 <div className="tab-pane fade show active" id="All-list">
                                     <div className="row g-3 gy-5 py-3 row-deck">
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block light-info-bg">
-                                                                <i className="icofont-paint"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Social Geek Made{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                UI/UX Design
-                                                            </h6>
-                                                        </div>
+
+
+                                        {projects.map(project => (
+                                            <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6"
+                                                 key={project._id}>
+                                                <div className="card">
+                                                    <div className="card-body">
                                                         <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
+                                                            className="d-flex align-items-center justify-content-between mt-5">
+                                                            <div className="lesson_name">
+                                                                <div className="project-block light-info-bg">
+                                                                    <i className="icofont-paint"/>
+                                                                </div>
+                                                                <span className="small text-muted project_name fw-bold">
+                                                            {" "}
+
+                                                                    {project.projectName}
+
+                                                        </span>
+                                                                <h6 className="mb-0 fw-bold  fs-6  mb-2">
+                                                                    UI/UX Design
+                                                                </h6>
+                                                            </div>
+                                                            <div
+                                                                className="btn-group"
+                                                                role="group"
+                                                                aria-label="Basic outlined example"
+
                                                             >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar8.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">5 Attach</span>
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-outline-secondary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#editproject"
+                                                                    onClick={() => setProjectIdToDelete(project.projectName)}
+                                                                >
+                                                                    <i className="icofont-edit text-success"/>
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-outline-secondary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target={`#deleteproject`}
+                                                                    onClick={() => setProjectIdToDelete(project.projectName)}
+
+                                                                >
+                                                                    <i className="icofont-ui-delete text-danger"/>
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">4 Month</span>
+                                                        <div className="d-flex align-items-center">
+                                                            <div className="avatar-list avatar-list-stacked pt-2">
+                                                                <img
+                                                                    className="avatar rounded-circle sm"
+                                                                    src="assets/images/xs/avatar2.jpg"
+                                                                    alt=""
+                                                                />
+                                                                <img
+                                                                    className="avatar rounded-circle sm"
+                                                                    src="assets/images/xs/avatar1.jpg"
+                                                                    alt=""
+                                                                />
+                                                                <img
+                                                                    className="avatar rounded-circle sm"
+                                                                    src="assets/images/xs/avatar3.jpg"
+                                                                    alt=""
+                                                                />
+                                                                <img
+                                                                    className="avatar rounded-circle sm"
+                                                                    src="assets/images/xs/avatar4.jpg"
+                                                                    alt=""
+                                                                />
+                                                                <img
+                                                                    className="avatar rounded-circle sm"
+                                                                    src="assets/images/xs/avatar8.jpg"
+                                                                    alt=""
+                                                                />
+                                                                <span
+                                                                    className="avatar rounded-circle text-center pointer sm"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#addUser"
+                                                                >
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                             </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">5 Members</span>
+                                                        <div className="row g-2 pt-4">
+                                                            <div className="col-6">
+                                                                <div className="d-flex align-items-center">
+                                                                    <i className="icofont-paper-clip"/>
+                                                                    <span className="ms-2">5 Attach</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <div className="d-flex align-items-center">
+                                                                    <i className="icofont-sand-clock"/>
+                                                                    <span className="ms-2">4 Month</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <div className="d-flex align-items-center">
+                                                                    <i className="icofont-group-students "/>
+                                                                    <span className="ms-2">5 Members</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <div className="d-flex align-items-center">
+                                                                    <i className="icofont-ui-text-chat"/>
+                                                                    <span className="ms-2">10</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">10</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 35 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
+                                                        <div className="dividers-block"/>
                                                         <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "10%"}}
-                                                            aria-valuenow={10}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
+                                                            className="d-flex align-items-center justify-content-between mb-2">
+                                                            <h4 className="small fw-bold mb-0">Progress</h4>
+                                                            <span className="small light-danger-bg  p-1 rounded">
+                                                        <i className="icofont-ui-clock"/> 35 Days Left
+                                                    </span>
+                                                        </div>
+                                                        <div className="progress" style={{height: 8}}>
+                                                            <div
+                                                                className="progress-bar bg-secondary"
+                                                                role="progressbar"
+                                                                style={{width: "25%"}}
+                                                                aria-valuenow={15}
+                                                                aria-valuemin={0}
+                                                                aria-valuemax={100}
+                                                            />
+                                                            <div
+                                                                className="progress-bar bg-secondary ms-1"
+                                                                role="progressbar"
+                                                                style={{width: "25%"}}
+                                                                aria-valuenow={30}
+                                                                aria-valuemin={0}
+                                                                aria-valuemax={100}
+                                                            />
+                                                            <div
+                                                                className="progress-bar bg-secondary ms-1"
+                                                                role="progressbar"
+                                                                style={{width: "10%"}}
+                                                                aria-valuenow={10}
+                                                                aria-valuemin={0}
+                                                                aria-valuemax={100}
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block bg-lightgreen">
-                                                                <i className="icofont-vector-path"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Practice to Perfect{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Website Design
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">4 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">1 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">4 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">3</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 15 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "39%"}}
-                                                            aria-valuenow={39}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block bg-lightyellow">
-                                                                <i className="icofont-ui-touch-phone"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Rhinestone{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                App Development
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar7.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar8.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">7 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">2 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">6 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">5</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 25 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "28%"}}
-                                                            aria-valuenow={20}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block light-success-bg">
-                                                                <i className="icofont-tick-boxed"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Box of Crayons{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Quality Assurance
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">1 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">1 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">2 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">15</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 2 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "40%"}}
-                                                            aria-valuenow={80}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block light-orange-bg">
-                                                                <i className="icofont-dashboard-web"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Gob Geeklords{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Development
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar8.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar10.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar11.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar6.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">10 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">10 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">8 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">45</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 20 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "20%"}}
-                                                            aria-valuenow={20}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block bg-careys-pink">
-                                                                <i className="icofont-site-map"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Java Dalia{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Backend Development
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar7.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar10.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar11.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar6.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">8 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">8Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">8 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">7</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 10 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "23%"}}
-                                                            aria-valuenow={23}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block bg-lightblue">
-                                                                <i className="icofont-tasks"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Fast Cad
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Software Testing
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar7.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar8.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">7 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">2 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">6 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">5</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 25 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "28%"}}
-                                                            aria-valuenow={20}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block bg-lightgreen">
-                                                                <i className="icofont-vector-path"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Hex Clan{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Website Design
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">4 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2 text-success">Completed</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">4 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">3</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "50%"}}
-                                                            aria-valuenow={39}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block light-success-bg">
-                                                                <i className="icofont-tick-boxed"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Switch and Swift{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Quality Assurance
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">1 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">1 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">2 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">0</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "0%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "0%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "0%"}}
-                                                            aria-valuenow={80}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block bg-lightyellow">
-                                                                <i className="icofont-ui-touch-phone"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Rhinestone{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                App Development
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar7.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar8.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">7 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">2 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">6 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">5</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 25 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "28%"}}
-                                                            aria-valuenow={20}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block light-success-bg">
-                                                                <i className="icofont-tick-boxed"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Box of Crayons{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Quality Assurance
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">1 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">1 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">2 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">15</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 2 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "40%"}}
-                                                            aria-valuenow={80}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-5">
-                                                        <div className="lesson_name">
-                                                            <div className="project-block light-orange-bg">
-                                                                <i className="icofont-dashboard-web"/>
-                                                            </div>
-                                                            <span className="small text-muted project_name fw-bold">
-                            {" "}
-                                                                Gob Geeklords{" "}
-                          </span>
-                                                            <h6 className="mb-0 fw-bold  fs-6  mb-2">
-                                                                Development
-                                                            </h6>
-                                                        </div>
-                                                        <div
-                                                            className="btn-group"
-                                                            role="group"
-                                                            aria-label="Basic outlined example"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#editproject"
-                                                            >
-                                                                <i className="icofont-edit text-success"/>
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-outline-secondary"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteproject"
-                                                            >
-                                                                <i className="icofont-ui-delete text-danger"/>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="avatar-list avatar-list-stacked pt-2">
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar2.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar1.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar3.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar4.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar8.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar10.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar11.jpg"
-                                                                alt=""
-                                                            />
-                                                            <img
-                                                                className="avatar rounded-circle sm"
-                                                                src="assets/images/xs/avatar6.jpg"
-                                                                alt=""
-                                                            />
-                                                            <span
-                                                                className="avatar rounded-circle text-center pointer sm"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#addUser"
-                                                            >
-                            <i className="icofont-ui-add"/>
-                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row g-2 pt-4">
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-paper-clip"/>
-                                                                <span className="ms-2">10 Attach</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-sand-clock"/>
-                                                                <span className="ms-2">10 Month</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-group-students "/>
-                                                                <span className="ms-2">8 Members</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <div className="d-flex align-items-center">
-                                                                <i className="icofont-ui-text-chat"/>
-                                                                <span className="ms-2">45</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="dividers-block"/>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mb-2">
-                                                        <h4 className="small fw-bold mb-0">Progress</h4>
-                                                        <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 20 Days Left
-                        </span>
-                                                    </div>
-                                                    <div className="progress" style={{height: 8}}>
-                                                        <div
-                                                            className="progress-bar bg-secondary"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={15}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "25%"}}
-                                                            aria-valuenow={30}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                        <div
-                                                            className="progress-bar bg-secondary ms-1"
-                                                            role="progressbar"
-                                                            style={{width: "20%"}}
-                                                            aria-valuenow={20}
-                                                            aria-valuemin={0}
-                                                            aria-valuemax={100}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
+                                        ))}
+
+
                                     </div>
                                 </div>
                                 <div className="tab-pane fade" id="Started-list">
@@ -1755,9 +333,9 @@ export default function Project() {
                                                                 <i className="icofont-paint"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Social Geek Made{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 UI/UX Design
                                                             </h6>
@@ -1817,8 +395,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -1852,8 +430,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 35 Days Left
-                        </span>
+                                                        <i className="icofont-ui-clock"/> 35 Days Left
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -1894,9 +472,9 @@ export default function Project() {
                                                                 <i className="icofont-vector-path"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Practice to Perfect{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Website Design
                                                             </h6>
@@ -1951,8 +529,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -1986,8 +564,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 15 Days Left
-                        </span>
+                                                        <i className="icofont-ui-clock"/> 15 Days Left
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -2028,9 +606,9 @@ export default function Project() {
                                                                 <i className="icofont-ui-touch-phone"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Rhinestone{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 App Development
                                                             </h6>
@@ -2095,8 +673,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -2130,8 +708,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 25 Days Left
-                        </span>
+                                                        <i className="icofont-ui-clock"/> 25 Days Left
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -2172,9 +750,9 @@ export default function Project() {
                                                                 <i className="icofont-tick-boxed"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Box of Crayons{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Quality Assurance
                                                             </h6>
@@ -2219,8 +797,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -2254,8 +832,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 2 Days Left
-                        </span>
+                                                        <i className="icofont-ui-clock"/> 2 Days Left
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -2296,9 +874,9 @@ export default function Project() {
                                                                 <i className="icofont-dashboard-web"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Gob Geeklords{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Development
                                                             </h6>
@@ -2373,8 +951,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -2408,8 +986,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 20 Days Left
-                        </span>
+                                                        <i className="icofont-ui-clock"/> 20 Days Left
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -2450,9 +1028,9 @@ export default function Project() {
                                                                 <i className="icofont-site-map"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Java Dalia{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Backend Development
                                                             </h6>
@@ -2527,8 +1105,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -2562,8 +1140,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 10 Days Left
-                        </span>
+                                                        <i className="icofont-ui-clock"/> 10 Days Left
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -2604,9 +1182,9 @@ export default function Project() {
                                                                 <i className="icofont-tasks"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Fast Cad
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Software Testing
                                                             </h6>
@@ -2671,8 +1249,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -2706,8 +1284,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 25 Days Left
-                        </span>
+                                                        <i className="icofont-ui-clock"/> 25 Days Left
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -2748,9 +1326,9 @@ export default function Project() {
                                                                 <i className="icofont-vector-path"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Practice to Perfect{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Website Design
                                                             </h6>
@@ -2805,8 +1383,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -2840,8 +1418,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-danger-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> 15 Days Left
-                        </span>
+                                                        <i className="icofont-ui-clock"/> 15 Days Left
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -2886,9 +1464,9 @@ export default function Project() {
                                                                 <i className="icofont-paint"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Software Chasers{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 UI/UX Design
                                                             </h6>
@@ -2948,8 +1526,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -2983,8 +1561,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Approval
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -3025,9 +1603,9 @@ export default function Project() {
                                                                 <i className="icofont-vector-path"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Navy Hurdle{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Website Design
                                                             </h6>
@@ -3082,8 +1660,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -3117,8 +1695,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Approval
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -3159,9 +1737,9 @@ export default function Project() {
                                                                 <i className="icofont-dashboard-web"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Barcelona{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Development
                                                             </h6>
@@ -3246,8 +1824,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -3281,8 +1859,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Approval
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -3323,9 +1901,9 @@ export default function Project() {
                                                                 <i className="icofont-site-map"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 phoenix{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Backend Development
                                                             </h6>
@@ -3400,8 +1978,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -3435,8 +2013,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Approval
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -3477,9 +2055,9 @@ export default function Project() {
                                                                 <i className="icofont-tasks"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Roadrunner
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Software Testing
                                                             </h6>
@@ -3544,8 +2122,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -3579,8 +2157,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Approval
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -3621,9 +2199,9 @@ export default function Project() {
                                                                 <i className="icofont-tick-boxed"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Bladerunner
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Quality Assurance
                                                             </h6>
@@ -3668,8 +2246,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -3703,8 +2281,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Approval
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -3745,9 +2323,9 @@ export default function Project() {
                                                                 <i className="icofont-vector-path"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Navy Hurdle{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Website Design
                                                             </h6>
@@ -3802,8 +2380,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -3837,8 +2415,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Approval
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -3879,9 +2457,9 @@ export default function Project() {
                                                                 <i className="icofont-dashboard-web"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Barcelona{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Development
                                                             </h6>
@@ -3966,8 +2544,8 @@ export default function Project() {
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#addUser"
                                                             >
-                            <i className="icofont-ui-add"/>
-                          </span>
+                                                            <i className="icofont-ui-add"/>
+                                                        </span>
                                                         </div>
                                                     </div>
                                                     <div className="row g-2 pt-4">
@@ -4001,8 +2579,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-warning-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Approval
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Approval
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -4047,9 +2625,9 @@ export default function Project() {
                                                                 <i className="icofont-paint"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Sunburst{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 UI/UX Design
                                                             </h6>
@@ -4129,8 +2707,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -4171,9 +2749,9 @@ export default function Project() {
                                                                 <i className="icofont-vector-path"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 X mind{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Website Design
                                                             </h6>
@@ -4248,8 +2826,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -4290,9 +2868,9 @@ export default function Project() {
                                                                 <i className="icofont-ui-touch-phone"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Edison{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 App Development
                                                             </h6>
@@ -4377,8 +2955,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -4419,9 +2997,9 @@ export default function Project() {
                                                                 <i className="icofont-tick-boxed"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Fireball{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Quality Assurance
                                                             </h6>
@@ -4486,8 +3064,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -4528,9 +3106,9 @@ export default function Project() {
                                                                 <i className="icofont-dashboard-web"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Firestorm{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Development
                                                             </h6>
@@ -4625,8 +3203,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -4667,9 +3245,9 @@ export default function Project() {
                                                                 <i className="icofont-site-map"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Irongate{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Backend Development
                                                             </h6>
@@ -4764,8 +3342,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -4806,9 +3384,9 @@ export default function Project() {
                                                                 <i className="icofont-tasks"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Kryptonite
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Software Testing
                                                             </h6>
@@ -4893,8 +3471,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -4935,9 +3513,9 @@ export default function Project() {
                                                                 <i className="icofont-vector-path"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Moonshine{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Website Design
                                                             </h6>
@@ -5012,8 +3590,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -5054,9 +3632,9 @@ export default function Project() {
                                                                 <i className="icofont-tick-boxed"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Oyster{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Quality Assurance
                                                             </h6>
@@ -5121,8 +3699,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -5163,9 +3741,9 @@ export default function Project() {
                                                                 <i className="icofont-vector-path"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 X mind{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Website Design
                                                             </h6>
@@ -5240,8 +3818,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -5282,9 +3860,9 @@ export default function Project() {
                                                                 <i className="icofont-dashboard-web"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Firestorm{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 Development
                                                             </h6>
@@ -5379,8 +3957,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -5421,9 +3999,9 @@ export default function Project() {
                                                                 <i className="icofont-paint"/>
                                                             </div>
                                                             <span className="small text-muted project_name fw-bold">
-                            {" "}
+                                                            {" "}
                                                                 Sunburst{" "}
-                          </span>
+                                                        </span>
                                                             <h6 className="mb-0 fw-bold  fs-6  mb-2">
                                                                 UI/UX Design
                                                             </h6>
@@ -5503,8 +4081,8 @@ export default function Project() {
                                                         className="d-flex align-items-center justify-content-between mb-2">
                                                         <h4 className="small fw-bold mb-0">Progress</h4>
                                                         <span className="small light-success-bg  p-1 rounded">
-                          <i className="icofont-ui-clock"/> Completed
-                        </span>
+                                                        <i className="icofont-ui-clock"/> Completed
+                                                    </span>
                                                     </div>
                                                     <div className="progress" style={{height: 8}}>
                                                         <div
@@ -5806,38 +4384,12 @@ export default function Project() {
                                     className="form-control"
                                     id="exampleFormControlInput77"
                                     placeholder="Explain what the Project Name"
+
+                                    onChange={(e) => handleChange(e, 'projectName')}
                                 />
                             </div>
-                            <div className="mb-3">
-                                <label className="form-label">Project Category</label>
-                                <select
-                                    className="form-select"
-                                    aria-label="Default select Project Category"
-                                >
-                                    <option selected="">UI/UX Design</option>
-                                    <option value={1}>Website Design</option>
-                                    <option value={2}>App Development</option>
-                                    <option value={3}>Quality Assurance</option>
-                                    <option value={4}>Development</option>
-                                    <option value={5}>Backend Development</option>
-                                    <option value={6}>Software Testing</option>
-                                    <option value={7}>Website Design</option>
-                                    <option value={8}>Marketing</option>
-                                    <option value={9}>SEO</option>
-                                    <option value={10}>Other</option>
-                                </select>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="formFileMultipleone" className="form-label">
-                                    Project Images &amp; Document
-                                </label>
-                                <input
-                                    className="form-control"
-                                    type="file"
-                                    id="formFileMultipleone"
-                                    multiple=""
-                                />
-                            </div>
+
+
                             <div className="deadline-form">
                                 <form>
                                     <div className="row g-3 mb-3">
@@ -5849,6 +4401,9 @@ export default function Project() {
                                                 type="date"
                                                 className="form-control"
                                                 id="datepickerded"
+
+                                                onChange={(e) => handleChange(e, 'startDate')}
+
                                             />
                                         </div>
                                         <div className="col">
@@ -5859,12 +4414,13 @@ export default function Project() {
                                                 type="date"
                                                 className="form-control"
                                                 id="datepickerdedone"
+                                                onChange={(e) => handleChange(e, 'endDate')}
                                             />
                                         </div>
                                     </div>
                                     <div className="row g-3 mb-3">
                                         <div className="col-sm-12">
-                                            <label className="form-label">Notifation Sent</label>
+                                            <label className="form-label">Teams</label>
                                             <select
                                                 className="form-select"
                                                 aria-label="Default select example"
@@ -5874,49 +4430,11 @@ export default function Project() {
                                                 <option value={2}>Team Member Only</option>
                                             </select>
                                         </div>
-                                        <div className="col-sm-12">
-                                            <label htmlFor="formFileMultipleone" className="form-label">
-                                                Task Assign Person
-                                            </label>
-                                            <select
-                                                className="form-select"
-                                                multiple=""
-                                                aria-label="Default select Priority"
-                                            >
-                                                <option selected="">Lucinda Massey</option>
-                                                <option value={1}>Ryan Nolan</option>
-                                                <option value={2}>Oliver Black</option>
-                                                <option value={3}>Adam Walker</option>
-                                                <option value={4}>Brian Skinner</option>
-                                                <option value={5}>Dan Short</option>
-                                                <option value={5}>Jack Glover</option>
-                                            </select>
-                                        </div>
+
                                     </div>
                                 </form>
                             </div>
-                            <div className="row g-3 mb-3">
-                                <div className="col-sm">
-                                    <label htmlFor="formFileMultipleone" className="form-label">
-                                        Budget
-                                    </label>
-                                    <input type="number" className="form-control"/>
-                                </div>
-                                <div className="col-sm">
-                                    <label htmlFor="formFileMultipleone" className="form-label">
-                                        Priority
-                                    </label>
-                                    <select
-                                        className="form-select"
-                                        aria-label="Default select Priority"
-                                    >
-                                        <option selected="">Highest</option>
-                                        <option value={1}>Medium</option>
-                                        <option value={2}>Low</option>
-                                        <option value={3}>Lowest</option>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div className="mb-3">
                                 <label
                                     htmlFor="exampleFormControlTextarea78"
@@ -5930,6 +4448,7 @@ export default function Project() {
                                     rows={3}
                                     placeholder="Add any extra details about the request"
                                     defaultValue={""}
+                                    onChange={(e) => handleChange(e, 'projectDescription')}
                                 />
                             </div>
                         </div>
@@ -5941,8 +4460,11 @@ export default function Project() {
                             >
                                 Done
                             </button>
-                            <button type="button" className="btn btn-primary">
+                            <button type="button" className="btn btn-primary"
+                                    onClick={handleAddProject}
+                            >
                                 Create
+
                             </button>
                         </div>
                     </div>
@@ -5973,35 +4495,12 @@ export default function Project() {
                                     type="text"
                                     className="form-control"
                                     id="exampleFormControlInput78"
-                                    defaultValue="Social Geek Made"
+                                    value={projectData.projectName}
+                                    onChange={(e) => handleChange(e, 'projectName')}
                                 />
                             </div>
-                            <div className="mb-3">
-                                <label className="form-label">Project Category</label>
-                                <select className="form-select" aria-label="Default select example">
-                                    <option selected="">UI/UX Design</option>
-                                    <option value={1}>Website Design</option>
-                                    <option value={2}>App Development</option>
-                                    <option value={3}>Quality Assurance</option>
-                                    <option value={4}>Development</option>
-                                    <option value={5}>Backend Development</option>
-                                    <option value={6}>Software Testing</option>
-                                    <option value={7}>Website Design</option>
-                                    <option value={8}>Marketing</option>
-                                    <option value={9}>SEO</option>
-                                    <option value={10}>Other</option>
-                                </select>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="formFileMultiple456" className="form-label">
-                                    Project Images &amp; Document
-                                </label>
-                                <input
-                                    className="form-control"
-                                    type="file"
-                                    id="formFileMultiple456"
-                                />
-                            </div>
+
+
                             <div className="deadline-form">
                                 <form>
                                     <div className="row g-3 mb-3">
@@ -6013,7 +4512,8 @@ export default function Project() {
                                                 type="date"
                                                 className="form-control"
                                                 id="datepickerded123"
-                                                defaultValue="2021-01-10"
+                                                value={projectData.startDate}
+                                                onChange={(e) => handleChange(e, 'startDate')}
                                             />
                                         </div>
                                         <div className="col">
@@ -6024,7 +4524,8 @@ export default function Project() {
                                                 type="date"
                                                 className="form-control"
                                                 id="datepickerded456"
-                                                defaultValue="2021-04-10"
+                                                value={projectData.endDate}
+                                                onChange={(e) => handleChange(e, 'endDate')}
                                             />
                                         </div>
                                     </div>
@@ -6040,51 +4541,11 @@ export default function Project() {
                                                 <option value={2}>Team Member Only</option>
                                             </select>
                                         </div>
-                                        <div className="col-sm-12">
-                                            <label htmlFor="formFileMultipleone" className="form-label">
-                                                Task Assign Person
-                                            </label>
-                                            <select
-                                                className="form-select"
-                                                multiple=""
-                                                aria-label="Default select Priority"
-                                            >
-                                                <option selected="">Lucinda Massey</option>
-                                                <option selected="" value={1}>
-                                                    Ryan Nolan
-                                                </option>
-                                                <option selected="" value={2}>
-                                                    Oliver Black
-                                                </option>
-                                                <option selected="" value={3}>
-                                                    Adam Walker
-                                                </option>
-                                                <option selected="" value={4}>
-                                                    Brian Skinner
-                                                </option>
-                                                <option value={5}>Dan Short</option>
-                                                <option value={5}>Jack Glover</option>
-                                            </select>
-                                        </div>
+
                                     </div>
                                 </form>
                             </div>
-                            <div className="row g-3 mb-3">
-                                <div className="col-sm">
-                                    <label htmlFor="formFileMultipleone" className="form-label">
-                                        Priority
-                                    </label>
-                                    <select
-                                        className="form-select"
-                                        aria-label="Default select Priority"
-                                    >
-                                        <option selected="">Medium</option>
-                                        <option value={1}>Highest</option>
-                                        <option value={2}>Low</option>
-                                        <option value={3}>Lowest</option>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div className="mb-3">
                                 <label
                                     htmlFor="exampleFormControlTextarea786"
@@ -6096,9 +4557,8 @@ export default function Project() {
                                     className="form-control"
                                     id="exampleFormControlTextarea786"
                                     rows={3}
-                                    defaultValue={
-                                        "Social Geek Made,lorem urna commodo sem. Pellentesque venenatis leo quam, sed mattis sapien lobortis ut. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere\n                        "
-                                    }
+                                    value={projectData.projectDescription}
+                                    onChange={(e) => handleChange(e, 'projectDescription')}
                                 />
                             </div>
                         </div>
@@ -6110,24 +4570,20 @@ export default function Project() {
                             >
                                 Done
                             </button>
-                            <button type="button" className="btn btn-primary">
-                                Create
+                            <button type="button" className="btn btn-primary"
+                                    onClick={() => handleUpdateProject(projectIdToDelete)}>
+                                Update
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* Modal  Delete Folder/ File*/}
-            <div
-                className="modal fade"
-                id="deleteproject"
-                tabIndex={-1}
-                aria-hidden="true"
-            >
+            {/* Modal Delete Folder/ File*/}
+            <div className="modal fade" id={`deleteproject`} tabIndex={-1} aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title  fw-bold" id="deleteprojectLabel">
+                            <h5 className="modal-title fw-bold" id="deleteprojectLabel">
                                 {" "}
                                 Delete item Permanently?
                             </h5>
@@ -6152,14 +4608,20 @@ export default function Project() {
                             >
                                 Cancel
                             </button>
-                            <button type="button" className="btn btn-danger color-fff">
+                            <button
+                                type="button"
+                                className="btn btn-danger color-fff"
+                                onClick={() => handleDelete(projectIdToDelete)}
+                            >
                                 Delete
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
     )
-}
+
+};

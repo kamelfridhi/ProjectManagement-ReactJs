@@ -22,8 +22,10 @@ export default function Sidebar() {
 
         return (
 
+
             <div>
                 <ToastContainer />
+
 
                 <div id="mytask-layout">
                     {/* sidebar */}
@@ -556,9 +558,10 @@ export default function Sidebar() {
                             </div>
                         </div>
                     </div>
-                    {/* Modal Members*/}
+
                 </div>
             </div>
+
 
 
         </div>

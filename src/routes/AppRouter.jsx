@@ -13,6 +13,7 @@ import OurClients from "../pages/user/OurClients.jsx";
 import Teams from "../pages/team/Teams.jsx";
 import TeamMembers from "../pages/team/TeamMembers.jsx";
 import Signup from "../pages/user/Signup.jsx";
+import Teamcard from "../pages/team/teamcard.jsx";
 import TaskList from "../pages/task/components/ShowTask.jsx";
 import ShowTasks from "../pages/task/pages/ShowTasks.jsx";
 import TaskManagement from "../pages/task/components/TaskManagement.jsx";
@@ -29,14 +30,16 @@ const AppRouter = () => {
     return (
         <Router>
             <Routes>
+
                 <Route element={<DontLogin/>}>
                     <Route path="/" element={<Login />} />
                 </Route>
 
-      <Route path="/showtask" element={<TaskList />} />
+                <Route path="/showtask" element={<TaskList />} />
                 <Route path="/status" element={<StatusPage />} />
                 <Route path="/showtasks" element={<ShowTasks />} />
                 <Route path="/board" element={<StatusBoard />} />
+                <Route path="card" element={<Teamcard />} />
                 <Route path="/testdrag" element={<TestDrag />} />
                 <Route path="/prog" element={<TaskManagement />} />
                 <Route path="/update" element={<UpdateTaskForm />} />
@@ -44,7 +47,6 @@ const AppRouter = () => {
                 <Route element={<PrivateRoute/>}>
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}
-
                     <Route path="project-dashboard" element={<ProjectDashboard />} />
                     <Route path="project" element={<Project />} />
                     <Route path="team-leader" element={<TeamLeader />} />
@@ -52,10 +54,7 @@ const AppRouter = () => {
                     <Route path="ticket-details" element={<TicketDetails />} />
                     <Route path="our-clients" element={<OurClients />} />
                     <Route path="our-teams" element={<Teams />} />
-                    <Route path="teams-members" element={<TeamMembers />} />
-                    <Route path="showtasks" element={<ShowTasks />} />
-
-
+                    <Route path="teams-members/:id" element={<TeamMembers />} />
                     <Route path="task" element={<Task />} />
                     <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<UserProfile />} />

@@ -1,16 +1,29 @@
-import React, {Component} from 'react';
-import {Link, Outlet} from 'react-router-dom';
-import Dashboard from "../../pages/Dashboard/Dashboard.jsx"; // Import Link and withRouter from react-router-dom
+import React from 'react';
+import {Link, Outlet, useNavigate} from 'react-router-dom';
 import logoImage from '/public/assets/images/logots.png';
+import {useDispatch, useSelector} from "react-redux";
+
+import { selectUserObject } from '../../redux/user/userSelector.js';
+import { signOut }  from "../../redux/user/userSlice.js";
+import {ToastContainer} from "react-toastify";
 
 
 
 export default function Sidebar() {
-
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const currentUser = useSelector(selectUserObject);
+    const handleSignOut = () => {
+        dispatch(signOut());
+        navigate("/");
+    };
 
 
         return (
+
             <div>
+                <ToastContainer />
+
                 <div id="mytask-layout">
                     {/* sidebar */}
                     <div className="sidebar px-4 py-4 py-md-5 me-0" style={{backgroundColor: '#4c3575'}}>
@@ -382,9 +395,9 @@ export default function Sidebar() {
                                         <div className="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center">
                                             <div className="u-info me-2">
                                                 <p className="mb-0 text-end line-height-sm ">
-                                                    <span className="font-weight-bold">Dylan Hunter</span>
+                                                    <span className="font-weight-bold">{currentUser ? currentUser.email : null}</span>
                                                 </p>
-                                                <small>Admin Profile</small>
+                                                <small>{currentUser.role.role} Profile</small>
                                             </div>
                                             <a
                                                 className="nav-link dropdown-toggle pulse p-0"
@@ -420,35 +433,44 @@ export default function Sidebar() {
                                                         </div>
                                                     </div>
                                                     <div className="list-group m-2 ">
+                                                        <Link
+                                                            to="profile"
+                                                            className="list-group-item list-group-item-action border-0 "
+                                                        >
+                                                            <i className="icofont-tasks fs-5 me-3"/>
+                                                            My Profile
+                                                        </Link>
+
                                                         <a
                                                             href="task.html"
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
-                                                            <i className="icofont-tasks fs-5 me-3" />
+                                                            <i className="icofont-tasks fs-5 me-3"/>
                                                             My Task
                                                         </a>
                                                         <a
                                                             href="members.html"
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
-                                                            <i className="icofont-ui-user-group fs-6 me-3" />
+                                                            <i className="icofont-ui-user-group fs-6 me-3"/>
                                                             members
                                                         </a>
-                                                        <a
-                                                            href="ui-elements/auth-signin.html"
+                                                        <button
+                                                            onClick={handleSignOut}
+
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
-                                                            <i className="icofont-logout fs-6 me-3" />
+                                                            <i className="icofont-logout fs-6 me-3"/>
                                                             Signout
-                                                        </a>
+                                                        </button>
                                                         <div>
-                                                            <hr className="dropdown-divider border-dark" />
+                                                            <hr className="dropdown-divider border-dark"/>
                                                         </div>
                                                         <a
                                                             href="ui-elements/auth-signup.html"
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
-                                                            <i className="icofont-contact-add fs-5 me-3" />
+                                                            <i className="icofont-contact-add fs-5 me-3"/>
                                                             Add personal account
                                                         </a>
                                                     </div>

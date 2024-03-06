@@ -88,7 +88,7 @@ export default function Signup() {
                             </div>
                             <div className="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100" style={{ backgroundColor: "#4c3575" }}>
                                 <div
-                                    className="w-100 p-3 p-md-5 card border-0 bg-dark text-light"
+                                    className="w-100 p-3 p-md-5 h-250 card border-0 bg-dark text-light"
                                     style={{ maxWidth: "32rem" }}
                                 >
                                     {/* Form */}
@@ -179,7 +179,6 @@ export default function Signup() {
                                                 >
                                                     <option value="">Select a role</option>
                                                     <option value="user">User</option>
-                                                    <option value="admin">Admin</option>
                                                     <option value="employee">Employee</option>
                                                     <option value="projectManager">Project Manager</option>
                                                     <option value="client">Client</option>

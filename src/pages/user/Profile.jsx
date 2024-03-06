@@ -4,7 +4,7 @@ import {selectUserObject} from "../../redux/user/userSelector.js";
 export default function UserProfile(){
     const currentUser = useSelector(selectUserObject);
     return(
-        <>
+            <>
             <>
                 {/* Body: Body */}
                 <div className="body d-flex py-lg-3 py-md-2">

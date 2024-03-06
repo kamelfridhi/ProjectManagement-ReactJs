@@ -1,8 +1,7 @@
 import React from 'react';
-
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter, BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Sidebar from "../_shared/sidebar/Sidebar.jsx";
-import Task from "../pages/task/Task.jsx";
+import Task from "../pages/task/pages/Task.jsx";
 import Login from "../pages/Login/Login.jsx";
 import Dashboard from "../pages/Dashboard/Dashboard.jsx";
 import ProjectDashboard from "../pages/Dashboard/ProjectDashboard.jsx";
@@ -15,18 +14,39 @@ import Teams from "../pages/team/Teams.jsx";
 import TeamMembers from "../pages/team/TeamMembers.jsx";
 import Signup from "../pages/user/Signup.jsx";
 import Teamcard from "../pages/team/teamcard.jsx";
-
+import TaskList from "../pages/task/components/ShowTask.jsx";
+import ShowTasks from "../pages/task/pages/ShowTasks.jsx";
+import TaskManagement from "../pages/task/components/TaskManagement.jsx";
+import UpdateTask from "../pages/task/components/UpdateTask.jsx";
+import UpdateTaskForm from "../pages/task/components/UpdateTask.jsx";
+import TestDrag from "../pages/task/components/TestDrag.jsx";
+import Mehdidrag from "../pages/task/components/StatusBoard.jsx";
+import StatusPage from "../pages/task/components/StatusPage.jsx";
+import StatusBoard from "../pages/task/components/StatusBoard.jsx";
+import { PrivateRoute, DontLogin } from "../_shared/protectRoutes.jsx";
+import UserProfile from "../pages/user/Profile.jsx";
 
 const AppRouter = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="Signup" element={<Signup />} />
+
+                <Route element={<DontLogin/>}>
+                    <Route path="/" element={<Login />} />
+                </Route>
+
+                <Route path="/showtask" element={<TaskList />} />
+                <Route path="/status" element={<StatusPage />} />
+                <Route path="/showtasks" element={<ShowTasks />} />
+                <Route path="/board" element={<StatusBoard />} />
                 <Route path="card" element={<Teamcard />} />
+                <Route path="/testdrag" element={<TestDrag />} />
+                <Route path="/prog" element={<TaskManagement />} />
+                <Route path="/update" element={<UpdateTaskForm />} />
+                <Route path="signup" element={<Signup />} />
+                <Route element={<PrivateRoute/>}>
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}
-
                     <Route path="project-dashboard" element={<ProjectDashboard />} />
                     <Route path="project" element={<Project />} />
                     <Route path="team-leader" element={<TeamLeader />} />
@@ -35,14 +55,12 @@ const AppRouter = () => {
                     <Route path="our-clients" element={<OurClients />} />
                     <Route path="our-teams" element={<Teams />} />
                     <Route path="teams-members/:id" element={<TeamMembers />} />
-
                     <Route path="task" element={<Task />} />
                     <Route path="dashboard" element={<Dashboard />} />
-                </Route>
-
+        <Route path="profile" element={<UserProfile />} />
+                    </Route>
             </Routes>
         </Router>
-
 
 
     );

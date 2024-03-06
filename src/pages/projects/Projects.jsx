@@ -88,6 +88,7 @@ export default function Project() {
 
     return (
 
+
         <div className="main px-lg-4 px-md-4">
             {/* Body: Body */}
             <div className="body d-flex py-lg-3 py-md-2">
@@ -192,6 +193,7 @@ export default function Project() {
                                                                 className="btn-group"
                                                                 role="group"
                                                                 aria-label="Basic outlined example"
+
                                                             >
                                                                 <button
                                                                     type="button"

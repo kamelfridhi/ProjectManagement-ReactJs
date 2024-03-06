@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import BACK_END_URL from '../config';
 import User from '../_models/User';
@@ -15,6 +16,17 @@ export const getAllUsers = async() => {
     }
 };
 
+  export const getAllUserss = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}`);
+        console.log(data.size+"datttttttta")
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
 export const addUser = async (data) => {
     try {
         return await axios.post (API_BASE_URL, data);

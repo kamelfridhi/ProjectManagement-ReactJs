@@ -397,7 +397,7 @@ export default function Sidebar() {
                                                 <p className="mb-0 text-end line-height-sm ">
                                                     <span className="font-weight-bold">{currentUser ? currentUser.email : null}</span>
                                                 </p>
-                                                <small>Admin Profile</small>
+                                                <small>{currentUser.role.role} Profile</small>
                                             </div>
                                             <a
                                                 className="nav-link dropdown-toggle pulse p-0"
@@ -433,18 +433,26 @@ export default function Sidebar() {
                                                         </div>
                                                     </div>
                                                     <div className="list-group m-2 ">
+                                                        <Link
+                                                            to="profile"
+                                                            className="list-group-item list-group-item-action border-0 "
+                                                        >
+                                                            <i className="icofont-tasks fs-5 me-3"/>
+                                                            My Profile
+                                                        </Link>
+
                                                         <a
                                                             href="task.html"
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
-                                                            <i className="icofont-tasks fs-5 me-3" />
+                                                            <i className="icofont-tasks fs-5 me-3"/>
                                                             My Task
                                                         </a>
                                                         <a
                                                             href="members.html"
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
-                                                            <i className="icofont-ui-user-group fs-6 me-3" />
+                                                            <i className="icofont-ui-user-group fs-6 me-3"/>
                                                             members
                                                         </a>
                                                         <button
@@ -452,17 +460,17 @@ export default function Sidebar() {
 
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
-                                                            <i className="icofont-logout fs-6 me-3" />
+                                                            <i className="icofont-logout fs-6 me-3"/>
                                                             Signout
                                                         </button>
                                                         <div>
-                                                            <hr className="dropdown-divider border-dark" />
+                                                            <hr className="dropdown-divider border-dark"/>
                                                         </div>
                                                         <a
                                                             href="ui-elements/auth-signup.html"
                                                             className="list-group-item list-group-item-action border-0 "
                                                         >
-                                                            <i className="icofont-contact-add fs-5 me-3" />
+                                                            <i className="icofont-contact-add fs-5 me-3"/>
                                                             Add personal account
                                                         </a>
                                                     </div>

@@ -19,7 +19,6 @@ const userSlice = createSlice({
             state.loading = false;
             state.error = false;
 
-
             // Save user data to local storage
             //localStorage.setItem('currentUser', JSON.stringify(action.payload));
         },

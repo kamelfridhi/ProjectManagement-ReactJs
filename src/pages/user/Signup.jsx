@@ -1,18 +1,13 @@
 import * as Yup from 'yup';
-import {Link} from "react-router-dom";
-import {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import React, {useState} from "react";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Signup() {
     const [formData, setFormData] = useState({})
 
-    const validationSchema = Yup.object().shape({
-        username: Yup.string()
-            .required('username is required')
-            .matches(
-                /^[a-zA-Z0-9]{5,}$/,
-                'Folder name must be at least 5 characters long and contain only alphanumeric characters.',
-            ),
-    });
-
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({...formData, [e.target.id]: e.target.value });
@@ -21,6 +16,8 @@ export default function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault(); //stop the refresh of the page
         try {
+            await schema.validate(formData, { abortEarly: false });
+
             const res = await fetch(`/auth`,{
                 method: 'POST',
                 headers: {
@@ -29,14 +26,32 @@ export default function Signup() {
                 body: JSON.stringify(formData)
 
             });
-            const data = await res.json();
+            //const data = await res.json();
+            toast.success("registred successfuly");
+            navigate("/")
 
-        }catch (error){
-            console.log(error)
+        }catch (error) {
+            // Validation failed or server error
+            error.inner.forEach(err => {
+                toast.error(err.message); // Display validation error using Toastr
+            });
         }
     }
+    console.log(formData)
+
+    // Define validation schema using Yup
+    const schema = Yup.object().shape({
+        firstName: Yup.string().required('First name is required'),
+        lastName: Yup.string().required('Last name is required'),
+        email: Yup.string().email('Invalid email').required('Email is required'),
+        password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+        dateOfBirth: Yup.date().required('Date of Birth is required'),
+        address: Yup.string().required('Address is required'),
+        role: Yup.string().required('Role is required')
+    });
     return (
         <>
+            <ToastContainer />
             {/* main body area */}
             <div className="main p-2 py-3 p-xl-5">
                 {/* Body: Body */}
@@ -84,13 +99,13 @@ export default function Signup() {
                                         </div>
                                         <div className="col-6">
                                             <div className="mb-2">
-                                                <label className="form-label">Full name</label>
+                                                <label className="form-label">firstName</label>
                                                 <input
                                                     type="text"
                                                     className="form-control form-control-lg"
                                                     placeholder="John"
                                                     onChange={handleChange}
-                                                    id="username"
+                                                    id="firstName"
                                                 />
                                             </div>
                                         </div>
@@ -98,9 +113,11 @@ export default function Signup() {
                                             <div className="mb-2">
                                                 <label className="form-label">&nbsp;</label>
                                                 <input
-                                                    type="email"
+                                                    type="text"
                                                     className="form-control form-control-lg"
                                                     placeholder="Parker"
+                                                    onChange={handleChange}
+                                                    id="lastName"
                                                 />
                                             </div>
                                         </div>
@@ -118,6 +135,19 @@ export default function Signup() {
                                         </div>
                                         <div className="col-12">
                                             <div className="mb-2">
+                                                <label className="form-label">Telephone number</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control form-control-lg"
+                                                    placeholder="Enter your telephone number"
+                                                    onChange={handleChange}
+                                                    id="telephone"
+                                                    value={formData.telephone}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-12">
+                                            <div className="mb-2">
                                                 <label className="form-label">Password</label>
                                                 <input
                                                     type="password"
@@ -128,39 +158,48 @@ export default function Signup() {
                                                 />
                                             </div>
                                         </div>
+                                        <div className="col-6">
+                                            <div className="mb-2">
+                                                <label className="form-label">Date of Birth</label>
+                                                <input
+                                                    type="date"
+                                                    className="form-control form-control-lg"
+                                                    onChange={handleChange}
+                                                    id="dateOfBirth"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-6">
+                                            <div className="mb-2">
+                                                <label className="form-label">Role</label>
+                                                <select
+                                                    className="form-select form-select-lg"
+                                                    onChange={handleChange}
+                                                    id="role"
+                                                >
+                                                    <option value="">Select a role</option>
+                                                    <option value="user">User</option>
+                                                    <option value="admin">Admin</option>
+                                                    <option value="employee">Employee</option>
+                                                    <option value="projectManager">Project Manager</option>
+                                                    <option value="client">Client</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div className="col-12">
                                             <div className="mb-2">
-                                                <label className="form-label">Confirm password</label>
+                                                <label className="form-label">Address</label>
                                                 <input
-                                                    type="email"
+                                                    type="text"
                                                     className="form-control form-control-lg"
-                                                    placeholder="8+ characters required"
+                                                    placeholder="Enter your address"
+                                                    onChange={handleChange}
+                                                    id="address"
                                                 />
                                             </div>
                                         </div>
-                                        <div className="col-12">
-                                            <div className="form-check">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault"
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor="flexCheckDefault"
-                                                >
-                                                    I accept the{" "}
-                                                    <a
-                                                        href="#"
-                                                        title="Terms and Conditions"
-                                                        className="text-secondary"
-                                                    >
-                                                        Terms and Conditions
-                                                    </a>
-                                                </label>
-                                            </div>
-                                        </div>
+
                                         <div className="col-12 text-center mt-4">
                                             <button
                                                 type="submit"
@@ -187,7 +226,8 @@ export default function Signup() {
                                     {/* End Form */}
                                 </div>
                             </div>
-                        </div>{" "}
+                        </div>
+                        {" "}
                         {/* End Row */}
                     </div>
                 </div>

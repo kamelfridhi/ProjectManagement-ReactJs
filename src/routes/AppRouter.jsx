@@ -14,6 +14,7 @@ import Teams from "../pages/team/Teams.jsx";
 import TeamMembers from "../pages/team/TeamMembers.jsx";
 import Signup from "../pages/user/Signup.jsx";
 import { PrivateRoute, DontLogin } from "../_shared/protectRoutes.jsx";
+import UserProfile from "../pages/user/Profile.jsx";
 
 const AppRouter = () => {
     return (
@@ -37,6 +38,7 @@ const AppRouter = () => {
                         <Route path="teams-members" element={<TeamMembers />} />
                         <Route path="task" element={<Task />} />
                         <Route path="dashboard" element={<Dashboard />} />
+                        <Route path="profile" element={<UserProfile />} />
                     </Route>
                 </Route>
             </Routes>

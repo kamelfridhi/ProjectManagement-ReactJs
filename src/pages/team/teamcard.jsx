@@ -30,6 +30,7 @@ export default function Teamcard ({ team ,fetchTeams}){
                 users.map((userId) => TeamService.getOneUser(userId))
             );
             setUsersInfo(usersDetails);
+
         } catch (error) {
             console.error("Error fetching user details:", error);
         }
@@ -126,13 +127,15 @@ export default function Teamcard ({ team ,fetchTeams}){
                                         data-bs-toggle="modal"
                                         data-bs-target="#addUser"
                                     >
-    <i className="icofont-ui-add"/>
+    <i className="icofont-ui-add" id={team._id}  />
+                                        {team._id}
 </span>
 
                                 </div>
 
                                 {/* Modal Members*/}
                                 <div
+                                    key={team._id}
                                     className="modal fade"
                                     id="addUser"
                                     tabIndex={-1}
@@ -143,7 +146,7 @@ export default function Teamcard ({ team ,fetchTeams}){
                                         <div className="modal-content">
                                             <div className="modal-header">
                                                 <h5 className="modal-title  fw-bold" id="addUserLabel">
-                                                    Add Member
+                                                    Add Member {team.name}
                                                 </h5>
                                                 <button
                                                     type="button"

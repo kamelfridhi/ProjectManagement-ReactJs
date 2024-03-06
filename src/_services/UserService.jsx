@@ -3,7 +3,7 @@ import axios from 'axios';
 import BACK_END_URL from '../config';
 import User from '../_models/User';
 
-const API_BASE_URL = BACK_END_URL + '/user';
+const API_BASE_URL = BACK_END_URL + 'user';
 //const userid = '65d8dd987faf4da6a55483aa';
 
 export const getAllUsers = async() => {

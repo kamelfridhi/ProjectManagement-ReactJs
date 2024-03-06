@@ -109,8 +109,7 @@ export default function TeamMembers() {
                                                     {user.username}
                                                 </h6>
                                                 <span className="light-info-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-11 mb-0 mt-1">
-                            {user.role}
-                        </span>
+                         </span>
                                                 <div className="video-setting-icon mt-3 pt-3 border-top">
                                                     <p>
                                                         {user.email}

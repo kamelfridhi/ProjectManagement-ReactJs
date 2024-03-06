@@ -1,24 +1,22 @@
+
 import axios from 'axios';
 import BACK_END_URL from '../config';
 import User from '../_models/User';
-import data from "bootstrap/js/src/dom/data.js";
 
-const API_BASE_URL = BACK_END_URL + 'user';
+const API_BASE_URL = BACK_END_URL + '/user';
 //const userid = '65d8dd987faf4da6a55483aa';
 
-export const getAllUserss = async() => {
+export const getAllUsers = async() => {
     try {
-
-        const response = await axios.get(API_BASE_URL);
-        console.log(data+"userservice")
-        return response.data;
+        return (await axios.get(`${API_BASE_URL}`)).data;
 
     } catch (error) {
         console.error(error);
         throw error;
     }
 };
-export const getAllUsers = async () => {
+
+  export const getAllUserss = async () => {
     try {
         const response = await axios.get(`${API_BASE_URL}`);
         console.log(data.size+"datttttttta")
@@ -29,7 +27,6 @@ export const getAllUsers = async () => {
         throw error;
     }
 };
-
 export const addUser = async (data) => {
     try {
         return await axios.post (API_BASE_URL, data);

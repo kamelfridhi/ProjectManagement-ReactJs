@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {BrowserRouter, BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Sidebar from "../_shared/sidebar/Sidebar.jsx";
 import Task from "../pages/task/pages/Task.jsx";
@@ -23,21 +22,26 @@ import TestDrag from "../pages/task/components/TestDrag.jsx";
 import Mehdidrag from "../pages/task/components/StatusBoard.jsx";
 import StatusPage from "../pages/task/components/StatusPage.jsx";
 import StatusBoard from "../pages/task/components/StatusBoard.jsx";
-
+import { PrivateRoute, DontLogin } from "../_shared/protectRoutes.jsx";
+import UserProfile from "../pages/user/Profile.jsx";
 
 const AppRouter = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/showtask" element={<TaskList />} />
+                <Route element={<DontLogin/>}>
+                    <Route path="/" element={<Login />} />
+                </Route>
+
+      <Route path="/showtask" element={<TaskList />} />
                 <Route path="/status" element={<StatusPage />} />
                 <Route path="/showtasks" element={<ShowTasks />} />
                 <Route path="/board" element={<StatusBoard />} />
                 <Route path="/testdrag" element={<TestDrag />} />
                 <Route path="/prog" element={<TaskManagement />} />
                 <Route path="/update" element={<UpdateTaskForm />} />
-                <Route path="Signup" element={<Signup />} />
+                <Route path="signup" element={<Signup />} />
+                <Route element={<PrivateRoute/>}>
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}
 
@@ -54,8 +58,8 @@ const AppRouter = () => {
 
                     <Route path="task" element={<Task />} />
                     <Route path="dashboard" element={<Dashboard />} />
-                </Route>
-
+        <Route path="profile" element={<UserProfile />} />
+                    </Route>
             </Routes>
         </Router>
 

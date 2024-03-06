@@ -1,30 +1,44 @@
 import React, { Component } from 'react';
-import { Link, Outlet } from 'react-router-dom';
 import Dashboard from "../../pages/Dashboard/Dashboard.jsx"; // Import Link and withRouter from react-router-dom
+import {Link, Outlet, useNavigate} from 'react-router-dom';
 import logoImage from '/public/assets/images/logots.png';
+import {useDispatch, useSelector} from "react-redux";
+import { selectUserObject } from '../../redux/user/userSelector.js';
+import { signOut }  from "../../redux/user/userSlice.js";
+import {ToastContainer} from "react-toastify";
 
 
 
 export default function Sidebar() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const currentUser = useSelector(selectUserObject);
+    const handleSignOut = () => {
+        dispatch(signOut());
+        navigate("/");
+    };
 
 
 
-    return (
-        <div>
-            <div id="mytask-layout">
-                {/* sidebar */}
-                <div className="sidebar px-4 py-4 py-md-5 me-0" style={{ backgroundColor: '#4c3575' }}>
-                    <div className="d-flex flex-column h-100">
-                        <a href="index.html" className="mb-0 brand-icon">
-                            <span className="logo-icon">
-                                <img src={logoImage} style={{ width: '50px', height: '50px', marginLeft: '5px' }} />
-                                <svg
-                                    width={35}
-                                    height={35}
-                                    fill="currentColor"
-                                    className="bi bi-clipboard-check"
-                                    viewBox="0 0 16 16"
-                                >
+        return (
+
+            <div>
+                <ToastContainer />
+
+                <div id="mytask-layout">
+                    {/* sidebar */}
+                    <div className="sidebar px-4 py-4 py-md-5 me-0" style={{backgroundColor: '#4c3575'}}>
+                        <div className="d-flex flex-column h-100">
+                            <a href="index.html" className="mb-0 brand-icon">
+        <span className="logo-icon">
+            <img src= {logoImage}  style={{width: '50px', height: '50px', marginLeft: '5px'}} />
+          <svg
+              width={35}
+              height={35}
+              fill="currentColor"
+              className="bi bi-clipboard-check"
+              viewBox="0 0 16 16"
+          >
 
                                 </svg>
                             </span>
@@ -379,71 +393,83 @@ export default function Sidebar() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center">
-                                        <div className="u-info me-2">
-                                            <p className="mb-0 text-end line-height-sm ">
-                                                <span className="font-weight-bold">Dylan Hunter</span>
-                                            </p>
-                                            <small>Admin Profile</small>
-                                        </div>
-                                        <a
-                                            className="nav-link dropdown-toggle pulse p-0"
-                                            href="#"
-                                            role="button"
-                                            data-bs-toggle="dropdown"
-                                            data-bs-display="static"
-                                        >
-                                            <img
-                                                className="avatar lg rounded-circle img-thumbnail"
-                                                src="/assets/images/profile_av.png"
-                                                alt="profile"
-                                            />
-                                        </a>
-                                        <div className="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
-                                            <div className="card border-0 w280">
-                                                <div className="card-body pb-0">
-                                                    <div className="d-flex py-1">
-                                                        <img
-                                                            className="avatar rounded-circle"
-                                                            src="/assets/images/profile_av.png"
-                                                            alt="profile"
-                                                        />
-                                                        <div className="flex-fill ms-3">
-                                                            <p className="mb-0">
-                                                                <span className="font-weight-bold">Dylan Hunter</span>
-                                                            </p>
-                                                            <small className="">Dylan.hunter@gmail.com</small>
+
+
+                                        <div className="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center">
+                                            <div className="u-info me-2">
+                                                <p className="mb-0 text-end line-height-sm ">
+                                                    <span className="font-weight-bold">{currentUser ? currentUser.email : null}</span>
+                                                </p>
+                                                <small>{currentUser.role.role} Profile</small>
+                                            </div>
+                                            <a
+                                                className="nav-link dropdown-toggle pulse p-0"
+                                                href="#"
+                                                role="button"
+                                                data-bs-toggle="dropdown"
+                                                data-bs-display="static"
+                                            >
+                                                <img
+                                                    className="avatar lg rounded-circle img-thumbnail"
+                                                    src="/assets/images/profile_av.png"
+                                                    alt="profile"
+                                                />
+                                            </a>
+                                            <div className="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
+                                                <div className="card border-0 w280">
+                                                    <div className="card-body pb-0">
+                                                        <div className="d-flex py-1">
+                                                            <img
+                                                                className="avatar rounded-circle"
+                                                                src="/assets/images/profile_av.png"
+                                                                alt="profile"
+                                                            />
+                                                            <div className="flex-fill ms-3">
+                                                                <p className="mb-0">
+                                                                    <span className="font-weight-bold">Dylan Hunter</span>
+                                                                </p>
+                                                                <small className="">Dylan.hunter@gmail.com</small>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <hr className="dropdown-divider border-dark" />
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                        <hr className="dropdown-divider border-dark" />
-                                                    </div>
-                                                </div>
-                                                <div className="list-group m-2 ">
-                                                    <a
-                                                        href="task.html"
-                                                        className="list-group-item list-group-item-action border-0 "
-                                                    >
-                                                        <i className="icofont-tasks fs-5 me-3" />
-                                                        My Task
-                                                    </a>
-                                                    <a
-                                                        href="members.html"
-                                                        className="list-group-item list-group-item-action border-0 "
-                                                    >
-                                                        <i className="icofont-ui-user-group fs-6 me-3" />
-                                                        members
-                                                    </a>
-                                                    <a
-                                                        href="ui-elements/auth-signin.html"
-                                                        className="list-group-item list-group-item-action border-0 "
-                                                    >
-                                                        <i className="icofont-logout fs-6 me-3" />
-                                                        Signout
-                                                    </a>
-                                                    <div>
-                                                        <hr className="dropdown-divider border-dark" />
-                                                    </div>
+                                                    <div className="list-group m-2 ">
+                                                        <Link
+                                                            to="profile"
+                                                            className="list-group-item list-group-item-action border-0 "
+                                                        >
+                                                            <i className="icofont-tasks fs-5 me-3"/>
+                                                            My Profile
+                                                        </Link>
+
+                                                        <a
+                                                            href="task.html"
+                                                            className="list-group-item list-group-item-action border-0 "
+                                                        >
+                                                            <i className="icofont-tasks fs-5 me-3"/>
+                                                            My Task
+                                                        </a>
+                                                        <a
+                                                            href="members.html"
+                                                            className="list-group-item list-group-item-action border-0 "
+                                                        >
+                                                            <i className="icofont-ui-user-group fs-6 me-3"/>
+                                                            members
+                                                        </a>
+                                                        <button
+                                                            onClick={handleSignOut}
+
+                                                            className="list-group-item list-group-item-action border-0 "
+                                                        >
+                                                            <i className="icofont-logout fs-6 me-3"/>
+                                                            Signout
+                                                        </button>
+                                                        <div>
+                                                            <hr className="dropdown-divider border-dark"/>
+                                                        </div>
+                                                        
                                                     <a
                                                         href="ui-elements/auth-signup.html"
                                                         className="list-group-item list-group-item-action border-0 "

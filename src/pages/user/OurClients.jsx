@@ -1,5 +1,18 @@
+import { useEffect, useState } from "react";
+import UserCard from "../user/userCard"
+import * as UserService from "./../../_services/UserService";
+
 export default function OurClients() {
-    return(
+    const [users, setUsers] = useState([])
+    const fetchUsers = async () => {
+        setUsers(await UserService.getAllUsers());
+    };
+    useEffect(() => {
+
+        fetchUsers();
+    }, []);
+
+    return (
         <>
             {/* main body area */}
             <div className="main px-lg-4 px-md-4">
@@ -79,653 +92,15 @@ export default function OurClients() {
                         </div>
                         {/* Row End */}
                         <div className="row g-3 row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck py-1 pb-4">
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar3.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">CEO</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">
-                                                AgilSoft Tech
-                                            </h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Ryan Ogden
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices.Vestibulum ante ipsum primis in faucibus orci
-                                                    luctus et ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-1">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar2.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">Manager</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">Macrosoft</h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Matt Gibson
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices.Vestibulum ante ipsum primis in faucibus orci
-                                                    luctus et ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-1">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar8.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">CEO</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">Google</h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Lauren Reid
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices.Vestibulum ante ipsum primis in faucibus orci
-                                                    luctus et ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-2">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar10.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">CEO</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">
-                                                Pixelwibes
-                                            </h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Peter Vance
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices.Vestibulum ante ipsum primis in faucibus orci
-                                                    luctus et ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-1">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar11.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">Manager</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">
-                                                Deltasoft Tech
-                                            </h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Una Murray
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices.Vestibulum ante ipsum primis in faucibus orci
-                                                    luctus et ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-1">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar12.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">CEO</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">
-                                                Design Tech
-                                            </h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Paul Grant
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices,Vestibulum ante ipsum primis in faucibus orci
-                                                    luctus et ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-1">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar5.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">Manager</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">VerinSoft</h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Amanda Russell
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-1">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar6.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">CEO</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">
-                                                Crestcoder
-                                            </h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Diane Vaughan
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-1">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar7.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">Manager</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">Rocobend</h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Piers Churchill
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-1">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card teacher-card">
-                                    <div className="card-body  d-flex">
-                                        <div className="profile-av pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
-                                            <img
-                                                src="assets/images/lg/avatar1.jpg"
-                                                alt=""
-                                                className="avatar xl rounded-circle img-thumbnail shadow-sm"
-                                            />
-                                            <div className="about-info d-flex align-items-center mt-1 justify-content-center flex-column">
-                                                <h6 className="mb-0 fw-bold d-block fs-6 mt-2">CEO</h6>
-                                                <div
-                                                    className="btn-group mt-2"
-                                                    role="group"
-                                                    aria-label="Basic outlined example"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editproject"
-                                                    >
-                                                        <i className="icofont-edit text-success" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-outline-secondary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteproject"
-                                                    >
-                                                        <i className="icofont-ui-delete text-danger" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
-                                            <h6 className="mb-0 mt-2  fw-bold d-block fs-6">Google</h6>
-                                            <span className="py-1 fw-bold small-11 mb-0 mt-1 text-muted">
-                    Lauren Reid
-                  </span>
-                                            <div className="video-setting-icon mt-3 pt-3 border-top">
-                                                <p>
-                                                    Vestibulum ante ipsum primis in faucibus orci luctus et
-                                                    ultrices.Vestibulum ante ipsum primis in faucibus orci
-                                                    luctus et ultrices
-                                                </p>
-                                            </div>
-                                            <div className="d-flex flex-wrap align-items-center ct-btn-set">
-                                                <a
-                                                    href="chat.html"
-                                                    className="btn btn-dark btn-sm mt-1 me-1"
-                                                >
-                                                    <i className="icofont-ui-text-chat me-2 fs-6" />
-                                                    Chat
-                                                </a>
-                                                <a href="profile.html" className="btn btn-dark btn-sm mt-2">
-                                                    <i className="icofont-invisible me-2 fs-6" />
-                                                    Profile
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                            {
+                                users.length > 0 ? (
+                                    users.map(user => <UserCard key={user.id} user={user} fetchUsers={fetchUsers} />)
+                                ) : (
+                                    <p>No users found</p>
+                                )
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -848,9 +223,9 @@ export default function OurClients() {
                                                                     <i className="icofont-check-circled" />
                                                                     Member
                                                                     <span>
-                                Can view, edit, delete, comment on and save
-                                files
-                              </span>
+                                                                        Can view, edit, delete, comment on and save
+                                                                        files
+                                                                    </span>
                                                                 </a>
                                                             </li>
                                                             <li>
@@ -858,8 +233,8 @@ export default function OurClients() {
                                                                     <i className="fs-6 p-2 me-1" />
                                                                     Admin
                                                                     <span>
-                                Member, but can invite and manage team members
-                              </span>
+                                                                        Member, but can invite and manage team members
+                                                                    </span>
                                                                 </a>
                                                             </li>
                                                         </ul>
@@ -914,9 +289,9 @@ export default function OurClients() {
                                                                     <i className="icofont-check-circled" />
                                                                     Member
                                                                     <span>
-                                Can view, edit, delete, comment on and save
-                                files
-                              </span>
+                                                                        Can view, edit, delete, comment on and save
+                                                                        files
+                                                                    </span>
                                                                 </a>
                                                             </li>
                                                             <li>
@@ -924,8 +299,8 @@ export default function OurClients() {
                                                                     <i className="fs-6 p-2 me-1" />
                                                                     Admin
                                                                     <span>
-                                Member, but can invite and manage team members
-                              </span>
+                                                                        Member, but can invite and manage team members
+                                                                    </span>
                                                                 </a>
                                                             </li>
                                                         </ul>
@@ -1119,357 +494,357 @@ export default function OurClients() {
                                 <div className="table-responsive">
                                     <table className="table table-striped custom-table">
                                         <thead>
-                                        <tr>
-                                            <th>Project Permission</th>
-                                            <th className="text-center">Read</th>
-                                            <th className="text-center">Write</th>
-                                            <th className="text-center">Create</th>
-                                            <th className="text-center">Delete</th>
-                                            <th className="text-center">Import</th>
-                                            <th className="text-center">Export</th>
-                                        </tr>
+                                            <tr>
+                                                <th>Project Permission</th>
+                                                <th className="text-center">Read</th>
+                                                <th className="text-center">Write</th>
+                                                <th className="text-center">Create</th>
+                                                <th className="text-center">Delete</th>
+                                                <th className="text-center">Import</th>
+                                                <th className="text-center">Export</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td className="fw-bold">Projects</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault1"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault2"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault3"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault4"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault5"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault6"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Tasks</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault7"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault8"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault9"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault10"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault11"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault12"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Chat</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault13"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault14"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault15"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault16"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault17"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault18"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Estimates</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault19"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault20"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault21"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault22"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault23"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault24"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Invoices</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault25"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault26"
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault27"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault28"
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault29"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault30"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Timing Sheets</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault31"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault32"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault33"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault34"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault35"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault36"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td className="fw-bold">Projects</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault1"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault2"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault3"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault4"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault5"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault6"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Tasks</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault7"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault8"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault9"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault10"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault11"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault12"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Chat</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault13"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault14"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault15"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault16"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault17"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault18"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Estimates</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault19"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault20"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault21"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault22"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault23"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault24"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Invoices</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault25"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault26"
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault27"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault28"
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault29"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault30"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Timing Sheets</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault31"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault32"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault33"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault34"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault35"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault36"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1622,357 +997,357 @@ export default function OurClients() {
                                 <div className="table-responsive">
                                     <table className="table table-striped custom-table">
                                         <thead>
-                                        <tr>
-                                            <th>Project Permission</th>
-                                            <th className="text-center">Read</th>
-                                            <th className="text-center">Write</th>
-                                            <th className="text-center">Create</th>
-                                            <th className="text-center">Delete</th>
-                                            <th className="text-center">Import</th>
-                                            <th className="text-center">Export</th>
-                                        </tr>
+                                            <tr>
+                                                <th>Project Permission</th>
+                                                <th className="text-center">Read</th>
+                                                <th className="text-center">Write</th>
+                                                <th className="text-center">Create</th>
+                                                <th className="text-center">Delete</th>
+                                                <th className="text-center">Import</th>
+                                                <th className="text-center">Export</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td className="fw-bold">Projects</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault117"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault127"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault37"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault47"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault57"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault67"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Tasks</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault77"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault87"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault97"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault107"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault1179"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault1279"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Chat</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault137"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault147"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault157"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault167"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault177"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault187"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Estimates</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault197"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault207"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault217"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault227"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault237"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault247"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Invoices</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault257"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault267"
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault277"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault287"
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault297"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault307"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="fw-bold">Timing Sheets</td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault317"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault327"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault337"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault347"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault357"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                            <td className="text-center">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    defaultValue=""
-                                                    id="flexCheckDefault367"
-                                                    defaultChecked=""
-                                                />
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td className="fw-bold">Projects</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault117"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault127"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault37"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault47"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault57"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault67"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Tasks</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault77"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault87"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault97"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault107"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault1179"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault1279"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Chat</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault137"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault147"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault157"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault167"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault177"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault187"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Estimates</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault197"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault207"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault217"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault227"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault237"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault247"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Invoices</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault257"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault267"
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault277"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault287"
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault297"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault307"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="fw-bold">Timing Sheets</td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault317"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault327"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault337"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault347"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault357"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                                <td className="text-center">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        defaultValue=""
+                                                        id="flexCheckDefault367"
+                                                        defaultChecked=""
+                                                    />
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

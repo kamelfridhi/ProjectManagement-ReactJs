@@ -72,7 +72,7 @@ export default function Teams() {
                 };
 
                 // Send POST request to create a new team
-                const createdTeam = await TeamService.addTeam(newTeamData);
+                 await TeamService.addTeam(newTeamData);
 
                 // Reset form fields after creating the team
                 setTeamName('');
@@ -83,7 +83,6 @@ export default function Teams() {
                 fetchTeams();
 
                 // Do something with the created team, for example, display a success message
-                console.log('Team created successfully:', createdTeam);
             }
         } catch (error) {
             // Handle errors when creating the team, for example, display an error message

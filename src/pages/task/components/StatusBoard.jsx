@@ -131,12 +131,12 @@ export default function StatusBoard({ refresh }) {
             if (status !== 'TODO' && status !== 'INPROGRESS' && status !== 'DONE') {
                 await Swal.fire({
                     title: "Are you sure?",
-                    text: "You won't be able to revert this!",
+                    text: "You won't be able to delete  '" + status + "' status",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#68358d",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
+                    confirmButtonText: "Yes, delete '" +status + "' status",
                 }).then(async (result) => {
                     if (result.isConfirmed) {
                         // Supprimer l'élément

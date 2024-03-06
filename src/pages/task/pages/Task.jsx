@@ -24,6 +24,8 @@ export default function Task() {
     const [refresh, setRefresh] = useState(false);
     const [users, setUsers] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState('');
+    const [taskNameError, setTaskNameError] = useState('');
+
     // Autres états pour les autres champs du formulaire
     const handlePriorityChange = (e) => {
         setTaskPriority(e.target.value);
@@ -57,7 +59,12 @@ export default function Task() {
 
     const handleAddTask = async () => {
         try {
-            // Créer un objet de données pour la nouvelle tâche
+            // Vérifiez si le champ "Task Name" est vide lors de la soumission du formulaire
+            if (taskName.trim() === '') {
+                setTaskNameError('Task Name is required');
+                return;
+            }
+
             const newTaskData = {
                 name: taskName,
                 category: taskCategory,
@@ -66,39 +73,39 @@ export default function Task() {
                 startDate: taskStartDate,
                 endDate: taskEndDate,
                 assignPerson: selectedUserId,
-                // Ajoutez d'autres propriétés de tâche nécessaires
             };
 
-            // Envoyer la requête POST pour créer une nouvelle tâche
             const createdTask = await TaskService.addTask(newTaskData);
+            resetForm();
 
-            // Réinitialiser les champs du formulaire après la création de la tâche
-            setTaskName('');
-            setTaskCategory('');
-            setTaskDescription('');
-            setTaskPriority('');
-            setTaskStartDate('');
-            setTaskEndDate('');
-            setSelectedUserId('');
-
-            // Afficher une alerte de succès
             Swal.fire({
                 position: "top-end",
                 icon: "success",
                 title: "Your Task has been saved",
                 showConfirmButton: false,
                 timer: 1500,
-                width:200,
-                height :50,
-
+                width: 200,
+                height: 50,
             });
 
-            // Faites quelque chose avec la tâche créée, par exemple, affichez un message de succès
             console.log('Task created successfully:', createdTask);
         } catch (error) {
-            // Gérer les erreurs lors de la création de la tâche, par exemple, affichez un message d'erreur
             console.error('Error creating task:', error);
         }
+    };
+
+
+
+    // Fonction pour réinitialiser le formulaire
+    const resetForm = () => {
+        setTaskName('');
+        setTaskCategory('');
+        setTaskDescription('');
+        setTaskPriority('');
+        setTaskStartDate('');
+        setTaskEndDate('');
+        setSelectedUserId('');
+        setTaskNameError('');
     };
 
 
@@ -217,7 +224,21 @@ export default function Task() {
                                         </div>*/}
                                 <div className="mb-3">
                                     <label className="form-label">Task Name</label>
-                                    <input type="text" className="form-control" value={taskName} onChange={(e) => setTaskName(e.target.value)} placeholder="Task Name" />
+                                    <input type="text" className="form-control" value={taskName} onChange={(e) => setTaskName(e.target.value)} placeholder="Task Name"
+
+                                           onBlur={() => {
+                                               // Vérifiez si le champ "Task Name" est vide lorsqu'il perd le focus
+                                               if (taskName.trim() === '') {
+                                                   setTaskNameError('Task Name is required');
+                                               } else {
+                                                   setTaskNameError('');
+                                               }
+                                           }}
+
+
+                                    />
+                                    {taskNameError && <div className="text-danger">{taskNameError}</div>}
+
 
                                 </div>
 
@@ -303,6 +324,7 @@ export default function Task() {
                                             value={taskpriority}
                                             onChange={handlePriorityChange}
                                         >
+                                            <option selected="">Select Priority</option>
                                             <option value="High">Highest</option>
                                             <option value="Medium">Medium</option>
                                             <option value="Low">Low</option>
@@ -329,6 +351,7 @@ export default function Task() {
                             </div>
                             <div className="modal-footer">
                                 <button
+                                    style={{ backgroundColor: '#4c3575' }}
                                     type="button"
                                     className="btn btn-secondary"
                                     data-bs-dismiss="modal"
@@ -336,9 +359,7 @@ export default function Task() {
                                 >
                                     Create
                                 </button>
-                                <button type="button" className="btn btn-primary">
-                                    Create
-                                </button>
+
                             </div>
                         </div>
                     </div>

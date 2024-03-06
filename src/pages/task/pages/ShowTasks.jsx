@@ -30,7 +30,7 @@ export default function ShowTasks() {
         }
 
     }, [selectedTask]);
-    const HandeDelete = async (_id) => {
+    const handleDelete = async (_id) => {
         try {
             await TaskService.deleteTask(_id);
             // Mettre à jour la liste des tâches après la suppression
@@ -53,7 +53,14 @@ export default function ShowTasks() {
         }
     };
 
-
+    const fetchTaskss = async () => {
+        try {
+            const data = await TaskService.getAllTasks();
+            setTasks(data);
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+        }
+    };
     const handleUpdate1 = async () => {
         try {
             await TaskService.updateTask(selectedTask, selectedTask._id);
@@ -66,7 +73,8 @@ export default function ShowTasks() {
                 return task;
             });
             setTasks(updatedTasks);
-            window.location.reload();
+            fetchTaskss();
+
         } catch (error) {
             console.error("Error updating task:", error);
         }
@@ -215,7 +223,7 @@ export default function ShowTasks() {
 
                                                                 <button
                                                                     type="button"
-                                                                    onClick={() => HandeDelete(task._id)}
+                                                                    onClick={() => handleDelete(task._id)}
                                                                     className="btn btn-outline-secondary deleterow"
                                                                 >
                                                                     <i className="icofont-ui-delete text-danger" />

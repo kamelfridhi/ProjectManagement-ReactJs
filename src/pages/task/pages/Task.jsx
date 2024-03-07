@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 import * as userservice from "../../../_services/UserService.jsx";
 import user from "../../../_models/User.jsx";
 import data from "bootstrap/js/src/dom/data.js";
+import {useSelector} from "react-redux";
+import {selectUserObject} from "../../../redux/user/userSelector.js";
 export default function Task() {
 
     const [tasks, setTasks] = useState([]);
@@ -25,6 +27,7 @@ export default function Task() {
     const [users, setUsers] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState('');
     const [taskNameError, setTaskNameError] = useState('');
+    const currentUser = useSelector(selectUserObject);
 
     // Autres états pour les autres champs du formulaire
     const handlePriorityChange = (e) => {
@@ -150,7 +153,7 @@ export default function Task() {
 
                         <div className="border-0 mb-4">
                             <div className="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h3 className="fw-bold mb-0">Task Management</h3>
+                                <h3 className="fw-bold mb-0">Task Management of {currentUser.firstName}</h3>
                                 <div className="col-auto">
                                     <button
                                         type="button"

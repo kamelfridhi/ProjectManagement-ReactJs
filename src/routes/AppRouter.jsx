@@ -49,7 +49,7 @@ const AppRouter = () => {
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}
                     <Route path="project-dashboard" element={<ProjectDashboard />} />
-                    <Route path="/showProject" element={<ProjectList />} />
+                    <Route path="showProject" element={<ProjectList />} />
                     <Route path="project" element={<Project />} />
                     <Route path="team-leader" element={<TeamLeader />} />
                     <Route path="ticket" element={<Ticket />} />

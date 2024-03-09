@@ -14,7 +14,7 @@ export default function Teams() {
         description: '',
     });
     const categories = ["marketing", "developement", "test",'sales','it']; // Example of static categories
-    useEffect(() => {
+   useEffect(() => {
         // Fetch teams when the component mounts
         fetchTeams();
     }, []);

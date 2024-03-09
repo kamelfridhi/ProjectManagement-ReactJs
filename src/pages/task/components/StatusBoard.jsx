@@ -172,7 +172,7 @@ export default function StatusBoard({ refresh }) {
 
     const handleAddStatus = async (e) => {
         e.preventDefault();
-        const projectId = '65e4b65f97417e8007cc7e53'; // Remplacez 'your_static_project_id' par l'ID statique souhaité
+        const projectId = '65eb0662938257e24665fb0e'; // Remplacez 'your_static_project_id' par l'ID statique souhaité
         const maxStatusCount = 5; // Nombre maximum de statuts
         try {
             // Récupérer les statuts actuels

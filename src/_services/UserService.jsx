@@ -2,6 +2,9 @@
 import axios from 'axios';
 import BACK_END_URL from '../config';
 import User from '../_models/User';
+import {toast} from "react-toastify";
+import {signInSuccess, signOut} from "../redux/user/userSlice.js";
+import {useDispatch} from "react-redux";
 
 const API_BASE_URL = BACK_END_URL + 'user';
 //const userid = '65d8dd987faf4da6a55483aa';
@@ -62,5 +65,37 @@ export const deleteUser = async (id) => {
     } catch (error) {
         console.error(error);
         throw error;
+    }
+};
+
+export const UpdateUserLocalStorage = async (currentUser) => {
+    const dispatch = useDispatch();
+
+    //dispatch(signOut());
+
+    try {
+        const response = await fetch(`http://localhost:3000/user/${currentUser._id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+        }
+
+        const userData = await response.json();
+        console.log("user : " + userData.data.email);
+        localStorage.removeItem('currentUser');
+        //localStorage.setItem('currentUser', JSON.stringify(userData));
+        dispatch(signInSuccess(userData.data))
+
+         //toast.success('User data updated successfully.');
+
+
+    } catch (error) {
+        console.error('Error updating user data:', error);
+        toast.error('Failed to update user data.');
     }
 };

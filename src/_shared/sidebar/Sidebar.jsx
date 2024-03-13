@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import Dashboard from "../../pages/Dashboard/Dashboard.jsx"; // Import Link and withRouter from react-router-dom
 import {Link, Outlet, useNavigate} from 'react-router-dom';
 import logoImage from '/public/assets/images/logots.png';
@@ -13,10 +13,36 @@ export default function Sidebar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentUser = useSelector(selectUserObject);
+    const [imageData, setImageData] = useState(null);
+
     const handleSignOut = () => {
         dispatch(signOut());
         navigate("/");
     };
+
+    useEffect(() => {
+        const fetchImageData = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/user/image/${currentUser._id}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user image');
+                }
+
+                // Convert the received blob to a base64 string
+                const blob = await response.blob();
+                const reader = new FileReader();
+                reader.onload = () => {
+                    setImageData(reader.result);
+                };
+                reader.readAsDataURL(blob);
+            } catch (error) {
+                console.error('Error fetching user image:', error);
+            }
+        };
+
+        fetchImageData();
+    }); // Fetch image data when userId changes
 
 
 
@@ -402,7 +428,10 @@ export default function Sidebar() {
                                             <p className="mb-0 text-end line-height-sm ">
                                                 <span className="font-weight-bold">{currentUser ? currentUser.email : null}</span>
                                             </p>
-                                            <small>{currentUser.role.role} Profile</small>
+                                            <small>{currentUser.role.role} Profile
+                                                {currentUser.settings.blocked ? <h1>blocked</h1> : <h1>leli</h1>}
+                                            </small>
+
                                         </div>
                                         <a
                                             className="nav-link dropdown-toggle pulse p-0"
@@ -411,13 +440,16 @@ export default function Sidebar() {
                                             data-bs-toggle="dropdown"
                                             data-bs-display="static"
                                         >
-                                            <img
-                                                className="avatar lg rounded-circle img-thumbnail"
-                                                src="/assets/images/profile_av.png"
-                                                alt="profile"
-                                            />
+                                            <div>
+                                                {imageData ? (
+                                                    <img className="rounded-5" width={200} src={imageData} alt="User"/>
+                                                ) : (
+                                                    <p>Loading user image...</p>
+                                                )}
+                                            </div>
                                         </a>
-                                        <div className="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
+                                        <div
+                                            className="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                             <div className="card border-0 w280">
                                                 <div className="card-body pb-0">
                                                     <div className="d-flex py-1">

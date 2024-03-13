@@ -44,6 +44,7 @@ const AppRouter = () => {
                 <Route path="/prog" element={<TaskManagement />} />
                 <Route path="/update" element={<UpdateTaskForm />} />
                 <Route path="signup" element={<Signup />} />
+
                 <Route element={<PrivateRoute/>}>
 
                 <Route path="/Home" element={<Sidebar />}>

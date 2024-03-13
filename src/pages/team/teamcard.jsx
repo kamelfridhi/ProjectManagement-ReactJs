@@ -1,9 +1,8 @@
 import * as TeamService from "../../_services/TeamService.jsx";
 import UpdateTeam from "./updateteams.jsx";
 import {useEffect, useState} from "react";
-import TeamMembers from "./TeamMembers.jsx";
 import {Link} from "react-router-dom";
-import {addMemberToTeam, getOneUser} from "../../_services/TeamService.jsx";
+import {addMemberToTeam} from "../../_services/TeamService.jsx";
 
 export default function Teamcard ({ team ,fetchTeams}){
     const [usersInfo, setUsersInfo] = useState([]);
@@ -15,9 +14,8 @@ export default function Teamcard ({ team ,fetchTeams}){
     }, [team]);
     const fetchallusers = async () => {
         try {
-            const fetchedUsers = await TeamService.getAllUser(); // Assuming you have a function to get teams from your service
-            const filteredUsers = fetchedUsers.filter(user => !user.teams || user.teams.length === 0);
-            setUsers(filteredUsers);
+            const fetchedUsers = await TeamService.getUsersNotInTeam(team._id,team.category); // Assuming you have a function to get teams from your service
+            setUsers(fetchedUsers);
         } catch (error) {
             console.error('Error fetching teams:', error);
         }
@@ -47,14 +45,81 @@ export default function Teamcard ({ team ,fetchTeams}){
     };
     const HandeDelete = async (_id) => {
         try {
-            await TeamService.deleteTeam(_id);
-            // Fetch updated teams after successful deletion
-            fetchTeams();
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = '999';
+
+            // Create modal container
+            const modal = document.createElement('div');
+            modal.style.backgroundColor = '#fff';
+            modal.style.borderRadius = '8px';
+            modal.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
+            modal.style.maxWidth = '400px';
+            modal.style.width = '80%';
+            modal.style.textAlign = 'center';
+            modal.style.padding = '20px';
+
+            // Create message
+            const message = document.createElement('p');
+            message.textContent = 'Are you sure you want to delete this team?';
+            message.style.marginBottom = '20px';
+
+            // Create button container
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.display = 'flex';
+            buttonContainer.style.justifyContent = 'center';
+
+            // Create confirm button
+            const confirmButton = document.createElement('button');
+            confirmButton.textContent = 'Confirm';
+            confirmButton.style.padding = '10px 20px';
+            confirmButton.style.backgroundColor = '#4CAF50';
+            confirmButton.style.color = '#fff';
+            confirmButton.style.border = 'none';
+            confirmButton.style.borderRadius = '4px';
+            confirmButton.style.marginRight = '10px';
+            confirmButton.style.cursor = 'pointer';
+            confirmButton.onclick = async () => {
+                overlay.remove();
+                await TeamService.deleteTeam(_id);
+                fetchTeams(); // Fetch updated teams after successful deletion
+            };
+
+            // Create cancel button
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = 'Cancel';
+            cancelButton.style.padding = '10px 20px';
+            cancelButton.style.backgroundColor = '#f44336';
+            cancelButton.style.color = '#fff';
+            cancelButton.style.border = 'none';
+            cancelButton.style.borderRadius = '4px';
+            cancelButton.style.cursor = 'pointer';
+            cancelButton.onclick = () => {
+                overlay.remove();
+            };
+
+            // Append elements
+            buttonContainer.appendChild(confirmButton);
+            buttonContainer.appendChild(cancelButton);
+            modal.appendChild(message);
+            modal.appendChild(buttonContainer);
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
         } catch (error) {
             console.error(error);
             // Handle error appropriately
         }
     };
+
     const [searchQuery, setSearchQuery] = useState('');
 
     // Filter users based on the search query

@@ -14,6 +14,34 @@ export const getAllteam = async () => {
         throw error;
     }
 };
+export const getAllnotif = async (id) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/notif/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+export const getUsersNotInTeam = async (id, role) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/all/${id}/${role}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const getallcategories = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}`+'/categories'); // Assuming you have appropriate base URL configured
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
 
 export const addTeam = async (data) => {
     try {

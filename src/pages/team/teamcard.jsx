@@ -2,7 +2,7 @@ import * as TeamService from "../../_services/TeamService.jsx";
 import UpdateTeam from "./updateteams.jsx";
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import {addMemberToTeam} from "../../_services/TeamService.jsx";
+import {addMemberToTeam, addMemberToTeam2} from "../../_services/TeamService.jsx";
 
 export default function Teamcard ({ team ,fetchTeams}){
     const [usersInfo, setUsersInfo] = useState([]);
@@ -34,7 +34,7 @@ export default function Teamcard ({ team ,fetchTeams}){
     };
     const handleAddMember = async (teamId, userId) => {
         try {
-            await addMemberToTeam(teamId, userId); // Call the function to add a member to a team
+            await addMemberToTeam2(teamId, userId); // Call the function to add a member to a team
             await   fetchallusers();
             fetchTeams();
 

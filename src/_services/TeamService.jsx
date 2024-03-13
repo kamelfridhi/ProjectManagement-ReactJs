@@ -116,6 +116,24 @@ export const addMemberToTeam = async (teamId, userId) => {
         throw error;
     }
 };
+export const addMemberToTeam2 = async (teamId, userId) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/${teamId}/members2/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+export const acceptInvitation = async (userId, notificationId) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/accept-invitation/${userId}/${notificationId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error accepting team invitation:', error);
+        throw error;
+    }
+};
 export const removeMember = async (teamId, userId) => {
     try {
         console.log(teamId,userId)

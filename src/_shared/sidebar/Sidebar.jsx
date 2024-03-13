@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import Dashboard from "../../pages/Dashboard/Dashboard.jsx"; // Import Link and withRouter from react-router-dom
 import {Link, Outlet, useNavigate} from 'react-router-dom';
 import logoImage from '/public/assets/images/logots.png';
@@ -6,10 +6,14 @@ import {useDispatch, useSelector} from "react-redux";
 import { selectUserObject } from '../../redux/user/userSelector.js';
 import { signOut }  from "../../redux/user/userSlice.js";
 import {ToastContainer} from "react-toastify";
+import * as TeamService from "../../_services/TeamService.jsx";
+import {acceptInvitation, getAllnotif} from "../../_services/TeamService.jsx";
 
 
 
 export default function Sidebar() {
+    const [notifications, setNotifications] = useState([]);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentUser = useSelector(selectUserObject);
@@ -17,7 +21,31 @@ export default function Sidebar() {
         dispatch(signOut());
         navigate("/");
     };
+    useEffect(() => {
 
+
+        fetchNotifications();
+    }, [currentUser._id]); // Add currentUser._id to the dependency array
+    const fetchNotifications = async () => {
+        try {
+            const notificationsData = await getAllnotif(currentUser._id);
+            console.log('Fetched Notifications:', notificationsData);
+
+            setNotifications(notificationsData);
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    };
+    const handleAcceptClick = async (userId, notificationId) => {
+        try {
+            await acceptInvitation(userId, notificationId);
+             fetchNotifications();
+            // Optionally, you can update the notifications state or perform any other actions after accepting the invitation
+        } catch (error) {
+            console.error('Error accepting team invitation:', error);
+            // Optionally, you can display an error message or handle the error in some other way
+        }
+    };
 
 
     return (
@@ -268,27 +296,29 @@ export default function Sidebar() {
                                                 <div className="tab-content card-body">
                                                     <div className="tab-pane fade show active">
                                                         <ul className="list-unstyled list mb-0">
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar1.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Dylan Hunter
-                                                                            </span>{" "}
-                                                                            <small>2MIN</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Added 2021-02-19 my-Task ui/ux Design{" "}
-                                                                            <span className="badge bg-success">Review</span>
-                                                                        </span>
+
+                                                            {notifications.map(notification => (
+                                                                <li key={notification._id} className="py-2 mb-1 border-bottom">
+                                                                    <div className="d-flex align-items-center">
+                                                                        <img
+                                                                            className="avatar rounded-circle"
+                                                                            src="/assets/images/xs/avatar1.jpg"
+                                                                            alt=""
+                                                                        />
+                                                                        <div className="flex-fill ms-2">
+
+                                                                            <span className="">
+                                                                            {notification.message}
+                                                                                <span className="badge bg-success">Review</span>
+                </span>
+                                                                        </div>
+                                                                        <div className="ms-auto">
+                                                                            <button className="btn btn-success me-2" onClick={() => handleAcceptClick(currentUser._id, notification._id)}>Accept</button>
+                                                                            <button className="btn btn-danger">Reject</button>
+                                                                        </div>
                                                                     </div>
-                                                                </a>
-                                                            </li>
+                                                                </li>
+                                                            ))}
                                                         
                                                         </ul>
                                                     </div>

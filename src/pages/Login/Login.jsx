@@ -172,12 +172,12 @@ try {
                                                     <div className="form-label">
                                                         <span className="d-flex justify-content-between align-items-center">
                                                             Password
-                                                            <a
+                                                            <Link
                                                                 className="text-secondary"
-                                                                href="auth-password-reset.html"
+                                                                to="change-password"
                                                             >
                                                                 Forgot Password?
-                                                            </a>
+                                                            </Link>
                                                         </span>
                                                     </div>
                                                     <input

@@ -26,6 +26,7 @@ import StatusPage from "../pages/task/components/StatusPage.jsx";
 import StatusBoard from "../pages/task/components/StatusBoard.jsx";
 import { PrivateRoute, DontLogin } from "../_shared/protectRoutes.jsx";
 import UserProfile from "../pages/user/Profile.jsx";
+import ChangePassword from "../pages/user/ChangePassword.jsx";
 
 const AppRouter = () => {
     return (
@@ -44,6 +45,7 @@ const AppRouter = () => {
                 <Route path="/prog" element={<TaskManagement />} />
                 <Route path="/update" element={<UpdateTaskForm />} />
                 <Route path="signup" element={<Signup />} />
+                <Route path="change-password" element={<ChangePassword />} />
 
                 <Route element={<PrivateRoute/>}>
 

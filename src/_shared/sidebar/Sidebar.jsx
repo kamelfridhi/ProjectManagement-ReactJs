@@ -442,7 +442,7 @@ export default function Sidebar() {
                                         >
                                             <div>
                                                 {imageData ? (
-                                                    <img className="rounded-5" width={200} src={imageData} alt="User"/>
+                                                    <img className="rounded rounded-5" width={100} height={100} src={imageData} alt="User"/>
                                                 ) : (
                                                     <p>Loading user image...</p>
                                                 )}

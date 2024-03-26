@@ -21,7 +21,7 @@ export default function ChangePassword(){
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ password: formData.password }) // Pass password in the request body
+                body: JSON.stringify(formData) // Pass password in the request body
             });
             // Handle response
             if (res.ok) {
@@ -96,6 +96,18 @@ export default function ChangePassword(){
                     Enter the email address you used when you joined and we'll
                     send you instructions to reset your password.
                   </span>
+                                            </div>
+                                            <div className="col-12">
+                                                <div className="mb-2">
+                                                    <label className="form-label">Code</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control form-control-lg"
+                                                        placeholder="code"
+                                                        onChange={handleChange}
+                                                        id="code"
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="col-12">
                                                 <div className="mb-2">

@@ -11,29 +11,32 @@ export default function ChangePassword(){
         setFormData({...formData, [e.target.id]: e.target.value });
     }
     const handleSubmit = async (e) => {
-        e.preventDefault(); //stop the refresh of the page
+        e.preventDefault(); // Stop the refresh of the page
+        // Extract token from URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
         try {
-            //await schema.validate(formData, { abortEarly: false });
-
-            const res = await fetch(`http://localhost:3000/user/forgotPassword`,{
+            const res = await fetch(`http://localhost:3000/user/resetPassword?token=${token}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
-
+                body: JSON.stringify({ password: formData.password }) // Pass password in the request body
             });
-            //const data = await res.json();
-            toast.success("check your email!");
-
-
-        }catch (error) {
-            // Validation failed or server error
-            error.inner.forEach(err => {
-                toast.error(err.message); // Display validation error using Toastr
-            });
+            // Handle response
+            if (res.ok) {
+                toast.success("Password reset successful!");
+            } else {
+                const data = await res.json();
+                toast.error(data.message); // Display error message if available
+            }
+        } catch (error) {
+            toast.error("An error occurred while resetting password."); // Display generic error message
+            console.error("Error resetting password:", error);
         }
     }
+
+
     console.log(formData)
 
     return(
@@ -88,7 +91,7 @@ export default function ChangePassword(){
                                                     className="w240 mb-4"
                                                     alt=""
                                                 />
-                                                <h1>Forgot password?</h1>
+                                                <h1>Add new password</h1>
                                                 <span>
                     Enter the email address you used when you joined and we'll
                     send you instructions to reset your password.
@@ -96,13 +99,13 @@ export default function ChangePassword(){
                                             </div>
                                             <div className="col-12">
                                                 <div className="mb-2">
-                                                    <label className="form-label">Email address</label>
+                                                    <label className="form-label">New Password</label>
                                                     <input
-                                                        type="email"
+                                                        type="password"
                                                         className="form-control form-control-lg"
-                                                        placeholder="*@*.*"
+                                                        placeholder="new password"
                                                         onChange={handleChange}
-                                                        id="email"
+                                                        id="password"
                                                     />
                                                 </div>
                                             </div>

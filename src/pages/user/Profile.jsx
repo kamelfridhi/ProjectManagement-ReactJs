@@ -104,8 +104,8 @@ export default function UserProfile(){
                                                 className="profile-teacher pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
                                                 <a href="#" onClick={handleImageClick}>
                                                     <div>
-                                                        {imageData ? (
-                                                            <img className="rounded-5" width={200} src={imageData}
+                                                        {imageData || currentUser.photo ?  (
+                                                            <img className="rounded-5" width={200} src={currentUser.photo?currentUser.photo:imageData}
                                                                  alt="User"/>
                                                         ) : (
                                                             <p>Loading user image...</p>

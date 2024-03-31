@@ -14,11 +14,13 @@ export default function Sidebar() {
     const navigate = useNavigate();
     const currentUser = useSelector(selectUserObject);
     const [imageData, setImageData] = useState(null);
+    const [emailPic, setEmailPic] = useState(null);
 
     const handleSignOut = () => {
         dispatch(signOut());
         navigate("/");
     };
+
 
     useEffect(() => {
         const fetchImageData = async () => {
@@ -28,21 +30,25 @@ export default function Sidebar() {
                 if (!response.ok) {
                     throw new Error('Failed to fetch user image');
                 }
+                if(currentUser.settings.emailPhoto===true){
+                    const data = await response.json();
+                    setEmailPic(data.userEmailPic);
+                }else{
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        setImageData(reader.result);
+                    };
+                    reader.readAsDataURL(blob);
+                }
 
-                // Convert the received blob to a base64 string
-                const blob = await response.blob();
-                const reader = new FileReader();
-                reader.onload = () => {
-                    setImageData(reader.result);
-                };
-                reader.readAsDataURL(blob);
             } catch (error) {
                 console.error('Error fetching user image:', error);
             }
         };
 
         fetchImageData();
-    }); // Fetch image data when userId changes
+    });
 
 
 
@@ -441,12 +447,16 @@ export default function Sidebar() {
                                             data-bs-display="static"
                                         >
                                             <div>
-                                                {imageData ? (
-                                                    <img className="rounded rounded-5" width={100} height={100} src={imageData} alt="User"/>
+                                                { emailPic ?  (
+                                                    <img className="rounded-5" width={100} height={100} src={emailPic}
+                                                         alt="User"/>
                                                 ) : (
-                                                    <p>Loading user image...</p>
+                                                    <img className="rounded-5" width={100} height={100}
+                                                         src={ imageData}
+                                                         alt="User"/>
                                                 )}
                                             </div>
+
                                         </a>
                                         <div
                                             className="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">

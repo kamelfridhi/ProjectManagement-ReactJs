@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {selectUserObject} from "../../redux/user/userSelector.js";
 import {toast} from "react-toastify";
+import {updateUser} from "../../redux/user/userSlice.js";
 
 const UpdateUserModal = () => {
     const currentUser = useSelector(selectUserObject);
+    const dispatch = useDispatch();
 
     const [userData, setUserData] = useState({
         firstName: '',
@@ -55,6 +57,9 @@ const UpdateUserModal = () => {
             if (!response.ok) {
                 throw new Error('Failed to update user profile');
             }
+            console.log(userData)
+            dispatch(updateUser(userData));
+
             toast.success('User profile updated successfully');
             // Handle success response (optional)
         } catch (error) {

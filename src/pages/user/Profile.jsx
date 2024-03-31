@@ -1,13 +1,17 @@
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {selectUserObject} from "../../redux/user/userSelector.js";
 import {useEffect, useRef, useState} from "react";
 import UpdateUserModal from "./updateUserModal.jsx";
+import {updateUser} from "../../redux/user/userSlice.js";
 
 export default function UserProfile(){
     const currentUser = useSelector(selectUserObject);
+    const dispatch = useDispatch();
     const [file, setFile] = useState(null);
     const [imageData, setImageData] = useState(null);
     const fileInputRef = useRef(null);
+    const [emailPic, setEmailPic] = useState(null);
+
 
     const handleImageClick = () => {
         fileInputRef.current.click();
@@ -45,6 +49,7 @@ export default function UserProfile(){
             const data = await response.json();
             console.log('File uploaded successfully:', data);
             setImageData(selectedFile);
+            dispatch(updateUser(data.user));
         } catch (error) {
             console.error('Error uploading file:', error);
         }
@@ -58,13 +63,18 @@ export default function UserProfile(){
                 if (!response.ok) {
                     throw new Error('Failed to fetch user image');
                 }
+                if(currentUser.settings.emailPhoto===true){
+                    const data = await response.json();
+                    setEmailPic(data.userEmailPic);
+                }else{
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        setImageData(reader.result);
+                    };
+                    reader.readAsDataURL(blob);
+                }
 
-                const blob = await response.blob();
-                const reader = new FileReader();
-                reader.onload = () => {
-                    setImageData(reader.result);
-                };
-                reader.readAsDataURL(blob);
             } catch (error) {
                 console.error('Error fetching user image:', error);
             }
@@ -72,6 +82,7 @@ export default function UserProfile(){
 
         fetchImageData();
     });
+
     return(
                 <>
                     {/* Body: Body */}
@@ -104,11 +115,13 @@ export default function UserProfile(){
                                                 className="profile-teacher pe-xl-4 pe-md-2 pe-sm-4 pe-4 text-center w220">
                                                 <a href="#" onClick={handleImageClick}>
                                                     <div>
-                                                        {imageData || currentUser.photo ?  (
-                                                            <img className="rounded-5" width={200} src={currentUser.photo?currentUser.photo:imageData}
+                                                        { emailPic ?  (
+                                                            <img className="rounded-5" width={200} src={emailPic}
                                                                  alt="User"/>
                                                         ) : (
-                                                            <p>Loading user image...</p>
+                                                            <img className="rounded-5" width={200}
+                                                                 src={ imageData}
+                                                                 alt="User"/>
                                                         )}
                                                     </div>
                                                 </a>

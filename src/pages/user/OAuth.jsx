@@ -1,38 +1,47 @@
-import {GoogleAuthProvider,signInWithPopup,getAuth} from "firebase/auth";
-import {app} from "../../firebase.js";
-import {useDispatch} from "react-redux";
-import {signInSuccess} from "../../redux/user/userSlice.js";
+import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
+import { app } from "../../firebase.js";
+import { useDispatch } from "react-redux";
+import { signInSuccess } from "../../redux/user/userSlice.js";
 
-export default function OAuth(){
+export default function OAuth() {
     const dispatch = useDispatch();
     const handleGoogleClick = async () => {
         try {
             const provider = new GoogleAuthProvider();
-
-
             const auth = getAuth(app);
 
-            const result = await signInWithPopup(auth,provider);
-            console.log(result.user);
-            const res=await fetch("http://localhost:3000/auth/OAuth", {
+            // Sign in with Google provider popup
+            const result = await signInWithPopup(auth, provider);
+
+            // Extract user profile information from the authentication result
+            const { email, displayName: username, photoURL: photo } = result.user;
+
+            // Send user profile information to your backend for further processing
+            const res = await fetch("http://localhost:3000/auth/OAuth", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    email: result.user.email,
-                    username: result.user.displayName,
-                    photo: result.user.photoURL,
+                    email,
+                    username,
+                    photo,
                 }),
             });
+
+            // Assuming your backend responds with the user data
             const data = await res.json();
-            dispatch(signInSuccess(data.data))
-             console.log(data);
-        } catch (e) {
-            console.log(e.message());
+
+            // Dispatch the user data to update the Redux store
+            dispatch(signInSuccess(data.data));
+        } catch (error) {
+            console.error("Error signing in with Google:", error);
         }
     };
-    return (
+
+    // Render the button that triggers Google sign-in
+
+return (
         <>
             <button
                 onClick={handleGoogleClick}

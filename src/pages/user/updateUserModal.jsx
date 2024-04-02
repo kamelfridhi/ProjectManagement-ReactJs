@@ -71,7 +71,7 @@ const UpdateUserModal = () => {
         }
     };
 
-
+//console.log(userData);
     return (
         <div
             className="modal fade"

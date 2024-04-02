@@ -2,7 +2,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectUserObject} from "../../redux/user/userSelector.js";
 import {useEffect, useRef, useState} from "react";
 import UpdateUserModal from "./updateUserModal.jsx";
-import {updateUser} from "../../redux/user/userSlice.js";
+import {signInSuccess, updateUser} from "../../redux/user/userSlice.js";
+import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import {app} from "../../firebase.js";
+import {toast} from "react-toastify";
 
 export default function UserProfile(){
     const currentUser = useSelector(selectUserObject);
@@ -29,6 +32,44 @@ export default function UserProfile(){
             reader.readAsDataURL(selectedFile);
             setFile(selectedFile);
             handleSubmit(selectedFile);
+        }
+    };
+
+    const importEmailPicture = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const auth = getAuth(app);
+
+            const result = await signInWithPopup(auth, provider);
+
+            // Extract user profile information from the authentication result
+            const { photoURL: photo } = result.user;
+            console.log(photo);
+            // Construct the request body
+            const requestBody = {
+                photo: photo // Replace "dehe" with the actual photo data
+            };
+
+            console.log(requestBody);
+            const response = await fetch(`http://localhost:3000/user/importPhotoFromEmail/${currentUser._id}`, {
+                method: 'PATCH', // Use PATCH method for updating user data
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody), // Send the photo URL in the request body
+            });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to update user profile');
+                    }
+            const userData = await response.json();
+                    console.log("user : " +userData.user.firstName)
+            dispatch(updateUser(userData.user));
+
+                    toast.success('User profile updated successfully');
+
+        } catch (error) {
+            console.error("Error signing in with Google:", error);
         }
     };
 
@@ -145,6 +186,15 @@ export default function UserProfile(){
                                                         <i className="icofont-plus-circle me-2 fs-6"/>
                                                         update profile
                                                     </button>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-dark btn-set-task w-sm-100"
+                                                        onClick={importEmailPicture}
+                                                        style={{backgroundColor: '#4c3575'}}
+                                                    >
+                                                        import email picture
+                                                    </button>
+
                                                     <UpdateUserModal/>
                                                 </h6>
 

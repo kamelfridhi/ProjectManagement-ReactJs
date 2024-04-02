@@ -7,7 +7,7 @@ import { selectUserObject } from '../../redux/user/userSelector.js';
 import { signOut }  from "../../redux/user/userSlice.js";
 import {ToastContainer} from "react-toastify";
 import * as TeamService from "../../_services/TeamService.jsx";
-import {acceptInvitation, getAllnotif} from "../../_services/TeamService.jsx";
+import {acceptInvitation, getAllnotif, reject} from "../../_services/TeamService.jsx";
 
 
 
@@ -39,6 +39,16 @@ export default function Sidebar() {
     const handleAcceptClick = async (userId, notificationId) => {
         try {
             await acceptInvitation(userId, notificationId);
+             fetchNotifications();
+            // Optionally, you can update the notifications state or perform any other actions after accepting the invitation
+        } catch (error) {
+            console.error('Error accepting team invitation:', error);
+            // Optionally, you can display an error message or handle the error in some other way
+        }
+    };
+    const handlerejectClick = async (notificationId) => {
+        try {
+            await reject(notificationId);
              fetchNotifications();
             // Optionally, you can update the notifications state or perform any other actions after accepting the invitation
         } catch (error) {
@@ -194,15 +204,21 @@ export default function Sidebar() {
                                 </a>
                                 {/* Menu: Sub menu ul */}
                                 <ul className="sub-menu collapse" id="emp-Components">
-                                    <li>
-                                        <Link className="ms-link" to="our-teams">
-                                            {" "}
-                                            <span>Teams</span>
-                                        </Link>
-                                    </li>
-
-
+                                    {currentUser.role.role === 'admin' ? (
+                                        <li>
+                                            <Link className="ms-link" to="our-teams">
+                                                <span>Teams</span>
+                                            </Link>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <Link className="ms-link" to="userteams">
+                                                <span>MyTeams</span>
+                                            </Link>
+                                        </li>
+                                    )}
                                 </ul>
+
                             </li>
                         </ul>
                         {/* Menu: menu collepce btn */}
@@ -314,7 +330,7 @@ export default function Sidebar() {
                                                                         </div>
                                                                         <div className="ms-auto">
                                                                             <button className="btn btn-success me-2" onClick={() => handleAcceptClick(currentUser._id, notification._id)}>Accept</button>
-                                                                            <button className="btn btn-danger">Reject</button>
+                                                                            <button className="btn btn-danger" onClick={() => handlerejectClick(notification._id)}>Reject</button>
                                                                         </div>
                                                                     </div>
                                                                 </li>

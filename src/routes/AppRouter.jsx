@@ -26,6 +26,8 @@ import StatusPage from "../pages/task/components/StatusPage.jsx";
 import StatusBoard from "../pages/task/components/StatusBoard.jsx";
 import { PrivateRoute, DontLogin } from "../_shared/protectRoutes.jsx";
 import UserProfile from "../pages/user/Profile.jsx";
+import TeamChat from "../pages/team/TeamChat.jsx";
+import UserTeams from "../pages/team/UserTeams.jsx";
 
 const AppRouter = () => {
     return (
@@ -56,9 +58,11 @@ const AppRouter = () => {
                     <Route path="ticket-details" element={<TicketDetails />} />
                     <Route path="our-clients" element={<OurClients />} />
                     <Route path="our-teams" element={<Teams />} />
+                    <Route path="userteams" element={<UserTeams />} />
                     <Route path="showtask" element={<ShowTasks />} />
                     <Route path="teams-members/:id" element={<TeamMembers />} />
                     <Route path="task" element={<Task />} />
+                    <Route path="Chat/:id" element={<TeamChat />} />
                     <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<UserProfile />} />
                     </Route>

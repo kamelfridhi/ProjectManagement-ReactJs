@@ -5,7 +5,34 @@ const API_BASE_URL = BACK_END_URL + 'team';
 const API_User_URL = BACK_END_URL + 'user';
 const userid = '65d8dd987faf4da6a55483aa';
 
-export const getAllteam = async () => {
+export const sendChatMessage = async (teamId, sendChatMessageDto) => {
+    try {
+        await axios.post(`${API_BASE_URL}/${teamId}/chat/send`, sendChatMessageDto);
+    } catch (error) {
+        console.error('Error sending chat message:', error);
+        throw error;
+    }
+};
+
+export const getChatMessages = async (teamId) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/${teamId}/chat`);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting chat messages:', error);
+        throw error;
+    }
+};
+export const getTeamuser = async (userid) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/user/${userid}/teams`);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting user teams messages:', error);
+        throw error;
+    }
+};
+    export const getAllteam = async () => {
     try {
         const response = await axios.get(`${API_BASE_URL}`);
         return response.data;
@@ -134,6 +161,15 @@ export const acceptInvitation = async (userId, notificationId) => {
         throw error;
     }
 };
+export const reject = async (  notificationId) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/reject-invitation/${notificationId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error accepting team invitation:', error);
+        throw error;
+    }
+};
 export const removeMember = async (teamId, userId) => {
     try {
         console.log(teamId,userId)
@@ -143,5 +179,6 @@ export const removeMember = async (teamId, userId) => {
         console.error(error);
         throw error;
     }
+
 };
 

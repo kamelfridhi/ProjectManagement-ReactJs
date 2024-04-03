@@ -16,9 +16,25 @@ export default function Sidebar() {
     const [imageData, setImageData] = useState(null);
     const [emailPic, setEmailPic] = useState(null);
 
-    const handleSignOut = () => {
-        dispatch(signOut());
-        navigate("/");
+    const handleSignOut = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/auth/logout/${currentUser._id}`, {
+                method: 'POST',
+            });
+            if (response.ok) {
+                // Logout successful
+                dispatch(signOut());
+                navigate("/");
+                console.log('Logout successful');
+                // Perform any additional actions (e.g., clear user session)
+            } else {
+                // Logout failed
+                console.error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Error logging out:', error.message);
+        }
+
     };
 
 
@@ -452,7 +468,7 @@ export default function Sidebar() {
                                                          alt="User"/>
                                                 ) : (
                                                     <img className="rounded-5" width={100} height={100}
-                                                         src={ imageData}
+                                                         src={imageData}
                                                          alt="User"/>
                                                 )}
                                             </div>

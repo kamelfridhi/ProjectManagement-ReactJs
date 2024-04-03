@@ -1,9 +1,20 @@
 import React, {useEffect, useState} from "react";
 import * as UserService from "../../../_services/UserService.jsx";
+import {acceptUser, declinetUser} from "../../../_services/UserService.jsx";
+import {useSelector} from "react-redux";
+import {selectUserObject} from "../../../redux/user/userSelector.js";
 
 export default function LineOfTable({user,etat}){
     const [imageData, setImageData] = useState(null);
     const [emailPic, setEmailPic] = useState(null);
+    const currentUser = useSelector(selectUserObject);
+
+    const accept = async ()=>{
+        await UserService.acceptUser(user._id);
+    }
+    const decline = async ()=>{
+        await UserService.declinetUser(user._id);
+    }
 
     useEffect(() => {
         const fetchImageData = async () => {
@@ -31,76 +42,86 @@ export default function LineOfTable({user,etat}){
     });
     return (
         <>
-            <tr>
-                <td>{user.email}</td>
-                <td>
-                    { emailPic ?  (
-                        <img className="rounded-5" width={50} height={50} src={emailPic}
-                             alt="User"/>
-                    ) : (
-                        <img className="rounded-5" width={50} height={50}
-                             src={imageData}
-                             alt="User"/>
-                    )}
-                    <span className="fw-bold ms-1">{user.firstName}</span>
-                </td>
-                <td>{user.dateOfBirth}</td>
-                <td>
-                    {
-                        etat == 1 && <span className="badge bg-success">accepted</span>
-                    }
+            {
 
-                    {
-                        etat == 0 && <span className="badge bg-warning">en attente</span>
-                    }
 
-                    {
-                        etat == -1 && <span className="badge bg-danger">declined</span>
-                    }
-                </td>
-                {
-                    etat != -1 && (<>
+                    <tr>
+                        <td>{user.email}</td>
                         <td>
-                            <div
-                                className="btn-group"
-                                role="group"
-                                aria-label="Basic outlined example"
-                            >
-                                <button
-                                    type="button"
-                                    className="btn btn-outline-secondary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#edittickit"
-                                >
-                                    <i className="icofont-edit text-success"/>
-                                </button>
-                                {etat == 0 && (
-                                    <>
+                            {emailPic ? (
+                                <img className="rounded-5" width={50} height={50} src={emailPic}
+                                     alt="User"/>
+                            ) : (
+                                <img className="rounded-5" width={50} height={50}
+                                     src={imageData}
+                                     alt="User"/>
+                            )}
+                            <span className="fw-bold ms-1">{user.firstName}</span>
+                        </td>
+                        <td>{user.dateOfBirth}</td>
+                        <td>
+                            {
+                                etat == 1 && <span className="badge bg-success">accepted</span>
+                            }
+
+                            {
+                                etat == 0 && <span className="badge bg-warning">en attente</span>
+                            }
+
+                            {
+                                etat == -1 && <span className="badge bg-danger">declined</span>
+                            }
+                        </td>
+                        {
+                            etat != -1 && (<>
+                                <td>
+                                    <div
+                                        className="btn-group"
+                                        role="group"
+                                        aria-label="Basic outlined example"
+                                    >
                                         <button
-                                            onClick={() => UserService.acceptUser(user._id)}
+                                            disabled={currentUser._id === user._id}
+                                            type="button"
+                                            className="btn btn-outline-secondary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#edittickit"
+                                        >
+                                            <i className="icofont-edit text-success"/>
+                                        </button>
+
+                                        {etat == 0 && (
+                                            <>
+                                                <button
+                                                    disabled={currentUser._id === user._id}
+                                                    onClick={accept}
+                                                    type="button"
+                                                    className="btn btn-outline-secondary deleterow"
+                                                >
+                                                    accept
+                                                    <i className="icofont-ui-love-add  text-bg-success"/>
+                                                </button>
+                                            </>)
+                                        }
+
+
+                                        <button
+                                            disabled={currentUser._id === user._id}
+                                            onClick={decline}
                                             type="button"
                                             className="btn btn-outline-secondary deleterow"
-                                        >
-                                            accept
-                                            <i className="icofont-ui-love-add  text-bg-success"/>
+                                        > {etat == 1 ? <p>block</p> : <p>decline</p>}
+                                            <i className="icofont-ui-delete text-danger"/>
                                         </button>
-                                    </>)
-                                }
+                                    </div>
+                                </td>
+                            </>)
+                        }
 
+                    </tr>
 
-                                <button
-                                    onClick={() => UserService.declinetUser(user._id)}
-                                    type="button"
-                                    className="btn btn-outline-secondary deleterow"
-                                > {etat == 1 ? <p>block</p> : <p>decline</p>}
-                                    <i className="icofont-ui-delete text-danger"/>
-                                </button>
-                            </div>
-                        </td>
-                    </>)
-                }
+            }
 
-            </tr>
         </>
     )
 }

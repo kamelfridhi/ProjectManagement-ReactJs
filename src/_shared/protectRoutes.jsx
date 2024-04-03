@@ -29,7 +29,7 @@ const AccountNotVerified = () => {
     return (
         <div>
             <h1>Account Not Verified</h1>
-            <p>Please verify your account to access this page.</p>
+            <p>Please wait an admin to verify your account to access this page.</p>
         </div>
     );
 }

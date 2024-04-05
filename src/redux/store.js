@@ -29,7 +29,7 @@ export const store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck:false
-    }),
+    })//.concat(socketMiddleware) // Include WebSocket middleware
 })
 
 export const persistor = persistStore(store); //tpersisiti store fl localstorage

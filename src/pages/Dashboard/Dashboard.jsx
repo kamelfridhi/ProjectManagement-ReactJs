@@ -1,5 +1,9 @@
+import UsersTable from "../user/admin/usersTable.jsx";
+import {useSelector} from "react-redux";
+import {selectUserObject} from "../../redux/user/userSelector.js";
 
 export default function Dashboard() {
+    const currentUser = useSelector(selectUserObject);
 
         return (
             <>
@@ -401,8 +405,19 @@ export default function Dashboard() {
                                 </div>
                             </div>
                         </div>
+                        {
+                            currentUser.role.role === "admin" && (
+                                <>
+                                    <UsersTable etat={0} />
+                                    <UsersTable etat={1} />
+                                    <UsersTable etat={-1} />
+                                </>
+                            )
+                        }
+
                         {/* Row End */}
                     </div>
+
                 </div>
 
 

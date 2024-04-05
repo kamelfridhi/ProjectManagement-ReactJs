@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import OAuth from "../user/OAuth.jsx";
 
 
 export default function Login() {
@@ -126,32 +127,19 @@ try {
                                 <div className="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100" style={{ backgroundColor: "#4c3575" }}>
                                     <div
                                         className="w-100 p-3 p-md-5 card border-0 bg-dark text-light"
-                                        style={{ maxWidth: "32rem" }}
+                                        style={{maxWidth: "32rem"}}
                                     >
+                                        <div className="col-12 text-center mb-1 mb-lg-5">
+                                            <h1>Sign in</h1>
+                                            <span>Free access to our dashboard.</span>
+                                        </div>
+                                        <div className="col-12 text-center mb-4">
+                                            <OAuth/>
+                                            <span className="dividers text-muted mt-4">OR</span>
+                                        </div>
                                         {/* Form */}
                                         <form onSubmit={handleSubmit} className="row g-1 p-3 p-md-4">
-                                            <div className="col-12 text-center mb-1 mb-lg-5">
-                                                <h1>Sign in</h1>
-                                                <span>Free access to our dashboard.</span>
-                                            </div>
-                                            <div className="col-12 text-center mb-4">
-                                                <a
-                                                    className="btn btn-lg btn-outline-secondary btn-block"
-                                                    href="#"
-                                                >
 
-                                                    <span className="d-flex justify-content-center align-items-center">
-                                                        <img
-                                                            className="avatar xs me-2"
-                                                            src="/assets/images/google.svg"
-                                                            alt="Image Description"
-                                                        />
-                                                        Sign in with Google
-                                                    </span>
-
-                                                </a>
-                                                <span className="dividers text-muted mt-4">OR</span>
-                                            </div>
                                             <div className="col-12">
                                                 <div className="mb-2">
                                                     <label className="form-label">Email address</label>
@@ -170,18 +158,19 @@ try {
                                             <div className="col-12">
                                                 <div className="mb-2">
                                                     <div className="form-label">
-                                                        <span className="d-flex justify-content-between align-items-center">
+                                                        <span
+                                                            className="d-flex justify-content-between align-items-center">
                                                             Password
-                                                            <a
+                                                            <Link
                                                                 className="text-secondary"
-                                                                href="auth-password-reset.html"
+                                                                to="change-password"
                                                             >
                                                                 Forgot Password?
-                                                            </a>
+                                                            </Link>
                                                         </span>
                                                     </div>
                                                     <input
-                                                        type="password"  onChange={handleChange}
+                                                        type="password" onChange={handleChange}
                                                         className="form-control form-control-lg"
                                                         placeholder="***************"
                                                         id='password'
@@ -229,7 +218,8 @@ try {
                                         {/* End Form */}
                                     </div>
                                 </div>
-                            </div>{" "}
+                            </div>
+                            {" "}
                             {/* End Row */}
                         </div>
                     </div>

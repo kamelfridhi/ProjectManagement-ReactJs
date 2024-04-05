@@ -6,8 +6,12 @@ import {useDispatch, useSelector} from "react-redux";
 import { selectUserObject } from '../../redux/user/userSelector.js';
 import { signOut }  from "../../redux/user/userSlice.js";
 import {ToastContainer} from "react-toastify";
+
 import * as TeamService from "../../_services/TeamService.jsx";
 import {acceptInvitation, getAllnotif, reject} from "../../_services/TeamService.jsx";
+
+import * as UserService from "../../_services/UserService.jsx";
+
 
 
 
@@ -17,9 +21,12 @@ export default function Sidebar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentUser = useSelector(selectUserObject);
-    const handleSignOut = () => {
-        dispatch(signOut());
-        navigate("/");
+    const [imageData, setImageData] = useState(null);
+    const [emailPic, setEmailPic] = useState(null);
+
+    const handleSignOut = async () => {
+           await UserService.handleSignOut(currentUser._id,dispatch,navigate);
+
     };
     useEffect(() => {
 
@@ -56,6 +63,35 @@ export default function Sidebar() {
             // Optionally, you can display an error message or handle the error in some other way
         }
     };
+
+    useEffect(() => {
+        const fetchImageData = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/user/image/${currentUser._id}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user image');
+                }
+                if(currentUser.settings.emailPhoto===true){
+                    const data = await response.json();
+                    setEmailPic(data.userEmailPic);
+                }else{
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        setImageData(reader.result);
+                    };
+                    reader.readAsDataURL(blob);
+                }
+
+            } catch (error) {
+                console.error('Error fetching user image:', error);
+            }
+        };
+
+        fetchImageData();
+    });
+
 
 
     return (
@@ -353,7 +389,10 @@ export default function Sidebar() {
                                             <p className="mb-0 text-end line-height-sm ">
                                                 <span className="font-weight-bold">{currentUser ? currentUser.email : null}</span>
                                             </p>
-                                            <small>{currentUser.role.role} Profile</small>
+                                            <small>{currentUser.role.role} Profile
+                                                {currentUser.settings.blocked ? <h1>blocked</h1> : <h1>leli</h1>}
+                                            </small>
+
                                         </div>
                                         <a
                                             className="nav-link dropdown-toggle pulse p-0"
@@ -362,13 +401,20 @@ export default function Sidebar() {
                                             data-bs-toggle="dropdown"
                                             data-bs-display="static"
                                         >
-                                            <img
-                                                className="avatar lg rounded-circle img-thumbnail"
-                                                src="/assets/images/profile_av.png"
-                                                alt="profile"
-                                            />
+                                            <div>
+                                                { emailPic ?  (
+                                                    <img className="rounded-5" width={100} height={100} src={emailPic}
+                                                         alt="User"/>
+                                                ) : (
+                                                    <img className="rounded-5" width={100} height={100}
+                                                         src={imageData}
+                                                         alt="User"/>
+                                                )}
+                                            </div>
+
                                         </a>
-                                        <div className="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
+                                        <div
+                                            className="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                             <div className="card border-0 w280">
                                                 <div className="card-body pb-0">
                                                     <div className="d-flex py-1">

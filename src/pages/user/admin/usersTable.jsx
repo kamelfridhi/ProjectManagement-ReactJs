@@ -1,20 +1,21 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as UserService from "../../../_services/UserService.jsx";
 import UserCard from "../userCard.jsx";
 import LineOfTable from "./lineOfTable.jsx";
 
-export default function UsersTable({etat}){
+export default function UsersTable({ etat }) {
     const [users, setUsers] = useState([])
-    const fetchUsers = async ()=>{
-
+    const [blockedUsers, setBlockedUsers] = useState([])
+    const fetchUsers = async () => {
+        //setBlockedUsers(await UserService.getBlockedUsers());
         setUsers(await UserService.getUsersWithEtat(etat));
     };
     useEffect(() => {
 
         fetchUsers()
-    },[users]);
+    }, [users]);
 
-   return ( <>
+    return (<>
         {/* main body area */}
         <div className=" px-lg-4 px-md-4">
             {/* Body: Body */}
@@ -31,7 +32,7 @@ export default function UsersTable({etat}){
                                 }
 
                                 {
-                                    etat == -1 && <h3 className="fw-bold mb-0">declined users</h3>
+                                    etat == -1 && <h3 className="fw-bold mb-0">declined/blocked users</h3>
                                 }
 
 
@@ -60,23 +61,24 @@ export default function UsersTable({etat}){
                                         style={{ width: "100%" }}
                                     >
                                         <thead>
-                                        <tr>
-                                            <th>Email</th>
-                                            <th>Name</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            {etat != -1 && <th>Actions</th>}
+                                            <tr>
+                                                <th>Email</th>
+                                                <th>Name</th>
+                                                <th>Date</th>
+                                                <th>Role</th>
+                                                <th>Status</th>
+                                                {etat != -1 && <th>Actions</th>}
 
-                                        </tr>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        {
-                                            users.length > 0 ? (
-                                                users.map(user => <LineOfTable key={user.id} user={user} etat={etat} />)
-                                            ) : (
-                                                <p>No users found</p>
-                                            )
-                                        }
+                                            {
+                                                users.length > 0 ? (
+                                                    users.map(user => <LineOfTable key={user.id} user={user} etat={etat} />)
+                                                ) : (
+                                                    <p>No users found</p>
+                                                )
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -474,5 +476,5 @@ export default function UsersTable({etat}){
             </div>
         </div>
     </>
-   )
+    )
 }

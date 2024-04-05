@@ -1,7 +1,11 @@
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { selectUserObject } from "../redux/user/userSelector.js";
-import { Navigate, Outlet } from "react-router-dom";
+import {Navigate, Outlet, useNavigate} from "react-router-dom";
 import React from 'react';
+import * as UserService from "../_services/UserService.jsx";
+
+
+
 export const PrivateRoute = () => {
     const currentUser = useSelector(selectUserObject);
 
@@ -26,10 +30,18 @@ export const NotVerifiedUser = () => {
 
 // Define a component to render when the account is not verified
 const AccountNotVerified = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const currentUser = useSelector(selectUserObject);
+    const handleSignOut = async () => {
+        await UserService.handleSignOut(currentUser._id, dispatch, navigate);
+    };
+
     return (
         <div>
             <h1>Account Not Verified</h1>
             <p>Please wait an admin to verify your account to access this page.</p>
+                <button onClick={handleSignOut}>Sign Out</button>
         </div>
     );
 }

@@ -127,7 +127,7 @@ export default function ChangePassword(){
                                                     className="btn btn-lg btn-block btn-light lift text-uppercase"
                                                     alt="SIGNUP"
                                                 >
-                                                    SIGN UP
+UPDATE PASSWORD
                                                 </button>
                                             </div>
 

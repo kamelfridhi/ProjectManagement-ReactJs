@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import { selectUserObject } from '../../redux/user/userSelector.js';
 import { signOut }  from "../../redux/user/userSlice.js";
 import {ToastContainer} from "react-toastify";
+import * as UserService from "../../_services/UserService.jsx";
 
 
 
@@ -17,23 +18,7 @@ export default function Sidebar() {
     const [emailPic, setEmailPic] = useState(null);
 
     const handleSignOut = async () => {
-        try {
-            const response = await fetch(`http://localhost:3000/auth/logout/${currentUser._id}`, {
-                method: 'POST',
-            });
-            if (response.ok) {
-                // Logout successful
-                dispatch(signOut());
-                navigate("/");
-                console.log('Logout successful');
-                // Perform any additional actions (e.g., clear user session)
-            } else {
-                // Logout failed
-                console.error('Logout failed');
-            }
-        } catch (error) {
-            console.error('Error logging out:', error.message);
-        }
+           await UserService.handleSignOut(currentUser._id,dispatch,navigate);
 
     };
 

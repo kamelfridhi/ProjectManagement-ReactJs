@@ -1,21 +1,55 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import * as UserService from "../../../_services/UserService.jsx";
-import {acceptUser, declinetUser} from "../../../_services/UserService.jsx";
-import {useSelector} from "react-redux";
-import {selectUserObject} from "../../../redux/user/userSelector.js";
+import { acceptUser, declinetUser } from "../../../_services/UserService.jsx";
+import { useSelector } from "react-redux";
+import { selectUserObject } from "../../../redux/user/userSelector.js";
 
-export default function LineOfTable({user,etat}){
+export default function LineOfTable({ user, etat }) {
     const [imageData, setImageData] = useState(null);
     const [emailPic, setEmailPic] = useState(null);
     const currentUser = useSelector(selectUserObject);
 
-    const accept = async ()=>{
+    const [selectedRole, setSelectedRole] = useState('');
+
+    const handleChange = async (event) => {
+        const newRole = event.target.value;
+        setSelectedRole(newRole);
+        await updateRole(newRole);
+    };
+
+    const updateRole = async (role) => {
+        try {
+            const response = await fetch(`http://localhost:3000/user/setRole/${user._id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ role }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update role');
+            }
+            // Handle success
+        } catch (error) {
+            console.error('Error updating role:', error);
+        }
+    };
+
+
+    const accept = async () => {
         await UserService.acceptUser(user._id);
     }
-    const decline = async ()=>{
+    const decline = async () => {
         await UserService.declinetUser(user._id);
     }
-
+    const block = async () => {
+        await UserService.blockUser(user._id);
+    }
+    /*
+        useEffect(() => {
+            console.log(selectedRole);
+        }, [selectedRole]);
+    */
     useEffect(() => {
         const fetchImageData = async () => {
             try {
@@ -23,10 +57,10 @@ export default function LineOfTable({user,etat}){
                 if (!response.ok) {
                     throw new Error('Failed to fetch user image');
                 }
-                if(user.settings.emailPhoto===true){
+                if (user.settings.emailPhoto === true) {
                     const data = await response.json();
                     setEmailPic(data.userEmailPic);
-                }else{
+                } else {
                     const blob = await response.blob();
                     const reader = new FileReader();
                     reader.onload = () => {
@@ -39,26 +73,46 @@ export default function LineOfTable({user,etat}){
             }
         };
         fetchImageData();
+
+
     });
     return (
         <>
             {
-
 
                     <tr>
                         <td>{user.email}</td>
                         <td>
                             {emailPic ? (
                                 <img className="rounded-5" width={50} height={50} src={emailPic}
-                                     alt="User"/>
+                                    alt="User" />
                             ) : (
                                 <img className="rounded-5" width={50} height={50}
-                                     src={imageData}
-                                     alt="User"/>
+                                    src={imageData}
+                                    alt="User" />
                             )}
                             <span className="fw-bold ms-1">{user.firstName}</span>
                         </td>
                         <td>{user.dateOfBirth}</td>
+
+                        <td>
+                            <select
+                                disabled={user.role.role === "admin"}
+                                className="form-select form-select-lg"
+                                onChange={handleChange}
+                                value={selectedRole}
+                                id="role"
+                            >
+                                <option value="" disabled={user.role.role === "admin"}>
+                                    {user.role.role}
+                                </option>
+                                <option value="user">User</option>
+                                <option value="employee">Employee</option>
+                                <option value="projectManager">Project Manager</option>
+                                <option value="client">Client</option>
+                            </select>
+
+                        </td>
                         <td>
                             {
                                 etat == 1 && <span className="badge bg-success">accepted</span>
@@ -80,38 +134,29 @@ export default function LineOfTable({user,etat}){
                                         role="group"
                                         aria-label="Basic outlined example"
                                     >
-                                        <button
-                                            disabled={currentUser._id === user._id}
-                                            type="button"
-                                            className="btn btn-outline-secondary"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#edittickit"
-                                        >
-                                            <i className="icofont-edit text-success"/>
-                                        </button>
 
                                         {etat == 0 && (
                                             <>
                                                 <button
-                                                    disabled={currentUser._id === user._id}
+                                                    disabled={currentUser._id === user._id || user.role.role === 'user'}
                                                     onClick={accept}
                                                     type="button"
                                                     className="btn btn-outline-secondary deleterow"
                                                 >
                                                     accept
-                                                    <i className="icofont-ui-love-add  text-bg-success"/>
+                                                    <i className="icofont-ui-love-add  text-bg-success" />
                                                 </button>
                                             </>)
                                         }
 
 
                                         <button
-                                            disabled={currentUser._id === user._id}
+                                            disabled={currentUser._id === user._id || user.role.role === 'user'}
                                             onClick={decline}
                                             type="button"
                                             className="btn btn-outline-secondary deleterow"
                                         > {etat == 1 ? <p>block</p> : <p>decline</p>}
-                                            <i className="icofont-ui-delete text-danger"/>
+                                            <i className="icofont-ui-delete text-danger" />
                                         </button>
                                     </div>
                                 </td>
@@ -119,7 +164,7 @@ export default function LineOfTable({user,etat}){
                         }
 
                     </tr>
-
+                
             }
 
         </>

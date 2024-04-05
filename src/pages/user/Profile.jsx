@@ -175,7 +175,7 @@ export default function UserProfile(){
                                             <div
                                                 className="teacher-info border-start ps-xl-4 ps-md-4 ps-sm-4 ps-4 w-100">
                                                 <h6 className="mb-0 mt-2  fw-bold d-block fs-6">
-                                                    {currentUser.firstName + " " + currentUser.lastName}
+                                                    { !currentUser.settings.emailPhoto? currentUser.firstName + " " + currentUser.lastName : currentUser.firstName}
                                                     <button
                                                         type="button"
                                                         className="btn btn-dark btn-set-task w-sm-100"

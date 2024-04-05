@@ -6,11 +6,18 @@ import {useDispatch, useSelector} from "react-redux";
 import { selectUserObject } from '../../redux/user/userSelector.js';
 import { signOut }  from "../../redux/user/userSlice.js";
 import {ToastContainer} from "react-toastify";
+
+import * as TeamService from "../../_services/TeamService.jsx";
+import {acceptInvitation, getAllnotif, reject} from "../../_services/TeamService.jsx";
+
 import * as UserService from "../../_services/UserService.jsx";
 
 
 
+
 export default function Sidebar() {
+    const [notifications, setNotifications] = useState([]);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentUser = useSelector(selectUserObject);
@@ -21,7 +28,41 @@ export default function Sidebar() {
            await UserService.handleSignOut(currentUser._id,dispatch,navigate);
 
     };
+    useEffect(() => {
 
+
+        fetchNotifications();
+    }, [currentUser._id]); // Add currentUser._id to the dependency array
+    const fetchNotifications = async () => {
+        try {
+            const notificationsData = await getAllnotif(currentUser._id);
+            console.log('Fetched Notifications:', notificationsData);
+
+            setNotifications(notificationsData);
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    };
+    const handleAcceptClick = async (userId, notificationId) => {
+        try {
+            await acceptInvitation(userId, notificationId);
+             fetchNotifications();
+            // Optionally, you can update the notifications state or perform any other actions after accepting the invitation
+        } catch (error) {
+            console.error('Error accepting team invitation:', error);
+            // Optionally, you can display an error message or handle the error in some other way
+        }
+    };
+    const handlerejectClick = async (notificationId) => {
+        try {
+            await reject(notificationId);
+             fetchNotifications();
+            // Optionally, you can update the notifications state or perform any other actions after accepting the invitation
+        } catch (error) {
+            console.error('Error accepting team invitation:', error);
+            // Optionally, you can display an error message or handle the error in some other way
+        }
+    };
 
     useEffect(() => {
         const fetchImageData = async () => {
@@ -199,15 +240,21 @@ export default function Sidebar() {
                                 </a>
                                 {/* Menu: Sub menu ul */}
                                 <ul className="sub-menu collapse" id="emp-Components">
-                                    <li>
-                                        <Link className="ms-link" to="our-teams">
-                                            {" "}
-                                            <span>Teams</span>
-                                        </Link>
-                                    </li>
-
-
+                                    {currentUser.role.role === 'admin' ? (
+                                        <li>
+                                            <Link className="ms-link" to="our-teams">
+                                                <span>Teams</span>
+                                            </Link>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <Link className="ms-link" to="userteams">
+                                                <span>MyTeams</span>
+                                            </Link>
+                                        </li>
+                                    )}
                                 </ul>
+
                             </li>
                         </ul>
                         {/* Menu: menu collepce btn */}
@@ -301,123 +348,30 @@ export default function Sidebar() {
                                                 <div className="tab-content card-body">
                                                     <div className="tab-pane fade show active">
                                                         <ul className="list-unstyled list mb-0">
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar1.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Dylan Hunter
-                                                                            </span>{" "}
-                                                                            <small>2MIN</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Added 2021-02-19 my-Task ui/ux Design{" "}
-                                                                            <span className="badge bg-success">Review</span>
-                                                                        </span>
+
+                                                            {notifications.map(notification => (
+                                                                <li key={notification._id} className="py-2 mb-1 border-bottom">
+                                                                    <div className="d-flex align-items-center">
+                                                                        <img
+                                                                            className="avatar rounded-circle"
+                                                                            src="/assets/images/xs/avatar1.jpg"
+                                                                            alt=""
+                                                                        />
+                                                                        <div className="flex-fill ms-2">
+
+                                                                            <span className="">
+                                                                            {notification.message}
+                                                                                <span className="badge bg-success">Review</span>
+                </span>
+                                                                        </div>
+                                                                        <div className="ms-auto">
+                                                                            <button className="btn btn-success me-2" onClick={() => handleAcceptClick(currentUser._id, notification._id)}>Accept</button>
+                                                                            <button className="btn btn-danger" onClick={() => handlerejectClick(notification._id)}>Reject</button>
+                                                                        </div>
                                                                     </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <div className="avatar rounded-circle no-thumbnail">
-                                                                        DF
-                                                                    </div>
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Diane Fisher
-                                                                            </span>{" "}
-                                                                            <small>13MIN</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Task added Get Started with Fast Cad project
-                                                                        </span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar3.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Andrea Gill
-                                                                            </span>{" "}
-                                                                            <small>1HR</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Quality Assurance Task Completed
-                                                                        </span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar5.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Diane Fisher
-                                                                            </span>{" "}
-                                                                            <small>13MIN</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Add New Project for App Developemnt
-                                                                        </span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar6.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Andrea Gill
-                                                                            </span>{" "}
-                                                                            <small>1HR</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Add Timesheet For Rhinestone project
-                                                                        </span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar7.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Zoe Wright
-                                                                            </span>{" "}
-                                                                            <small className="">1DAY</small>
-                                                                        </p>
-                                                                        <span className="">Add Calander Event</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
+                                                                </li>
+                                                            ))}
+                                                        
                                                         </ul>
                                                     </div>
                                                 </div>

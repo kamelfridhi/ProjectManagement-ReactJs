@@ -22,7 +22,7 @@ const StatusPage = () => {
 
     const handleAddStatus = async (e) => {
         e.preventDefault();
-        const projectId = '65e4b65f97417e8007cc7e53'; // Remplacez 'your_static_project_id' par l'ID statique souhaité
+        const projectId = '65ec873c1e33a653e43a9b83'; // Remplacez 'your_static_project_id' par l'ID statique souhaité
         try {
             await addStatus({ status: newStatus }, projectId);
             setNewStatus('');

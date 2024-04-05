@@ -1,12 +1,15 @@
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import * as TeamService from "../../_services/TeamService.jsx";
 import {removeMember} from "../../_services/TeamService.jsx";
+import {useSelector} from "react-redux";
+import {selectUserObject} from "../../redux/user/userSelector.js";
 
 export default function TeamMembers() {
     const { id } = useParams();
     const [team, setTeam] = useState({});
     const [usersInfo, setUsersInfo] = useState([]);
+    const currentUser = useSelector(selectUserObject);
 
     useEffect(() => {
         // Fetch team and user information when the component mounts
@@ -40,15 +43,83 @@ export default function TeamMembers() {
 
     const kickMember = async (teamId, userId) => {
         try {
-            await removeMember(teamId, userId);
-             await getData(); // Fetch updated team data
-            console.log("Teams:", team); // Log fetched user details
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.display = 'flex';
+            overlay.style.alignItems = 'center';
+            overlay.style.justifyContent = 'center';
+            overlay.style.zIndex = '999';
 
+            // Create modal container
+            const modal = document.createElement('div');
+            modal.style.backgroundColor = '#fff';
+            modal.style.borderRadius = '8px';
+            modal.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
+            modal.style.maxWidth = '400px';
+            modal.style.width = '80%';
+            modal.style.textAlign = 'center';
+            modal.style.padding = '20px';
+
+            // Create message
+            const message = document.createElement('p');
+            message.textContent = 'Are you sure you want to remove this member?';
+            message.style.marginBottom = '20px';
+
+            // Create button container
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.display = 'flex';
+            buttonContainer.style.justifyContent = 'center';
+
+            // Create confirm button
+            const confirmButton = document.createElement('button');
+            confirmButton.textContent = 'Confirm';
+            confirmButton.style.padding = '10px 20px';
+            confirmButton.style.backgroundColor = '#4CAF50';
+            confirmButton.style.color = '#fff';
+            confirmButton.style.border = 'none';
+            confirmButton.style.borderRadius = '4px';
+            confirmButton.style.marginRight = '10px';
+            confirmButton.style.cursor = 'pointer';
+            confirmButton.onclick = async () => {
+                overlay.remove();
+                await removeMember(teamId, userId);
+                await getData();
+                console.log('Teams:', team);
+            };
+
+            // Create cancel button
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = 'Cancel';
+            cancelButton.style.padding = '10px 20px';
+            cancelButton.style.backgroundColor = '#f44336';
+            cancelButton.style.color = '#fff';
+            cancelButton.style.border = 'none';
+            cancelButton.style.borderRadius = '4px';
+            cancelButton.style.cursor = 'pointer';
+            cancelButton.onclick = () => {
+                overlay.remove();
+            };
+
+            // Append elements
+            buttonContainer.appendChild(confirmButton);
+            buttonContainer.appendChild(cancelButton);
+            modal.appendChild(message);
+            modal.appendChild(buttonContainer);
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
         } catch (error) {
-            console.error("Error kicking member:", error);
+            console.error('Error kicking member:', error);
             // Handle error if needed
         }
     };
+
+
 
 
     return (
@@ -63,15 +134,16 @@ export default function TeamMembers() {
                                 <div className="card border-0 mb-4 no-bg">
                                     <div className="card-header py-3 px-0 d-sm-flex align-items-center  justify-content-between border-bottom">
                                         <h3 className=" fw-bold flex-fill mb-0 mt-sm-0">members</h3>
-                                        <button
-                                            type="button"
-                                            className="btn btn-dark me-1 mt-1 w-sm-100"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#createemp"
-                                        >
-                                            <i className="icofont-plus-circle me-2 fs-6" />
-                                            Add Employee
-                                        </button>
+                                        <Link to={`/Home/Chat/${team._id}`}>
+                                            <button
+                                                type="button"
+                                                className="btn btn-dark btn-set-task w-sm-100"
+                                                style={{ backgroundColor: '#4c3575' }}
+                                            >
+                                                <i className="icofont-plus-circle me-2 fs-6" />
+                                                Chat
+                                            </button>
+                                        </Link>
 
                                     </div>
                                 </div>
@@ -115,11 +187,14 @@ export default function TeamMembers() {
                                                         {user.email}
                                                     </p>
                                                 </div>
-                                                <div className="button-container mt-3">
-                                                    <button className="btn btn-danger btn-sm" onClick={() => kickMember(team._id, user._id)}>
+                                                {currentUser.role.role === 'admin' && (
+
+                                                    <div className="button-container mt-3">
+
+                                                        <button className="btn btn-danger btn-sm" onClick={() => kickMember(team._id, user._id)}>
                                                         Remove
                                                     </button>
-                                                </div>
+                                                </div>)}
                                                 <a href="task.html" className="btn btn-dark btn-sm mt-1">
                                                     <i className="icofont-plus-circle me-2 fs-6" />
                                                     Add Task

@@ -390,7 +390,6 @@ export default function Sidebar() {
                                                 <span className="font-weight-bold">{currentUser ? currentUser.email : null}</span>
                                             </p>
                                             <small>{currentUser.role.role} Profile
-                                                {currentUser.settings.blocked ? <h1>blocked</h1> : <h1>leli</h1>}
                                             </small>
 
                                         </div>

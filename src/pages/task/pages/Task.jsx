@@ -312,7 +312,7 @@ export default function Task() {
                                             <option selected="">Select Person</option>
                                             {users.map((user) => (
 
-                                                <option key={user._id} value={user._id}>{user.username}</option>
+                                                <option key={user._id} value={user._id}>{user.firstName}</option>
                                             ))}
                                         </select>
                                     </div>

@@ -1,5 +1,40 @@
-export default function Ticket() {
 
+    import React, { useState, useEffect } from 'react';
+    import TicketService from "../../_services/Ticket.jsx";
+    import {useSelector} from "react-redux";
+    import {selectUserObject} from "../../redux/user/userSelector.js";
+
+    export default function Ticket() {
+        const [tickets, setTickets] = useState([]);
+        const currentUser = useSelector(selectUserObject);
+
+
+        useEffect(() => {
+            const fetchTickets = async () => {
+                try {
+                    const ticketsData = await TicketService.getAllTickets();
+                    setTickets(ticketsData);
+                } catch (error) {
+                    console.error('Error fetching tickets:', error);
+                }
+            };
+
+            fetchTickets();
+        }, []);
+
+        const handleEdit = async (ticketId) => {
+            // Logique pour récupérer les données du ticket et ouvrir un formulaire d'édition
+        };
+
+        const handleDelete = async (ticketId) => {
+            try {
+                await TicketService.deleteTicket(ticketId);
+                // Logique pour actualiser la liste des tickets après la suppression
+            } catch (error) {
+                console.error('Error deleting ticket:', error);
+                // Gérer les erreurs, afficher un message d'erreur, etc.
+            }
+        };
     return(
         <>
             {/* main body area */}
@@ -46,276 +81,30 @@ export default function Ticket() {
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a
-                                                        href="ticket-detail.html"
-                                                        className="fw-bold text-secondary"
-                                                    >
-                                                        #Tc-0002
-                                                    </a>
-                                                </td>
-                                                <td>Internet Not Working</td>
-                                                <td>
-                                                    <img
-                                                        className="avatar rounded-circle"
-                                                        src="assets/images/xs/avatar1.jpg"
-                                                        alt=""
-                                                    />
-                                                    <span className="fw-bold ms-1">Joan Dyer</span>
-                                                </td>
-                                                <td>12/03/2021</td>
-                                                <td>
-                                                    <span className="badge bg-warning">In Progress</span>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        className="btn-group"
-                                                        role="group"
-                                                        aria-label="Basic outlined example"
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edittickit"
-                                                        >
-                                                            <i className="icofont-edit text-success" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary deleterow"
-                                                        >
-                                                            <i className="icofont-ui-delete text-danger" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <a
-                                                        href="ticket-detail.html"
-                                                        className="fw-bold text-secondary"
-                                                    >
-                                                        #Tc-0006
-                                                    </a>
-                                                </td>
-                                                <td>Salary Amount wrong</td>
-                                                <td>
-                                                    <img
-                                                        className="avatar rounded-circle"
-                                                        src="assets/images/xs/avatar2.jpg"
-                                                        alt=""
-                                                    />
-                                                    <span className="fw-bold ms-1">Ryan Randall</span>
-                                                </td>
-                                                <td>12/03/2021</td>
-                                                <td>
-                                                    <span className="badge bg-warning">In Progress</span>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        className="btn-group"
-                                                        role="group"
-                                                        aria-label="Basic outlined example"
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edittickit"
-                                                        >
-                                                            <i className="icofont-edit text-success" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary deleterow"
-                                                        >
-                                                            <i className="icofont-ui-delete text-danger" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <a
-                                                        href="ticket-detail.html"
-                                                        className="fw-bold text-secondary"
-                                                    >
-                                                        #Tc-0004
-                                                    </a>
-                                                </td>
-                                                <td>Mouse Not working</td>
-                                                <td>
-                                                    <img
-                                                        className="avatar rounded-circle"
-                                                        src="assets/images/xs/avatar3.jpg"
-                                                        alt=""
-                                                    />
-                                                    <span className="fw-bold ms-1">Phil Glover</span>
-                                                </td>
-                                                <td>16/03/2021</td>
-                                                <td>
-                                                    <span className="badge bg-warning">In Progress</span>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        className="btn-group"
-                                                        role="group"
-                                                        aria-label="Basic outlined example"
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edittickit"
-                                                        >
-                                                            <i className="icofont-edit text-success" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary deleterow"
-                                                        >
-                                                            <i className="icofont-ui-delete text-danger" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <a
-                                                        href="ticket-detail.html"
-                                                        className="fw-bold text-secondary"
-                                                    >
-                                                        #Tc-00011
-                                                    </a>
-                                                </td>
-                                                <td>punching time not proper</td>
-                                                <td>
-                                                    <img
-                                                        className="avatar rounded-circle"
-                                                        src="assets/images/xs/avatar4.jpg"
-                                                        alt=""
-                                                    />
-                                                    <span className="fw-bold ms-1">Victor Rampling</span>
-                                                </td>
-                                                <td>25/02/2021</td>
-                                                <td>
-                                                    <span className="badge bg-success">Completed</span>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        className="btn-group"
-                                                        role="group"
-                                                        aria-label="Basic outlined example"
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edittickit"
-                                                        >
-                                                            <i className="icofont-edit text-success" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary deleterow"
-                                                        >
-                                                            <i className="icofont-ui-delete text-danger" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <a
-                                                        href="ticket-detail.html"
-                                                        className="fw-bold text-secondary"
-                                                    >
-                                                        #Tc-00021
-                                                    </a>
-                                                </td>
-                                                <td>Leave Balance Wrong</td>
-                                                <td>
-                                                    <img
-                                                        className="avatar rounded-circle"
-                                                        src="assets/images/xs/avatar5.jpg"
-                                                        alt=""
-                                                    />
-                                                    <span className="fw-bold ms-1">Sally Graham</span>
-                                                </td>
-                                                <td>16/02/2021</td>
-                                                <td>
-                                                    <span className="badge bg-success">Completed</span>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        className="btn-group"
-                                                        role="group"
-                                                        aria-label="Basic outlined example"
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edittickit"
-                                                        >
-                                                            <i className="icofont-edit text-success" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary deleterow"
-                                                        >
-                                                            <i className="icofont-ui-delete text-danger" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <a
-                                                        href="ticket-detail.html"
-                                                        className="fw-bold text-secondary"
-                                                    >
-                                                        #Tc-00041
-                                                    </a>
-                                                </td>
-                                                <td>Display Blur</td>
-                                                <td>
-                                                    <img
-                                                        className="avatar rounded-circle"
-                                                        src="assets/images/xs/avatar6.jpg"
-                                                        alt=""
-                                                    />
-                                                    <span className="fw-bold ms-1">Robert Anderson</span>
-                                                </td>
-                                                <td>18/01/2021</td>
-                                                <td>
-                                                    <span className="badge bg-success">Completed</span>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        className="btn-group"
-                                                        role="group"
-                                                        aria-label="Basic outlined example"
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edittickit"
-                                                        >
-                                                            <i className="icofont-edit text-success" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary deleterow"
-                                                        >
-                                                            <i className="icofont-ui-delete text-danger" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            {tickets.map((ticket) => (
+                                                <tr key={ticket._id}>
+                                                    <td>
+                                                        <a href={`ticket-detail.html/${ticket._id}`} className="fw-bold text-secondary">
+                                                            #{ticket._id}
+                                                        </a>
+                                                    </td>
+                                                    <td>{ticket.subject}</td>
+                                                    {/* Ajoutez le code pour Assigned, Created Date et Status */}
+                                                    <td>{ticket.assigned}{currentUser.firstName}</td>
+                                                    <td>{ticket.creationDate.split("T")[0].split("-").reverse().join("-")}</td>
+                                                    <td>{/* Code pour Status */}</td>
+                                                    <td>
+                                                        <div className="btn-group" role="group" aria-label="Basic outlined example">
+                                                            <button type="button" className="btn btn-outline-secondary" onClick={() => handleEdit(ticket._id)}>
+                                                                <i className="icofont-edit text-success" />
+                                                            </button>
+                                                            <button type="button" className="btn btn-outline-secondary deleterow" onClick={() => handleDelete(ticket._id)}>
+                                                                <i className="icofont-ui-delete text-danger" />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                             </tbody>
                                         </table>
                                     </div>

@@ -47,10 +47,19 @@ const AccountNotVerified = () => {
 }
 
 const AccountBlocked = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const currentUser = useSelector(selectUserObject);
+    const handleSignOut = async () => {
+        await UserService.handleSignOut(currentUser._id, dispatch, navigate);
+    };
+
     return (
         <div>
             <h1>Account Blocked</h1>
             <p>Please verify your account to access this page.</p>
+            <button onClick={handleSignOut}>Sign Out</button>
+
         </div>
     );
 }

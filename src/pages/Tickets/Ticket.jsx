@@ -1,5 +1,112 @@
-export default function Ticket() {
 
+    import React, { useState, useEffect } from 'react';
+
+    import {useSelector} from "react-redux";
+    import {selectUserObject} from "../../redux/user/userSelector.js";
+    import * as userservice from "../../_services/UserService.jsx";
+    import * as TicketService from "../../_services/TicketService.jsx";
+
+    export default function Ticket() {
+        const [tickets, setTickets] = useState([]);
+        const currentUser = useSelector(selectUserObject);
+        const [ticketName, setTicketName] = useState('');
+        const [ticketSubject, setTicketSubject] = useState('');
+        const [ticketAssignee, setTicketAssignee] = useState('');
+        const [refresh, setRefresh] = useState(false);
+        const [users, setUsers] = useState([]);
+        const [selectedUserId, setSelectedUserId] = useState('');
+
+
+        useEffect(() => {
+
+
+
+
+
+            fetchTickets();
+            fetchUsers();
+        }, []);
+        const fetchTickets = async () => {
+            try {
+                const ticketsData = await TicketService.getAllTickets();
+                setTickets(ticketsData);
+            } catch (error) {
+                console.error('Error fetching tickets:', error);
+            }
+        };
+
+        const fetchUsers = async () => {
+            const data = await userservice.getAllUsers();
+            setUsers(data);
+        };
+
+        const handleAddTicket = async () => {
+            try {
+                // Vérifiez si les champs requis sont vides lors de la soumission du formulaire
+                if (ticketSubject.trim() === '') {
+                    alert('Veuillez remplir tous les champs');
+                    return;
+                }
+
+                const newTicketData = {
+
+                    subject: ticketSubject,
+                    //assignPerson: ticketAssignee,
+                    // Autres champs du ticket
+                };
+
+                const createdTicket = await TicketService.addTicket(newTicketData,currentUser._id);
+                resetForm();
+                fetchTickets();
+                // Logique pour actualiser la liste des tickets après l'ajout du nouveau ticket
+            } catch (error) {
+                console.error('Error creating ticket:', error);
+                // Gérer les erreurs, afficher un message d'erreur, etc.
+            }
+        };
+        const resetForm = () => {
+            setTicketSubject('');
+            setTicketAssignee('');
+            setSelectedUserId('');
+
+        };
+        const handleUserChange = (e) => {
+            setSelectedUserId(e.target.value);
+        };
+
+        const handleRefresh = () => {
+            setRefresh(!refresh); // Inversez simplement la valeur de refresh pour forcer le rendu à se mettre à jour
+        };
+        /*const handleEdit = async (ticketId) => {
+            try {
+                const updatedTicket = await TicketService.updateTicket(ticketId, { subject: ticketSubject });
+                const updatedTickets = tickets.map(ticket => {
+                    if (ticket._id === updatedTicket._id) {
+                        return updatedTicket;
+                    }
+                    return ticket;
+                });
+                setTickets(updatedTickets);
+                // Logique pour actualiser la liste des tickets après la modification
+                console.log('Error deleting ticket:');
+
+            }};*/
+
+        const handleDelete = async (ticketId) => {
+            try {
+                await TicketService.deleteTicket(ticketId);
+
+                fetchTickets();
+
+
+
+
+            } catch (error) {
+                console.error('Error deleting ticket:', error);
+            }
+
+
+        };
     return(
         <>
             {/* main body area */}
@@ -17,6 +124,9 @@ export default function Ticket() {
                                             className="btn btn-dark btn-set-task w-sm-100"
                                             data-bs-toggle="modal"
                                             data-bs-target="#tickadd"
+                                            style={{ backgroundColor: '#4c3575' }}
+
+
                                         >
                                             <i className="icofont-plus-circle me-2 fs-6" />
                                             Add Tickets
@@ -46,51 +156,59 @@ export default function Ticket() {
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a
-                                                        href="ticket-detail.html"
-                                                        className="fw-bold text-secondary"
-                                                    >
-                                                        #Tc-0002
-                                                    </a>
-                                                </td>
-                                                <td>Internet Not Working</td>
-                                                <td>
-                                                    <img
-                                                        className="avatar rounded-circle"
-                                                        src="assets/images/xs/avatar1.jpg"
-                                                        alt=""
-                                                    />
-                                                    <span className="fw-bold ms-1">Joan Dyer</span>
-                                                </td>
-                                                <td>12/03/2021</td>
-                                                <td>
-                                                    <span className="badge bg-warning">In Progress</span>
-                                                </td>
-                                                <td>
-                                                    <div
-                                                        className="btn-group"
-                                                        role="group"
-                                                        aria-label="Basic outlined example"
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edittickit"
-                                                        >
-                                                            <i className="icofont-edit text-success" />
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-outline-secondary deleterow"
-                                                        >
-                                                            <i className="icofont-ui-delete text-danger" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            {tickets.map((ticket) => (
+                                                <React.Fragment key={ticket._id}>
+                                                    {ticket.assignPerson._id === currentUser._id && currentUser.role.role!== "admin" ? (
+                                                        <tr>
+                                                            <td>
+                                                                <a href={`ticket-detail.html/${ticket._id}`} className="fw-bold text-secondary">
+                                                                    #{ticket._id}
+                                                                </a>
+                                                            </td>
+                                                            <td>{ticket.subject}</td>
+                                                            <td>{ticket.assignPerson.firstName}</td>
+                                                            <td>{ticket.creationDate.split("T")[0].split("-").reverse().join("-")}</td>
+                                                            <td><span className="text-warning">InProgress</span></td>
+                                                            <td>
+                                                                <div className="btn-group" role="group" aria-label="Basic outlined example">
+                                                                    <button type="button" className="btn btn-outline-secondary" onClick={() => handleEdit(ticket._id)}>
+                                                                        <i className="icofont-edit text-success" />
+                                                                    </button>
+                                                                    <button type="button" className="btn btn-outline-secondary deleterow" onClick={() => handleDelete(ticket._id)}>
+                                                                        <i className="icofont-ui-delete text-danger" />
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ):  currentUser.role.role === "admin" && (
+                                                        <tr>
+                                                            <td>
+                                                                <a href={`ticket-detail.html/${ticket._id}`} className="fw-bold text-secondary">
+                                                                    #{ticket._id}
+                                                                </a>
+                                                            </td>
+                                                            <td>{ticket.subject}</td>
+                                                            <td>{ticket.assignPerson.firstName}</td>
+                                                            <td>{ticket.creationDate.split("T")[0].split("-").reverse().join("-")}</td>
+                                                            <td>
+                                                                <span className="text-success">Not Checked</span>
+                                                            </td>
+                                                            <td>
+                                                                <div className="btn-group" role="group" aria-label="Basic outlined example">
+                                                                    <button type="button" className="btn btn-outline-secondary" onClick={() => handleEdit(ticket._id)}>
+                                                                        <i className="icofont-edit text-success" />
+                                                                    </button>
+                                                                    <button type="button" className="btn btn-outline-secondary deleterow" onClick={() => handleDelete(ticket._id)}>
+                                                                        <i className="icofont-ui-delete text-danger" />
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                    )}
+                                                </React.Fragment>
+                                            ))}
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -131,13 +249,7 @@ export default function Ticket() {
                                             id="exampleInputEmail1"
                                             aria-describedby="exampleInputEmail1"
                                         />
-                                        <button
-                                            className="btn btn-dark"
-                                            type="button"
-                                            id="button-addon2"
-                                        >
-                                            Sent
-                                        </button>
+
                                     </div>
                                 </div>
                                 <div className="members_list">
@@ -355,27 +467,38 @@ export default function Ticket() {
                                     <label htmlFor="sub" className="form-label">
                                         Subject
                                     </label>
-                                    <input type="text" className="form-control" id="sub" />
+                                    <input  type="text" className="form-control" value={ticketSubject} onChange={(e) => setTicketSubject(e.target.value)} placeholder="Ticket Subject" />
                                 </div>
-                                <div className="deadline-form">
+                                {/*<div className="deadline-form">
                                     <form>
                                         <div className="row g-3 mb-3">
-                                            <div className="col">
-                                                <label htmlFor="depone" className="form-label">
-                                                    Assign Name
-                                                </label>
-                                                <input type="text" className="form-control" id="depone" />
+                                            <div className="row g-3 mb-3">
+                                                <div className="col-sm">
+                                                    <label className="form-label">Ticket Assign Person</label>
+                                                    <select
+                                                        className="form-select"
+                                                        onChange={handleUserChange}
+                                                        value={selectedUserId}
+                                                        aria-label="Default select Priority"
+                                                    >
+                                                        <option selected="">Select Person</option>
+                                                        {users.map((user) => (
+
+                                                            <option key={user._id} value={user._id}>{user.firstName}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div className="col">
                                                 <label htmlFor="deptwo" className="form-label">
-                                                    Creted Date
+                                                    Created Date
                                                 </label>
                                                 <input type="date" className="form-control" id="deptwo" />
                                             </div>
                                         </div>
                                     </form>
-                                </div>
-                                <div className="mb-3">
+                                </div> */}
+                                {/* <div className="mb-3">
                                     <label className="form-label">Status</label>
                                     <select className="form-select">
                                         <option selected="">In Progress</option>
@@ -383,19 +506,21 @@ export default function Ticket() {
                                         <option value={2}>Wating</option>
                                         <option value={3}>Decline</option>
                                     </select>
-                                </div>
+                                </div>  */}
                             </div>
+
                             <div className="modal-footer">
                                 <button
                                     type="button"
                                     className="btn btn-secondary"
                                     data-bs-dismiss="modal"
+                                    onClick={handleAddTicket}
+                                    style={{ backgroundColor: '#4c3575' }}
+
                                 >
                                     Done
                                 </button>
-                                <button type="submit" className="btn btn-primary">
-                                    sent
-                                </button>
+
                             </div>
                         </div>
                     </div>
@@ -479,9 +604,7 @@ export default function Ticket() {
                                 >
                                     Done
                                 </button>
-                                <button type="submit" className="btn btn-primary">
-                                    sent
-                                </button>
+
                             </div>
                         </div>
                     </div>

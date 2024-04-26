@@ -3,21 +3,66 @@ import * as ProjectService from "../../_services/ProjectService";
 import addProject from "./addProject.jsx";
 import updateProject from "./updateProject.jsx";
 import project from "../../_models/Project.jsx";
-
+import * as userservice from "../../_services/UserService.jsx";
+import {Link} from "react-router-dom";
+import * as TeamService from "../../_services/TeamService.jsx";
+//import {affectTeamToProject} from "../../_services/ProjectService";
 
 export default function Project() {
+
     const [projects, setProjects] = useState([]);
     const [projectIdToDelete, setProjectIdToDelete] = useState(null);
     const [projectData, setProjectData] = useState({});
+    const [start, setStart]=useState('');
+    const [end, setEnd]=useState('');
+    const[teams,SetTeams]= useState([]);
+    const [weeksInPeriod, setWeeksInPeriod]=useState(0);
+    const [selectedTeam, setSelectedTeam] = useState('');
+    const [selectedProject, setSelectedProject] = useState('');
 
     useEffect(() => {
         const fetchProjects = async () => {
-            const data = await ProjectService.getAllProject();
-            setProjects(data);
+            try {
+                const data = await ProjectService.getAllProject();
+                setProjects(data);
 
+
+            } catch (error) {
+                console.error('Error fetching projects:', error);
+            }
         };
+
         fetchProjects();
     }, []);
+
+    const handleAffectTeamToProject = async () => {
+        try {
+            await affectTeamToProject(selectedTeam, selectedProject);
+            // Optionally, you can update the state or perform other actions after affecting the team to the project
+            console.log('Team affected to project successfully!');
+        } catch (error) {
+            console.error('Error affecting team to project:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchTeams = async () => {
+            try {
+                const data = await TeamService.getAllteam();
+                SetTeams(data);
+
+
+            } catch (error) {
+                console.error('Error fetching teams:', error);
+            }
+        };
+
+        fetchTeams();
+    }, []);
+
+
+
+
     const handleUpdateProject = async (projectId) => {
         try {
             console.log('Before updating project:', projectData);
@@ -49,10 +94,7 @@ export default function Project() {
             console.log('Before adding project:', projectData);
 
             // Check if any of the required fields are empty before sending the request
-            if (!projectData.projectName || !projectData.startDate || !projectData.endDate) {
-                console.error('Required fields are empty. Cannot create project.');
-                return;
-            }
+
 
             await ProjectService.createProject(projectData);
             // Notify the parent component to update its state
@@ -62,6 +104,7 @@ export default function Project() {
         } catch (error) {
             console.error('Error creating project:', error);
         }
+
     };
 
     const handleChange = (e, fieldName) => {
@@ -71,6 +114,7 @@ export default function Project() {
             [fieldName]: value,
         }));
     };
+
     const handleDelete = async (projectId) => {
         try {
             // Delete project on the server
@@ -83,11 +127,11 @@ export default function Project() {
         } catch (error) {
             console.error('Error deleting project:', error);
         }
+
     };
 
 
     return (
-
 
         <div className="main px-lg-4 px-md-4">
             {/* Body: Body */}
@@ -100,15 +144,16 @@ export default function Project() {
                                 <h3 className="fw-bold py-3 mb-0">Projects</h3>
                                 <div className="d-flex py-2 project-tab flex-wrap w-sm-100">
                                     <button
-                                        type="button"
-                                        className="btn btn-dark w-sm-100"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#createproject"
+                                    type="button"
+                                    className="btn btn-dark w-sm-100"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#createproject"
+                                    style={{ backgroundColor: '#343a40', color: '#ffffff' }}
+                                >
+                                    <i className="icofont-plus-circle me-2 fs-6" />
+                                    Create Project
+                                </button>
 
-                                    >
-                                        <i className="icofont-plus-circle me-2 fs-6"/>
-                                        Create Project
-                                    </button>
 
                                     <ul
                                         className="nav nav-tabs tab-body-header rounded ms-3 prtab-set w-sm-100"
@@ -182,7 +227,11 @@ export default function Project() {
                                                                 <span className="small text-muted project_name fw-bold">
                                                             {" "}
 
-                                                                    {project.projectName}
+                                                                    <li key={project._id}>
+                        <Link to={`/Home/project-dashboard/${project.projectName}`}>
+                            {project.projectName}
+                        </Link></li>
+
 
                                                         </span>
                                                                 <h6 className="mb-0 fw-bold  fs-6  mb-2">
@@ -261,8 +310,28 @@ export default function Project() {
                                                             </div>
                                                             <div className="col-6">
                                                                 <div className="d-flex align-items-center">
-                                                                    <i className="icofont-sand-clock"/>
-                                                                    <span className="ms-2">4 Month</span>
+
+                                                                    {(() => {
+                                                                        const projectStart = new Date(project.startDate);
+                                                                        const projectEnd = new Date(project.endDate);
+                                                                        console.log("Project Start Date:", projectStart);
+                                                                        console.log("Project End Date:", projectEnd);
+
+                                                                        const timeDifference = projectEnd.getTime() - projectStart.getTime();
+                                                                        console.log("Time Difference:", timeDifference);
+
+                                                                        const daysInPeriod = Math.floor(timeDifference / (1000 * 3600 * 24));
+                                                                        console.log("Days in Period:", daysInPeriod);
+
+                                                                        const weeksInPeriod = Math.floor(daysInPeriod / 7);
+                                                                        console.log("Weeks in period:", weeksInPeriod);
+
+                                                                        return (
+                                                                            <p>
+                                                                                <i className="icofont-sand-clock"/>  {weeksInPeriod} Weeks and {daysInPeriod} days
+                                                                            </p>
+                                                                        );
+                                                                    })()}
                                                                 </div>
                                                             </div>
                                                             <div className="col-6">
@@ -283,7 +352,25 @@ export default function Project() {
                                                             className="d-flex align-items-center justify-content-between mb-2">
                                                             <h4 className="small fw-bold mb-0">Progress</h4>
                                                             <span className="small light-danger-bg  p-1 rounded">
-                                                        <i className="icofont-ui-clock"/> 35 Days Left
+
+                                                               {(() => {
+                                                                   const end = new Date(project.endDate);
+                                                                   const currentDate = new Date();
+                                                                   const remainingDays = Math.floor((end.getTime() - currentDate.getTime()) / (1000 * 3600 * 24));
+
+                                                                   console.log("test weeks", weeksInPeriod);
+                                                                   console.log("remaining days", remainingDays);
+
+                                                                   return (
+                                                                       <div>
+                                                                           <p>
+                                                                               <i className="icofont-ui-clock" />
+                                                                               {remainingDays} Days left
+                                                                           </p>
+                                                                       </div>
+                                                                   );
+                                                               })()}
+
                                                     </span>
                                                         </div>
                                                         <div className="progress" style={{height: 8}}>
@@ -4121,25 +4208,15 @@ export default function Project() {
                 </div>
             </div>
             {/* Modal Members*/}
-            <div
-                className="modal fade"
-                id="addUser"
-                tabIndex={-1}
-                aria-labelledby="addUserLabel"
-                aria-hidden="true"
-            >
+
+            <div className="modal fade" id="addUser" tabIndex={-1} aria-labelledby="addUserLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title  fw-bold" id="addUserLabel">
+                            <h5 className="modal-title fw-bold" id="addUserLabel">
                                 Employee Invitation
                             </h5>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            />
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
                         <div className="modal-body">
                             <div className="inviteby_email">
@@ -4157,202 +4234,28 @@ export default function Project() {
                                 </div>
                             </div>
                             <div className="members_list">
-                                <h6 className="fw-bold ">Employee </h6>
+                                <h6 className="fw-bold">Teams</h6>
                                 <ul className="list-unstyled list-group list-group-custom list-group-flush mb-0">
-                                    <li className="list-group-item py-3 text-center text-md-start">
-                                        <div
-                                            className="d-flex align-items-center flex-column flex-sm-column flex-md-column flex-lg-row">
-                                            <div className="no-thumbnail mb-2 mb-md-0">
-                                                <img
-                                                    className="avatar lg rounded-circle"
-                                                    src="assets/images/xs/avatar2.jpg"
-                                                    alt=""
-                                                />
-                                            </div>
-                                            <div className="flex-fill ms-3 text-truncate">
-                                                <h6 className="mb-0  fw-bold">Rachel Carr(you)</h6>
-                                                <span className="text-muted">rachel.carr@gmail.com</span>
-                                            </div>
-                                            <div className="members-action">
-                                                <span className="members-role ">Admin</span>
-                                                <div className="btn-group">
-                                                    <button
-                                                        type="button"
-                                                        className="btn bg-transparent dropdown-toggle"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false"
-                                                    >
-                                                        <i className="icofont-ui-settings  fs-6"/>
-                                                    </button>
-                                                    <ul className="dropdown-menu dropdown-menu-end">
-                                                        <li>
-                                                            <a className="dropdown-item" href="#">
-                                                                <i className="icofont-ui-password fs-6 me-2"/>
-                                                                ResetPassword
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a className="dropdown-item" href="#">
-                                                                <i className="icofont-chart-line fs-6 me-2"/>
-                                                                ActivityReport
-                                                            </a>
-                                                        </li>
-                                                    </ul>
+                                    {teams.map((team) => (
+                                        <li key={team.id} className="list-group-item py-3 text-center text-md-start">
+                                            <div className="d-flex align-items-center flex-column flex-sm-column flex-md-column flex-lg-row">
+                                                <div className="no-thumbnail mb-2 mb-md-0">
+                                                    <img className="avatar lg rounded-circle" src={team.avatar} alt={team.name} />
+                                                </div>
+                                                <div className="flex-fill ms-3 text-truncate">
+                                                    <h6 className="mb-0 fw-bold">{team.name}</h6>
+                                                    <span className="text-muted">{team.email}</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item py-3 text-center text-md-start">
-                                        <div
-                                            className="d-flex align-items-center flex-column flex-sm-column flex-md-column flex-lg-row">
-                                            <div className="no-thumbnail mb-2 mb-md-0">
-                                                <img
-                                                    className="avatar lg rounded-circle"
-                                                    src="assets/images/xs/avatar3.jpg"
-                                                    alt=""
-                                                />
-                                            </div>
-                                            <div className="flex-fill ms-3 text-truncate">
-                                                <h6 className="mb-0  fw-bold">
-                                                    Lucas Baker
-                                                    <a href="#" className="link-secondary ms-2">
-                                                        (Resend invitation)
-                                                    </a>
-                                                </h6>
-                                                <span className="text-muted">lucas.baker@gmail.com</span>
-                                            </div>
-                                            <div className="members-action">
-                                                <div className="btn-group">
-                                                    <button
-                                                        type="button"
-                                                        className="btn bg-transparent dropdown-toggle"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false"
-                                                    >
-                                                        Members
-                                                    </button>
-                                                    <ul className="dropdown-menu dropdown-menu-end">
-                                                        <li>
-                                                            <a className="dropdown-item" href="#">
-                                                                <i className="icofont-check-circled"/>
-                                                                <span>All operations permission</span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a className="dropdown-item" href="#">
-                                                                <i className="fs-6 p-2 me-1"/>
-                                                                <span>Only Invite &amp; manage team</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div className="btn-group">
-                                                    <button
-                                                        type="button"
-                                                        className="btn bg-transparent dropdown-toggle"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false"
-                                                    >
-                                                        <i className="icofont-ui-settings  fs-6"/>
-                                                    </button>
-                                                    <ul className="dropdown-menu dropdown-menu-end">
-                                                        <li>
-                                                            <a className="dropdown-item" href="#">
-                                                                <i className="icofont-delete-alt fs-6 me-2"/>
-                                                                Delete Member
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li className="list-group-item py-3 text-center text-md-start">
-                                        <div
-                                            className="d-flex align-items-center flex-column flex-sm-column flex-md-column flex-lg-row">
-                                            <div className="no-thumbnail mb-2 mb-md-0">
-                                                <img
-                                                    className="avatar lg rounded-circle"
-                                                    src="assets/images/xs/avatar8.jpg"
-                                                    alt=""
-                                                />
-                                            </div>
-                                            <div className="flex-fill ms-3 text-truncate">
-                                                <h6 className="mb-0  fw-bold">Una Coleman</h6>
-                                                <span className="text-muted">una.coleman@gmail.com</span>
-                                            </div>
-                                            <div className="members-action">
-                                                <div className="btn-group">
-                                                    <button
-                                                        type="button"
-                                                        className="btn bg-transparent dropdown-toggle"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false"
-                                                    >
-                                                        Members
-                                                    </button>
-                                                    <ul className="dropdown-menu dropdown-menu-end">
-                                                        <li>
-                                                            <a className="dropdown-item" href="#">
-                                                                <i className="icofont-check-circled"/>
-                                                                <span>All operations permission</span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a className="dropdown-item" href="#">
-                                                                <i className="fs-6 p-2 me-1"/>
-                                                                <span>Only Invite &amp; manage team</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div className="btn-group">
-                                                    <div className="btn-group">
-                                                        <button
-                                                            type="button"
-                                                            className="btn bg-transparent dropdown-toggle"
-                                                            data-bs-toggle="dropdown"
-                                                            aria-expanded="false"
-                                                        >
-                                                            <i className="icofont-ui-settings  fs-6"/>
-                                                        </button>
-                                                        <ul className="dropdown-menu dropdown-menu-end">
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <i className="icofont-ui-password fs-6 me-2"/>
-                                                                    ResetPassword
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <i className="icofont-chart-line fs-6 me-2"/>
-                                                                    ActivityReport
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <i className="icofont-delete-alt fs-6 me-2"/>
-                                                                    Suspend member
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a className="dropdown-item" href="#">
-                                                                    <i className="icofont-not-allowed fs-6 me-2"/>
-                                                                    Delete Member
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             {/* Create Project*/}
             <div
                 className="modal fade"
@@ -4420,12 +4323,12 @@ export default function Project() {
                                     </div>
                                     <div className="row g-3 mb-3">
                                         <div className="col-sm-12">
-                                            <label className="form-label">Teams</label>
+                                            <label className="form-label">Project Category</label>
                                             <select
                                                 className="form-select"
                                                 aria-label="Default select example"
                                             >
-                                                <option selected="">All</option>
+                                                <option selected="">UI/UX Design</option>
                                                 <option value={1}>Team Leader Only</option>
                                                 <option value={2}>Team Member Only</option>
                                             </select>
@@ -4460,12 +4363,15 @@ export default function Project() {
                             >
                                 Done
                             </button>
-                            <button type="button" className="btn btn-primary"
-                                    onClick={handleAddProject}
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={handleAddProject}
+                                style={{ backgroundColor: '#007bff' }}
                             >
                                 Create
-
                             </button>
+
                         </div>
                     </div>
                 </div>
@@ -4531,7 +4437,7 @@ export default function Project() {
                                     </div>
                                     <div className="row g-3 mb-3">
                                         <div className="col-sm-12">
-                                            <label className="form-label">Notifation Sent</label>
+                                            <label className="form-label">Project Category</label>
                                             <select
                                                 className="form-select"
                                                 aria-label="Default select example"
@@ -4568,10 +4474,11 @@ export default function Project() {
                                 className="btn btn-secondary"
                                 data-bs-dismiss="modal"
                             >
-                                Done
+                                Cancel
                             </button>
                             <button type="button" className="btn btn-primary"
-                                    onClick={() => handleUpdateProject(projectIdToDelete)}>
+                                    onClick={() => handleUpdateProject(projectIdToDelete)}
+                                    style={{ backgroundColor: '#007bff' }}>
                                 Update
                             </button>
                         </div>
@@ -4579,6 +4486,7 @@ export default function Project() {
                 </div>
             </div>
             {/* Modal Delete Folder/ File*/}
+
             <div className="modal fade" id={`deleteproject`} tabIndex={-1} aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
                     <div className="modal-content">
@@ -4624,4 +4532,4 @@ export default function Project() {
 
     )
 
-};
+}

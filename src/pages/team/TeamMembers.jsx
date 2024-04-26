@@ -19,7 +19,7 @@ export default function TeamMembers() {
     const getData = async () => {
         try {
             const fetchedTeam = await TeamService.getOneTeam(id);
-             setTeam(fetchedTeam);
+            setTeam(fetchedTeam);
             if (fetchedTeam.users && fetchedTeam.users.length > 0) {
                 fetchUsersInfo(fetchedTeam.users);
             }
@@ -151,7 +151,7 @@ export default function TeamMembers() {
                         </div>
                         {/* Row End */}
                         <div className="row g-3 row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck py-1 pb-4">
-                             {team.users && team.users.length > 0 && usersInfo.length > 0 && usersInfo.map((user, index) => (
+                            {team.users && team.users.length > 0 && usersInfo.length > 0 && usersInfo.map((user, index) => (
                                 <div className="col" key={index}>
                                     <div className="card teacher-card">
                                         <div className="card-body d-flex">
@@ -178,7 +178,7 @@ export default function TeamMembers() {
                                             </div>
                                             <div className="teacher-info border-start ps-xl-4 ps-md-3 ps-sm-4 ps-4 w-100">
                                                 <h6 className="mb-0 mt-2 fw-bold d-block fs-6">
-                                                    {user.username}
+                                                    {user.firstName}
                                                 </h6>
                                                 <span className="light-info-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-11 mb-0 mt-1">
                          </span>
@@ -192,9 +192,9 @@ export default function TeamMembers() {
                                                     <div className="button-container mt-3">
 
                                                         <button className="btn btn-danger btn-sm" onClick={() => kickMember(team._id, user._id)}>
-                                                        Remove
-                                                    </button>
-                                                </div>)}
+                                                            Remove
+                                                        </button>
+                                                    </div>)}
                                                 <a href="task.html" className="btn btn-dark btn-sm mt-1">
                                                     <i className="icofont-plus-circle me-2 fs-6" />
                                                     Add Task

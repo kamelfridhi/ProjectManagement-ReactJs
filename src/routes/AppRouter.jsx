@@ -32,7 +32,7 @@ import UserTeams from "../pages/team/UserTeams.jsx";
 
 import ChangePassword from "../pages/user/ChangePassword.jsx";
 import NewPassword from "../pages/user/NewPassword.jsx";
-
+import Sprints from "../pages/sprints/Sprints.jsx";
 
 const AppRouter = () => {
     return (
@@ -58,9 +58,12 @@ const AppRouter = () => {
 
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}
-                    <Route path="project-dashboard" element={<ProjectDashboard />} />
+                    <Route path="project-dashboard/:projectName" element={<ProjectDashboard />} />
                     <Route path="showProject" element={<ProjectList />} />
+
                     <Route path="project" element={<Project />} />
+                     <Route path="sprints" element={<Sprints />} />
+
                     <Route path="team-leader" element={<TeamLeader />} />
                     <Route path="ticket" element={<Ticket />} />
                     <Route path="ticket-details" element={<TicketDetails />} />

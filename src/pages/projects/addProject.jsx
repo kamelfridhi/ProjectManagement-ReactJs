@@ -10,6 +10,7 @@ const AddProject = ({ addProject }) => {
         projectDescription: '',
         startDate: '',
         endDate: '',
+        projectCategory:''
     });
 
     const handleChange = (e, fieldName) => {

@@ -47,6 +47,7 @@ export default function Signup() {
         password: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
         dateOfBirth: Yup.date().required('Date of Birth is required'),
         address: Yup.string().required('Address is required'),
+        gendre: Yup.string().required('Gendre is required'),
         role: Yup.string().required('Role is required')
     });
     return (
@@ -158,17 +159,7 @@ export default function Signup() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="col-6">
-                                            <div className="mb-2">
-                                                <label className="form-label">Date of Birth</label>
-                                                <input
-                                                    type="date"
-                                                    className="form-control form-control-lg"
-                                                    onChange={handleChange}
-                                                    id="dateOfBirth"
-                                                />
-                                            </div>
-                                        </div>
+
                                         <div className="col-6">
                                             <div className="mb-2">
                                                 <label className="form-label">Role</label>
@@ -185,8 +176,21 @@ export default function Signup() {
                                                 </select>
                                             </div>
                                         </div>
-
-                                        <div className="col-12">
+                                        <div className="col-6">
+                                            <div className="mb-2">
+                                                <label className="form-label">Gendre</label>
+                                                <select
+                                                    className="form-select form-select-lg"
+                                                    onChange={handleChange}
+                                                    id="gendre"
+                                                >
+                                                    <option value="">Select a Gendre</option>
+                                                    <option value="male">male</option>
+                                                    <option value="female">female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="col-6">
                                             <div className="mb-2">
                                                 <label className="form-label">Address</label>
                                                 <input
@@ -198,7 +202,17 @@ export default function Signup() {
                                                 />
                                             </div>
                                         </div>
-
+                                        <div className="col-6">
+                                            <div className="mb-2">
+                                                <label className="form-label">Date of Birth</label>
+                                                <input
+                                                    type="date"
+                                                    className="form-control form-control-lg"
+                                                    onChange={handleChange}
+                                                    id="dateOfBirth"
+                                                />
+                                            </div>
+                                        </div>
                                         <div className="col-12 text-center mt-4">
                                             <button
                                                 type="submit"

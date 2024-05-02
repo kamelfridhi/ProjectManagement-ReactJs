@@ -104,7 +104,7 @@ const AccountNotVerified = () => {
                                                 </div>
                                                 <div className="flex-fill ms-4 text-truncate">
                                                     <div className="text-truncate">Status</div>
-                                                    {showAlert ? (
+                                                    {currentUser.settings.statusAccount === -1 ? (
                                                         <span className="badge bg-danger">Declined</span>
 
                                                     ) :

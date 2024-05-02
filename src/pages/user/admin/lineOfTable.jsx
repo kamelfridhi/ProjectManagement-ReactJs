@@ -3,6 +3,9 @@ import * as UserService from "../../../_services/UserService.jsx";
 import { acceptUser, declinetUser } from "../../../_services/UserService.jsx";
 import { useSelector } from "react-redux";
 import { selectUserObject } from "../../../redux/user/userSelector.js";
+import io from 'socket.io-client';
+let socket= io('ws://localhost:3000');
+
 
 export default function LineOfTable({ user, etat }) {
     const [imageData, setImageData] = useState(null);
@@ -10,6 +13,19 @@ export default function LineOfTable({ user, etat }) {
     const currentUser = useSelector(selectUserObject);
 
     const [selectedRole, setSelectedRole] = useState('');
+
+    useEffect(() => {
+        socket.on('connect',(data)=>{
+            socket.emit('Connect',{
+                id: currentUser._id,
+                socketid:null,
+                name: currentUser.firstName,
+                statusAccount: currentUser.settings.statusAccount,
+                verified: currentUser.settings.verifiedAccount
+            })
+        })
+
+    }, []);
 
     const handleChange = async (event) => {
         const newRole = event.target.value;
@@ -37,10 +53,27 @@ export default function LineOfTable({ user, etat }) {
 
 
     const accept = async () => {
-        await UserService.acceptUser(user._id);
+
+            socket.emit('userAccepted',{
+                id: user._id,
+                socketid:null,
+                name: user.firstName,
+                statusAccount: user.statusAccount,
+                verifiedAccount: true
+            })
+
+        //await UserService.acceptUser(user._id);
     }
     const decline = async () => {
-        await UserService.declinetUser(user._id);
+
+            socket.emit('userRejected',{
+                id: user._id,
+                socketid:null,
+                name: user.firstName,
+                statusAccount: user.statusAccount,
+                verifiedAccount:false
+            })
+        //await UserService.declinetUser(user._id);
     }
     const block = async () => {
         await UserService.blockUser(user._id);

@@ -13,7 +13,7 @@ export default function UsersTable({ etat }) {
     useEffect(() => {
 
         fetchUsers()
-    }, [users]);
+    }, []);
 
     return (<>
         {/* main body area */}

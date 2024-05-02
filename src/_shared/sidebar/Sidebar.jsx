@@ -7,7 +7,8 @@ import { selectUserObject } from '../../redux/user/userSelector.js';
 import { signOut }  from "../../redux/user/userSlice.js";
 import {ToastContainer} from "react-toastify";
 import * as UserService from "../../_services/UserService.jsx";
-
+import io from 'socket.io-client';
+let socket= io('ws://localhost:3000');
 
 
 export default function Sidebar() {
@@ -50,6 +51,23 @@ export default function Sidebar() {
 
         fetchImageData();
     });
+    useEffect(() => {
+        socket.on('connect',(data)=>{
+            socket.emit('Connect',{
+                id: currentUser._id,
+                socketid:null,
+                name: currentUser.firstName,
+                statusAccount: currentUser.settings.statusAccount,
+                verified: currentUser.settings.verifiedAccount
+            })
+        })
+        socket.on('userAccepted',(data)=>{
+            console.log('socket data accept ',data)
+        })
+        socket.on('userRejected',(data)=>{
+            console.log('socket data reject ',data)
+        })
+    }, []);
 
 
 

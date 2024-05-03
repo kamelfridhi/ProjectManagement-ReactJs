@@ -164,16 +164,12 @@ export default function Sidebar() {
                                             <span>Projects</span>
                                         </Link>
                                     </li>
-                                    <li>
+                                    { /* <li>
                                         <Link className="ms-link" to="/Home/task">
                                             <span>Tasks</span>
                                         </Link>
-                                    </li>
-                                    <li>
-                                        <Link className="ms-link" to="/Home/team-leader">
-                                            <span>Leaders</span>
-                                        </Link>
-                                    </li>
+                                    </li>*/}
+
                                 </ul>
                             </li>
                             <li className="collapsed">
@@ -276,54 +272,7 @@ export default function Sidebar() {
                             <div className="container-xxl">
                                 {/* header rightbar icon */}
                                 <div className="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
-                                    <div className="d-flex">
-                                        <a
-                                            className="nav-link text-primary collapsed"
-                                            href="help.html"
-                                            title="Get Help"
-                                        >
-                                            <i className="icofont-info-square fs-5" />
-                                        </a>
-                                        <div className="avatar-list avatar-list-stacked px-3">
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar2.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar1.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar3.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar4.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar7.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar8.jpg"
-                                                alt=""
-                                            />
-                                            <span
-                                                className="avatar rounded-circle text-center pointer"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#addUser"
-                                            >
-                                                <i className="icofont-ui-add" />
-                                            </span>
-                                        </div>
-                                    </div>
+
                                     <div className="dropdown notifications">
                                         <a
                                             className="nav-link dropdown-toggle pulse"
@@ -516,20 +465,8 @@ export default function Sidebar() {
                                 {/* main menu Search*/}
                                 <div className="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
                                     <div className="input-group flex-nowrap input-group-lg">
-                                        <button
-                                            type="button"
-                                            className="input-group-text"
-                                            id="addon-wrapping"
-                                        >
-                                            <i className="fa fa-search" />
-                                        </button>
-                                        <input
-                                            type="search"
-                                            className="form-control"
-                                            placeholder="Search"
-                                            aria-label="search"
-                                            aria-describedby="addon-wrapping"
-                                        />
+
+
                                         <button
                                             type="button"
                                             className="input-group-text add-member-top"

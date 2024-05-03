@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import * as TaskService from "../../../_services/TaskService.jsx";
 import task from "../../../_models/Task.jsx";
+import {useParams} from "react-router-dom";
 
 export default function ShowTasks() {
+    const { id } = useParams( );
+
     const [tasks, setTasks] = useState([]);
     const [selectedTask, setSelectedTask] = useState('');
 
@@ -13,7 +16,7 @@ export default function ShowTasks() {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const data = await TaskService.getAllTasks();
+                    const data = await TaskService.getAllTasksbysprint(id);
                 setTasks(data);
             } catch (error) {
                 console.error("Error fetching tasks:", error);
@@ -55,7 +58,7 @@ export default function ShowTasks() {
 
     const fetchTaskss = async () => {
         try {
-            const data = await TaskService.getAllTasks();
+            const data = await TaskService.getAllTasksbysprint(id);
             setTasks(data);
         } catch (error) {
             console.error("Error fetching tasks:", error);

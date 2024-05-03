@@ -8,7 +8,7 @@ import addSprint from "./addSprint.jsx";
 import {Link} from "react-router-dom";
 import {deleteSprintByName} from "../../_services/sprintService.jsx";
 
-export default function Sprints() {
+export default function Sprints({id}) {
     const [sprints, setSprints] = useState([]);
 
     const [sprintData, setSprintData] = useState({
@@ -70,7 +70,7 @@ export default function Sprints() {
 
             console.log('Before adding sprint:', sprintData);
 
-            await SprintsService.createSprint(sprintData);
+            await SprintsService.createSprint(sprintData,id);
 
             // Notify the parent component to update its state
             addSprint(sprintData);
@@ -129,7 +129,8 @@ export default function Sprints() {
     useEffect(() => {
         const fetchSprints = async () => {
             try {
-                const data = await SprintsService.getAllSprints();
+                console.log('Fetching sprints...');
+                const data = await SprintsService.getAllSprints(id);
                 setSprints(data);
 
 
@@ -212,7 +213,7 @@ export default function Sprints() {
                                 {sprints.map((sprint) => (
                                     <tr key={sprint._id}>
                                         <td>
-                                            <Link to={`/Home/task`}>{sprint.sprintName}</Link>
+                                            <Link to={`/Home/task/${sprint._id}`}>{sprint.sprintName}</Link>
                                         </td>
                                         <td>{sprint.sprintDescription}</td>
                                         <td>{new Date(sprint.startDate).toLocaleDateString()}</td>

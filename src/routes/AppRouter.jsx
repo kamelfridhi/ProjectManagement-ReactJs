@@ -70,9 +70,9 @@ const AppRouter = () => {
                     <Route path="our-clients" element={<OurClients />} />
                     <Route path="our-teams" element={<Teams />} />
                     <Route path="userteams" element={<UserTeams />} />
-                    <Route path="showtask" element={<ShowTasks />} />
+                    <Route path="showtask/:id" element={<ShowTasks />} />
                     <Route path="teams-members/:id" element={<TeamMembers />} />
-                    <Route path="task" element={<Task />} />
+                    <Route path="task/:id" element={<Task />} />
                     <Route path="Chat/:id" element={<TeamChat />} />
                     <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<UserProfile />} />

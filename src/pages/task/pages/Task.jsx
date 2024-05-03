@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as TaskService from "../../../_services/TaskService.jsx";
-import { addTask } from "../../../_services/TaskService.jsx";
+import {addTask, getAllTasksbysprint} from "../../../_services/TaskService.jsx";
 import TaskManagement from "../components/TaskManagement.jsx";
 import BoardTask from "../components/BoardTask.jsx";
 import RecentActivity from "../components/RecentActivity.jsx";
@@ -14,7 +14,10 @@ import user from "../../../_models/User.jsx";
 import data from "bootstrap/js/src/dom/data.js";
 import {useSelector} from "react-redux";
 import {selectUserObject} from "../../../redux/user/userSelector.js";
+import {Link, useParams} from "react-router-dom";
+import showTask from "../components/ShowTask.jsx";
 export default function Task() {
+    const { id } = useParams( );
 
     const [tasks, setTasks] = useState([]);
     const [taskName, setTaskName] = useState('');
@@ -38,8 +41,9 @@ export default function Task() {
     };
 
     useEffect(() => {
+        console.log("task_id"+id)
         const fetchTasks = async () => {
-            const data = await TaskService.getAllTasks();
+            const data = await TaskService.getAllTasksbysprint(id);
             setTasks(data);
         };
 
@@ -76,6 +80,7 @@ export default function Task() {
                 startDate: taskStartDate,
                 endDate: taskEndDate,
                 assignPerson: selectedUserId,
+                sprint:id
             };
 
             const createdTask = await TaskService.addTask(newTaskData);
@@ -91,6 +96,8 @@ export default function Task() {
                 height: 50,
             });
 
+            handleRefresh()
+            handleRefresh()
             console.log('Task created successfully:', createdTask);
         } catch (error) {
             console.error('Error creating task:', error);
@@ -119,6 +126,7 @@ export default function Task() {
     };
 
     const handleRefresh = () => {
+        console.log("yes i did")
         setRefresh(!refresh); // Inversez simplement la valeur de refresh pour forcer le rendu à se mettre à jour
     };
 
@@ -155,6 +163,16 @@ export default function Task() {
                             <div className="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                                 <h3 className="fw-bold mb-0">Task Management of {currentUser.firstName}</h3>
                                 <div className="col-auto">
+                                    <Link
+                                        type="button"
+                                        className="btn btn-dark btn-set-task"
+                                        style={{ backgroundColor: '#4c3575' }}
+                                        to={`/Home/showtask/${id}`}
+
+                                    >
+                                        All Tasks
+                                    </Link>
+
                                     <button
                                         type="button"
                                         className="btn btn-dark btn-set-task"
@@ -174,13 +192,13 @@ export default function Task() {
                         <div className="row clearfix  g-3">
                             <div className="col-lg-12 col-md-12 flex-column">
                                 <div className="row g-3 row-deck" onMouseEnter={handleRefresh}>
-                                    <TaskManagement refresh={refresh}  />
+                                    <TaskManagement refresh={refresh}  id={id} handle={handleRefresh} />
 
 
                                     <RecentActivity />
                                     <AllocatedTaskMembers />
                                 </div>
-                                <StatusBoard refresh={refresh}/>
+                                <StatusBoard refresh={refresh} id={id} handle={handleRefresh}/>
                             </div>
                         </div>
                     </div>
@@ -310,10 +328,10 @@ export default function Task() {
                                             aria-label="Default select Priority"
                                         >
                                             <option selected="">Select Person</option>
-                                            {users.map((user) => (
+                                                {users.map((user) => (
 
-                                                <option key={user._id} value={user._id}>{user.firstName}</option>
-                                            ))}
+                                                    <option key={user._id} value={user._id}>{user.firstName}</option>
+                                                ))}
                                         </select>
                                     </div>
                                 </div>

@@ -4,18 +4,18 @@ import BACK_END_URL from '../config';
 const API_BASE_URL = BACK_END_URL + 'sprint';
 const userid = '65d8dd987faf4da6a55483aa';
 
-export const getAllSprints = async () => {
+export const getAllSprints = async (idproject) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}`);
+        const response = await axios.get(`${API_BASE_URL}/${idproject}`);
         return response.data;
     } catch (error) {
         console.error(error);
         throw error;
     }
 };
-export const createSprint = async (data) => {
+export const createSprint = async (data,idproject) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}`, data);
+        const response = await axios.post(`${API_BASE_URL}/${idproject}`, data);
         console.log('Create Sprint Response:', response.data);
         return response.data;
     } catch (error) {

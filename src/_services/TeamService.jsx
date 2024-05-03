@@ -118,7 +118,7 @@ export const updateTeam = async (idteam,data) => {
 
 export const getOneUser = async (id) => {
     try {
-        const response = await axios.get(`${API_User_URL}/${id}`)
+        const response = await axios.get(`${API_User_URL}/teamuser/${id}`);
         return response.data }
     catch (error)
     {

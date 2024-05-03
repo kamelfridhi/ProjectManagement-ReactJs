@@ -3,17 +3,17 @@ import * as TaskService from "../../../_services/TaskService.jsx";
 import * as StatusService from "../../../_services/StatusService.jsx"; // Import de la fonction getAllStatus
 import io from 'socket.io-client';
 
-export default function TaskManagement({ refresh }) {
+export default function TaskManagement({ refresh , id}) {
     const [tasks, setTasks] = useState([]);
     const [statuses, setStatuses] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const taskData = await TaskService.getAllTasks();
+                const taskData = await TaskService.getAllTasksbysprint(id);
                 setTasks(taskData);
 
-                const statusData = await StatusService.getAllStatus();
+                const statusData = await StatusService.getAllStatusbysprint(id);
                 setStatuses(statusData);
             } catch (error) {
                 console.error('Error fetching data:', error);

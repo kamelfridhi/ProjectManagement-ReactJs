@@ -11,6 +11,8 @@ import enUS from 'date-fns/locale/en-US';
 import 'chartjs-plugin-zoom';
 import log from "eslint-plugin-react/lib/util/log.js";
 import Sprints from "../sprints/Sprints.jsx";
+import TeamMembers from "../team/TeamMembers.jsx";
+import Teamstable from "../team/teamstable.jsx";
 
 const ProjectDashboard= () =>{
 
@@ -118,41 +120,19 @@ const ProjectDashboard= () =>{
         }
     }, [project]);
 // Progress Pie Chart Initialization
-    useEffect(() => {
-        const progressCtx = document.getElementById('progressPieChart').getContext('2d');
-        const progressData = {
-            labels: ['Completed', 'Remaining','in progress'],
-            datasets: [{
-                data: [30, 50,20], // Example data, replace with actual completion percentages
-                backgroundColor: ['#36A2EB', '#ff7856',"#"],
-            }],
-        };
-        new Chart(progressCtx, {
-            type: 'doughnut',
-            data: progressData,
-            options: {
-                cutout: '80%',
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                },
-            },
-        });
-    }, []);
+
 
     return (
 
         <>
 
             <div >
-                <h1>Project Name: {projectName}</h1>
-                <p>Project Details:{projectDescription} </p>
+                {/*<h1>Project Name: {projectName}</h1> */}
+                <h1>Project Details:{projectDescription} </h1>
                 {/* Include additional details as needed */}
             </div>
             {/* main body area */}
             <div className="main px-lg-4 px-md-4">
-                {/* Body: Body */}
                 <div className="body d-flex py-3">
                     <div className="container-xxl">
                         <div className="row g-3 mb-3 row-deck">
@@ -165,7 +145,7 @@ const ProjectDashboard= () =>{
                                             </div>
                                             <div className="flex-fill ms-4">
                                                 <div className="">Total Task</div>
-                                                <h5 className="mb-0 ">122</h5>
+                                                <h5 className="mb-0 ">12</h5>
                                             </div>
                                             <a
                                                 href="task.html"
@@ -187,7 +167,7 @@ const ProjectDashboard= () =>{
                                             </div>
                                             <div className="flex-fill ms-4">
                                                 <div className="">Completed Task</div>
-                                                <h5 className="mb-0 ">376</h5>
+                                                <h5 className="mb-0 ">5</h5>
                                             </div>
                                             <a
                                                 href="task.html"
@@ -209,7 +189,7 @@ const ProjectDashboard= () =>{
                                             </div>
                                             <div className="flex-fill ms-4">
                                                 <div className="">Progress Task</div>
-                                                <h5 className="mb-0 ">74</h5>
+                                                <h5 className="mb-0 ">7</h5>
                                             </div>
                                             <a
                                                 href="task.html"
@@ -224,26 +204,7 @@ const ProjectDashboard= () =>{
                             </div>
                         </div>
                         {/* Row End */}
-                        <div className="row g-3 mb-3 row-deck">
-                            <div className="col-md-7">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <h2>Gantt Chart</h2>
-                                        <canvas id="ganttChart" width="400" height="200"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-5">
-                                <div className="card">
-                                    <div className="card-body">
-                                        <div className="text-center p-4">
-                                            <h2>Progress Pie Chart</h2>
-                                            <canvas id="progressPieChart" width="200" height="200"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                         {/* Row End */}
                         <div className="row g-3 mb-3 row-deck">
                             <div className="col-md-12 col-lg-4">
@@ -301,57 +262,16 @@ const ProjectDashboard= () =>{
                             </div>
                         </div>
                         {/* Row End */}
-                        <div className="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4 row-cols-xxl-4">
-                            <div className="col">
-                                <div className="card bg-primary">
-                                    <div className="card-body text-white d-flex align-items-center">
-                                        <i className="icofont-data fs-3" />
-                                        <div className="d-flex flex-column ms-3">
-                                            <h6 className="mb-0">Total Projects</h6>
-                                            <span className="text-white">550</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card bg-primary">
-                                    <div className="card-body text-white d-flex align-items-center">
-                                        <i className="icofont-chart-flow fs-3" />
-                                        <div className="d-flex flex-column ms-3">
-                                            <h6 className="mb-0">Coming Projects</h6>
-                                            <span className="text-white">210</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card bg-primary">
-                                    <div className="card-body text-white d-flex align-items-center">
-                                        <i className="icofont-chart-flow-2 fs-3" />
-                                        <div className="d-flex flex-column ms-3">
-                                            <h6 className="mb-0">Progress Projects</h6>
-                                            <span className="text-white">8456 Files</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col">
-                                <div className="card bg-primary">
-                                    <div className="card-body text-white d-flex align-items-center">
-                                        <i className="icofont-tasks fs-3" />
-                                        <div className="d-flex flex-column ms-3">
-                                            <h6 className="mb-0">Finished Projects</h6>
-                                            <span className="text-white">88 Files</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <Sprints/>
+
+
 
 
                     </div>
                 </div>
+                <Sprints id={projectName}/>
+                <Teamstable id={projectName}/>
+                {/* Body: Body */}
+
                 {/* Modal Members*/}
                 <div
                     className="modal fade"

@@ -173,8 +173,9 @@ export default function Signup() {
                                                     <option value="employee">Employee</option>
                                                     <option value="projectManager">Project Manager</option>
                                                     <option value="client">Client</option>
+
+                                                    <option value="development">development</option>
                                                     <option value="marketing">marketing</option>
-                                                    <option value="developement">developement</option>
                                                 </select>
                                             </div>
                                         </div>

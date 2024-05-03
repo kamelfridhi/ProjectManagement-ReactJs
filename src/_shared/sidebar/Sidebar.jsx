@@ -6,12 +6,19 @@ import {useDispatch, useSelector} from "react-redux";
 import { selectUserObject } from '../../redux/user/userSelector.js';
 import { signOut }  from "../../redux/user/userSlice.js";
 import {ToastContainer} from "react-toastify";
+
+import * as TeamService from "../../_services/TeamService.jsx";
+import {acceptInvitation, getAllnotif, reject} from "../../_services/TeamService.jsx";
+
 import * as UserService from "../../_services/UserService.jsx";
 import io from 'socket.io-client';
 let socket= io('ws://localhost:3000');
 
 
+
 export default function Sidebar() {
+    const [notifications, setNotifications] = useState([]);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentUser = useSelector(selectUserObject);
@@ -22,7 +29,41 @@ export default function Sidebar() {
            await UserService.handleSignOut(currentUser._id,dispatch,navigate);
 
     };
+    useEffect(() => {
 
+
+        fetchNotifications();
+    }, [currentUser._id]); // Add currentUser._id to the dependency array
+    const fetchNotifications = async () => {
+        try {
+            const notificationsData = await getAllnotif(currentUser._id);
+            console.log('Fetched Notifications:', notificationsData);
+
+            setNotifications(notificationsData);
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    };
+    const handleAcceptClick = async (userId, notificationId) => {
+        try {
+            await acceptInvitation(userId, notificationId);
+             fetchNotifications();
+            // Optionally, you can update the notifications state or perform any other actions after accepting the invitation
+        } catch (error) {
+            console.error('Error accepting team invitation:', error);
+            // Optionally, you can display an error message or handle the error in some other way
+        }
+    };
+    const handlerejectClick = async (notificationId) => {
+        try {
+            await reject(notificationId);
+             fetchNotifications();
+            // Optionally, you can update the notifications state or perform any other actions after accepting the invitation
+        } catch (error) {
+            console.error('Error accepting team invitation:', error);
+            // Optionally, you can display an error message or handle the error in some other way
+        }
+    };
 
     useEffect(() => {
         const fetchImageData = async () => {
@@ -141,16 +182,12 @@ export default function Sidebar() {
                                             <span>Projects</span>
                                         </Link>
                                     </li>
-                                    <li>
+                                    { /* <li>
                                         <Link className="ms-link" to="/Home/task">
                                             <span>Tasks</span>
                                         </Link>
-                                    </li>
-                                    <li>
-                                        <Link className="ms-link" to="/Home/team-leader">
-                                            <span>Leaders</span>
-                                        </Link>
-                                    </li>
+                                    </li>*/}
+
                                 </ul>
                             </li>
                             <li className="collapsed">
@@ -217,15 +254,21 @@ export default function Sidebar() {
                                 </a>
                                 {/* Menu: Sub menu ul */}
                                 <ul className="sub-menu collapse" id="emp-Components">
-                                    <li>
-                                        <Link className="ms-link" to="our-teams">
-                                            {" "}
-                                            <span>Teams</span>
-                                        </Link>
-                                    </li>
-
-
+                                    {currentUser.role.role === 'admin' ? (
+                                        <li>
+                                            <Link className="ms-link" to="our-teams">
+                                                <span>Teams</span>
+                                            </Link>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <Link className="ms-link" to="userteams">
+                                                <span>MyTeams</span>
+                                            </Link>
+                                        </li>
+                                    )}
                                 </ul>
+
                             </li>
                         </ul>
                         {/* Menu: menu collepce btn */}
@@ -247,54 +290,7 @@ export default function Sidebar() {
                             <div className="container-xxl">
                                 {/* header rightbar icon */}
                                 <div className="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
-                                    <div className="d-flex">
-                                        <a
-                                            className="nav-link text-primary collapsed"
-                                            href="help.html"
-                                            title="Get Help"
-                                        >
-                                            <i className="icofont-info-square fs-5" />
-                                        </a>
-                                        <div className="avatar-list avatar-list-stacked px-3">
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar2.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar1.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar3.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar4.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar7.jpg"
-                                                alt=""
-                                            />
-                                            <img
-                                                className="avatar rounded-circle"
-                                                src="/assets/images/xs/avatar8.jpg"
-                                                alt=""
-                                            />
-                                            <span
-                                                className="avatar rounded-circle text-center pointer"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#addUser"
-                                            >
-                                                <i className="icofont-ui-add" />
-                                            </span>
-                                        </div>
-                                    </div>
+
                                     <div className="dropdown notifications">
                                         <a
                                             className="nav-link dropdown-toggle pulse"
@@ -319,123 +315,30 @@ export default function Sidebar() {
                                                 <div className="tab-content card-body">
                                                     <div className="tab-pane fade show active">
                                                         <ul className="list-unstyled list mb-0">
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar1.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Dylan Hunter
-                                                                            </span>{" "}
-                                                                            <small>2MIN</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Added 2021-02-19 my-Task ui/ux Design{" "}
-                                                                            <span className="badge bg-success">Review</span>
-                                                                        </span>
+
+                                                            {notifications.map(notification => (
+                                                                <li key={notification._id} className="py-2 mb-1 border-bottom">
+                                                                    <div className="d-flex align-items-center">
+                                                                        <img
+                                                                            className="avatar rounded-circle"
+                                                                            src="/assets/images/xs/avatar1.jpg"
+                                                                            alt=""
+                                                                        />
+                                                                        <div className="flex-fill ms-2">
+
+                                                                            <span className="">
+                                                                            {notification.message}
+                                                                                <span className="badge bg-success">Review</span>
+                </span>
+                                                                        </div>
+                                                                        <div className="ms-auto">
+                                                                            <button className="btn btn-success me-2" onClick={() => handleAcceptClick(currentUser._id, notification._id)}>Accept</button>
+                                                                            <button className="btn btn-danger" onClick={() => handlerejectClick(notification._id)}>Reject</button>
+                                                                        </div>
                                                                     </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <div className="avatar rounded-circle no-thumbnail">
-                                                                        DF
-                                                                    </div>
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Diane Fisher
-                                                                            </span>{" "}
-                                                                            <small>13MIN</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Task added Get Started with Fast Cad project
-                                                                        </span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar3.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Andrea Gill
-                                                                            </span>{" "}
-                                                                            <small>1HR</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Quality Assurance Task Completed
-                                                                        </span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar5.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Diane Fisher
-                                                                            </span>{" "}
-                                                                            <small>13MIN</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Add New Project for App Developemnt
-                                                                        </span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2 mb-1 border-bottom">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar6.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Andrea Gill
-                                                                            </span>{" "}
-                                                                            <small>1HR</small>
-                                                                        </p>
-                                                                        <span className="">
-                                                                            Add Timesheet For Rhinestone project
-                                                                        </span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li className="py-2">
-                                                                <a href="javascript:void(0);" className="d-flex">
-                                                                    <img
-                                                                        className="avatar rounded-circle"
-                                                                        src="/assets/images/xs/avatar7.jpg"
-                                                                        alt=""
-                                                                    />
-                                                                    <div className="flex-fill ms-2">
-                                                                        <p className="d-flex justify-content-between mb-0 ">
-                                                                            <span className="font-weight-bold">
-                                                                                Zoe Wright
-                                                                            </span>{" "}
-                                                                            <small className="">1DAY</small>
-                                                                        </p>
-                                                                        <span className="">Add Calander Event</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
+                                                                </li>
+                                                            ))}
+                                                        
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -454,7 +357,6 @@ export default function Sidebar() {
                                                 <span className="font-weight-bold">{currentUser ? currentUser.email : null}</span>
                                             </p>
                                             <small>{currentUser.role.role} Profile
-                                                {currentUser.settings.blocked ? <h1>blocked</h1> : <h1>leli</h1>}
                                             </small>
 
                                         </div>
@@ -581,20 +483,8 @@ export default function Sidebar() {
                                 {/* main menu Search*/}
                                 <div className="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
                                     <div className="input-group flex-nowrap input-group-lg">
-                                        <button
-                                            type="button"
-                                            className="input-group-text"
-                                            id="addon-wrapping"
-                                        >
-                                            <i className="fa fa-search" />
-                                        </button>
-                                        <input
-                                            type="search"
-                                            className="form-control"
-                                            placeholder="Search"
-                                            aria-label="search"
-                                            aria-describedby="addon-wrapping"
-                                        />
+
+
                                         <button
                                             type="button"
                                             className="input-group-text add-member-top"

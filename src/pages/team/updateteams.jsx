@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import * as TeamService from "../../_services/TeamService.jsx";
+import {getallcategories} from "../../_services/TeamService.jsx";
 
 export default function UpdateTeam({ id,fetchTeams }) {
     const [team, setTeam] = useState({});
@@ -7,8 +8,8 @@ export default function UpdateTeam({ id,fetchTeams }) {
     const [description, setdescription] = useState('');
     const [nameteam, setnameteam] = useState('');
     const [teamCategory, setTeamCategory] = useState('');
-    const categories = ["marketing", "developement", "test",'sales','it']; // Example of static categories
-    const [errors, setErrors] = useState({});
+     const [errors, setErrors] = useState({});
+    const [categories, setCategories] = useState([]);
 
     const getData = async () => {
         console.log(id);
@@ -17,8 +18,10 @@ export default function UpdateTeam({ id,fetchTeams }) {
         setnameteam(fetchedData.name);
         setTeamCategory(fetchedData.category);
         setdescription(fetchedData.description);
-        console.log("Team name: ", fetchedData.name);
-    };
+        const fetchedCategories = await getallcategories();
+        setCategories(fetchedCategories);
+        console.log("hererreer"+fetchedCategories);
+     };
 
     useEffect(() => {
         getData();

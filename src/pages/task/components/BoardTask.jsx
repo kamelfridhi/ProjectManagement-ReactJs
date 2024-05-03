@@ -4,13 +4,13 @@ import * as TaskService from "../../../_services/TaskService.jsx";
 
 
 
-export default function BoardTask() {
+export default function BoardTask({id}) {
 
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
         const fetchTasks = async () => {
-            const data = await TaskService.getAllTasks();
+            const data = await TaskService.getAllTasksbysprint('663191e2aa5ff82325d6ab36');
             setTasks(data);
         };
         fetchTasks();

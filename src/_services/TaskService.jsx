@@ -14,6 +14,17 @@ export const getAllTasks = async () => {
     }
 };
 
+
+export const getAllTasksbysprint = async (id) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/sprint/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 export const addTask = async (data) => {
     try {
 

@@ -13,9 +13,19 @@ export const getAllStatus = async () => {
     }
 };
 
-export const addStatus = async (data, projectId) => {
+export const getAllStatusbysprint = async (sprintid) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/${projectId}`, data);
+        const response = await axios.get(`${API_BASE_URL}/${sprintid}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const addStatus = async (data, sprintid) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/${sprintid}`, data);
         return response.data;
     } catch (error) {
         console.error(error);

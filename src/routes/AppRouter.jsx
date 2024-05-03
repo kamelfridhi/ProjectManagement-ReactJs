@@ -26,8 +26,13 @@ import StatusPage from "../pages/task/components/StatusPage.jsx";
 import StatusBoard from "../pages/task/components/StatusBoard.jsx";
 import { PrivateRoute, DontLogin } from "../_shared/protectRoutes.jsx";
 import UserProfile from "../pages/user/Profile.jsx";
+
+import TeamChat from "../pages/team/TeamChat.jsx";
+import UserTeams from "../pages/team/UserTeams.jsx";
+
 import ChangePassword from "../pages/user/ChangePassword.jsx";
 import NewPassword from "../pages/user/NewPassword.jsx";
+import Sprints from "../pages/sprints/Sprints.jsx";
 
 const AppRouter = () => {
     return (
@@ -53,17 +58,22 @@ const AppRouter = () => {
 
                 <Route path="/Home" element={<Sidebar />}>
                     {/* Nested route for Task */}
-                    <Route path="project-dashboard" element={<ProjectDashboard />} />
+                    <Route path="project-dashboard/:projectName" element={<ProjectDashboard />} />
                     <Route path="showProject" element={<ProjectList />} />
+
                     <Route path="project" element={<Project />} />
+                     <Route path="sprints" element={<Sprints />} />
+
                     <Route path="team-leader" element={<TeamLeader />} />
                     <Route path="ticket" element={<Ticket />} />
                     <Route path="ticket-details" element={<TicketDetails />} />
                     <Route path="our-clients" element={<OurClients />} />
                     <Route path="our-teams" element={<Teams />} />
-                    <Route path="showtask" element={<ShowTasks />} />
+                    <Route path="userteams" element={<UserTeams />} />
+                    <Route path="showtask/:id" element={<ShowTasks />} />
                     <Route path="teams-members/:id" element={<TeamMembers />} />
-                    <Route path="task" element={<Task />} />
+                    <Route path="task/:id" element={<Task />} />
+                    <Route path="Chat/:id" element={<TeamChat />} />
                     <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<UserProfile />} />
                     </Route>

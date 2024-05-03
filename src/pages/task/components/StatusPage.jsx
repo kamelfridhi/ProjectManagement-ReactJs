@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { getAllStatus, addStatus, updateStatus, deleteStatus } from '../../../_services/StatusService.jsx';
+import {
+    getAllStatus,
+    addStatus,
+    updateStatus,
+    deleteStatus,
+    getAllStatusbysprint
+} from '../../../_services/StatusService.jsx';
 
-const StatusPage = () => {
+const StatusPage = (id) => {
     const [statuses, setStatuses] = useState([]);
     const [newStatus, setNewStatus] = useState('');
     const [updateStatusId, setUpdateStatusId] = useState('');
@@ -12,8 +18,9 @@ const StatusPage = () => {
     }, []);
 
     const loadStatuses = async () => {
+        const sprint = id;
         try {
-            const data = await getAllStatus();
+            const data = await getAllStatusbysprint(sprint);
             setStatuses(data);
         } catch (error) {
             console.error('Error loading statuses:', error);
@@ -22,7 +29,7 @@ const StatusPage = () => {
 
     const handleAddStatus = async (e) => {
         e.preventDefault();
-        const projectId = '65e4b65f97417e8007cc7e53'; // Remplacez 'your_static_project_id' par l'ID statique souhaité
+        const projectId = id; // Remplacez 'your_static_project_id' par l'ID statique souhaité
         try {
             await addStatus({ status: newStatus }, projectId);
             setNewStatus('');

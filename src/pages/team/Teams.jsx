@@ -1,6 +1,7 @@
 import Teamcard from "./teamcard.jsx";
 import {useEffect, useState} from "react";
 import * as TeamService from "../../_services/TeamService.jsx";
+import {getallcategories} from "../../_services/TeamService.jsx";
 
 export default function Teams() {
 
@@ -8,12 +9,13 @@ export default function Teams() {
     const [description, setdescription] = useState('');
     const [teamCategory, setTeamCategory] = useState('');
     const [teams, setTeams] = useState([]);
+    const [categories, setCategories] = useState([]);
+
     const [errors, setErrors] = useState({
         teamName: '',
         teamCategory: '',
         description: '',
     });
-    const categories = ["marketing", "developement", "test",'sales','it']; // Example of static categories
     useEffect(() => {
         // Fetch teams when the component mounts
         fetchTeams();
@@ -23,6 +25,11 @@ export default function Teams() {
         try {
             const fetchedTeams = await TeamService.getAllteam(); // Assuming you have a function to get teams from your service
             setTeams(fetchedTeams);
+
+            // Extract unique categories from fetched teams
+            const fetchedCategories = await getallcategories();
+            setCategories(fetchedCategories);
+            console.log("hererreer"+fetchedCategories);
         } catch (error) {
             console.error('Error fetching teams:', error);
         }
@@ -109,6 +116,7 @@ export default function Teams() {
                             <i className="icofont-plus-circle me-2 fs-6" />
                             Add Team
                         </button>
+
 
 
                     </div>

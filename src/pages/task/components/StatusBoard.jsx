@@ -5,13 +5,13 @@ import {faCircle, faMinus, faPlus, faPlusCircle, faTimesCircle, faTrashAlt} from
 import * as TaskService from '../../../_services/TaskService.jsx';
 import * as StatusService from "../../../_services/StatusService.jsx";
 import Swal from 'sweetalert2'
-import {addStatus, deleteStatus, getAllStatus} from "../../../_services/StatusService.jsx";
+import {addStatus, deleteStatus, getAllStatus, getAllStatusbysprint} from "../../../_services/StatusService.jsx";
 import * as UserService from "../../../_services/UserService.jsx";
 
 let users=[]
 let complexity=0
 
-export default function StatusBoard({ refresh }) {
+export default function StatusBoard({ refresh,id,handle }) {
     const [tasks, setTasks] = useState([]);
     const [columns, setColumns] = useState([]);
     const [newStatus, setNewStatus] = useState('');
@@ -19,10 +19,13 @@ export default function StatusBoard({ refresh }) {
 
 
     const fetchTasks = async () => {
-        try {
-            const [data, status] = await Promise.all([TaskService.getAllTasks(), StatusService.getAllStatus()]);
 
-            const mappedColumns = status.map((column) => ({
+        console.log("sjdksjdk id "+ id)
+        const sprint = id;
+        try {
+            const [data, status] = await Promise.all([TaskService.getAllTasksbysprint(id), StatusService.getAllStatusbysprint(sprint)]);
+            console.log(data)
+            const mappedColumns = statuses.map((column) => ({
                 id: column._id,
                 status: column.status,
                 items: [],
@@ -83,10 +86,12 @@ export default function StatusBoard({ refresh }) {
     useEffect(() => {
         fetchTasks();
         fetchStatuses();
+        console.log('refreshsed')
     }, [refresh]);
     const fetchStatuses = async () => {
+        const sprint = id;
         try {
-            const fetchedStatuses = await getAllStatus(); // Récupérer les statuts depuis le service
+            const fetchedStatuses = await getAllStatusbysprint(sprint); // Récupérer les statuts depuis le service
             setStatuses(fetchedStatuses); // Mettre à jour les statuts
         } catch (error) {
             console.error('Error fetching statuses:', error);
@@ -199,11 +204,11 @@ export default function StatusBoard({ refresh }) {
 
     const handleAddStatus = async (e) => {
         e.preventDefault();
-        const projectId = '65e4b65f97417e8007cc7e53'; // Remplacez 'your_static_project_id' par l'ID statique souhaité
+        const sprint = id; // Remplacez 'your_static_project_id' par l'ID statique souhaité
         const maxStatusCount = 5; // Nombre maximum de statuts
         try {
             // Récupérer les statuts actuels
-            const statusData = await StatusService.getAllStatus();
+            const statusData = await StatusService.getAllStatusbysprint(sprint);
             const currentStatusCount = statusData.length; // Compter le nombre de statuts actuels
             if (currentStatusCount >= maxStatusCount) {
                 // Afficher une alerte si le nombre maximum est atteint
@@ -215,9 +220,10 @@ export default function StatusBoard({ refresh }) {
                 });
             } else {
                 // Ajouter le statut si le nombre maximum n'est pas atteint
-                await addStatus({ status: newStatus }, projectId);
+                await addStatus({ status: newStatus }, sprint);
                 setNewStatus('');
                 fetchTasks();
+
             }
         } catch (error) {
             console.error('Error adding status:', error);

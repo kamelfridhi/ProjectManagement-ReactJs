@@ -58,3 +58,35 @@ export const deleteProject = async (id) => {
         throw error;
     }
 };
+
+export const affectteamtoproject = async (teamid,projectid) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/${teamid}/${projectid}` );
+        return response.data;
+    } catch (error) {
+        console.error('Error affectteamtoproject project:', error.response.data);
+        throw error;
+    }
+
+};
+export const disaffectteamtoproject = async (teamid,projectid) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/disaffect/${teamid}/${projectid}` );
+        return response.data;
+    } catch (error) {
+        console.error('Error disaffectteamtoproject project:', error.response.data);
+        throw error;
+    }
+
+};
+
+export const getTeambyproject = async (projectid) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/getteambyproject/${projectid}` );
+        return response.data;
+    } catch (error) {
+        console.error('Error affectteamtoproject project:', error.response.data);
+        throw error;
+    }
+
+};

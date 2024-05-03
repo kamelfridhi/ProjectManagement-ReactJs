@@ -11,7 +11,8 @@ import * as TeamService from "../../_services/TeamService.jsx";
 import {acceptInvitation, getAllnotif, reject} from "../../_services/TeamService.jsx";
 
 import * as UserService from "../../_services/UserService.jsx";
-
+import io from 'socket.io-client';
+let socket= io('ws://localhost:3000');
 
 
 
@@ -91,6 +92,23 @@ export default function Sidebar() {
 
         fetchImageData();
     });
+    useEffect(() => {
+        socket.on('connect',(data)=>{
+            socket.emit('Connect',{
+                id: currentUser._id,
+                socketid:null,
+                name: currentUser.firstName,
+                statusAccount: currentUser.settings.statusAccount,
+                verified: currentUser.settings.verifiedAccount
+            })
+        })
+        socket.on('userAccepted',(data)=>{
+            console.log('socket data accept ',data)
+        })
+        socket.on('userRejected',(data)=>{
+            console.log('socket data reject ',data)
+        })
+    }, []);
 
 
 

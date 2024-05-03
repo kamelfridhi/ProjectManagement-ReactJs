@@ -6,8 +6,10 @@ import * as TaskService from '../../../_services/TaskService.jsx';
 import * as StatusService from "../../../_services/StatusService.jsx";
 import Swal from 'sweetalert2'
 import {addStatus, deleteStatus, getAllStatus, getAllStatusbysprint} from "../../../_services/StatusService.jsx";
+import * as UserService from "../../../_services/UserService.jsx";
 
-
+let users=[]
+let complexity=0
 
 export default function StatusBoard({ refresh,id,handle }) {
     const [tasks, setTasks] = useState([]);
@@ -29,9 +31,33 @@ export default function StatusBoard({ refresh,id,handle }) {
                 items: [],
             }));
 
-            data.forEach((task) => {
-                const columnId = getColumnIdByStatus(task.status[task.status.length - 1].status, mappedColumns);
+            for (const task of tasks) {
+                console.log(task.status)
+                const columnId = getColumnIdByStatus(task.status[task.status.length ].status, mappedColumns);
+                console.log("tekhdem")
+                if(users.length === 0 && task.taskcomplexity) {
+                   UserService.getUserById(task.assignPerson).then(user => {
+                       console.log(user.data.data);
+                       users.push({id:user.data.data._id,image:user.photo,name:user.data.data.firstName,number:task.taskcomplexity})
+                       complexity+= task.taskcomplexity
+                   })
+                    //hne tfarekess ala user
 
+                }else{
+                    if(users.find(user => user.id === task.assignPerson) && task.taskcomplexity) {
+                        let user = users.find(user => user.id === task.assignPerson)
+                        user.number+=task.taskcomplexity
+                        complexity+= task.taskcomplexity
+                    }else if( task.taskcomplexity){
+                        //hne tfarekess ala user
+                        UserService.getUserById(task.assignPerson).then(user => {
+                            users.push({name:user.data.data.firstName,number:task.taskcomplexity})
+                            complexity+= task.taskcomplexity
+                        })
+                        //hne tfarekess ala user
+
+                    }
+                }
                 if (columnId !== null) {
                     const columnToUpdate = mappedColumns.find((column) => column.id === columnId);
                     columnToUpdate.items.push({
@@ -40,13 +66,14 @@ export default function StatusBoard({ refresh,id,handle }) {
                         category: task.category,
                         description: task.description,
                         priority: task.priority,
+                        taskcomplexity: task.taskcomplexity,
                         dueDate: task.creationDate,
-
-                        status: task.status.length > 0 ? task.status[task.status.length - 1].status : 'Aucun statut',
+                        status: task.status.length > 0 ? task.status[task.status.length ].status : 'Aucun statut',
                     });
                 }
-            });
-
+            }
+            console.log(users)
+            console.log(complexity)
             console.log(mappedColumns);
 
             setColumns(mappedColumns);
@@ -278,7 +305,8 @@ export default function StatusBoard({ refresh,id,handle }) {
                                                                     <div
                                                                         className="task-info d-flex align-items-center justify-content-between">
                                                                         <h6 className="light-info-bg py-1 px-2 rounded-1 d-inline-block fw-bold small-14 mb-0">
-                                                                            {item.name}
+                                                                            {item.name}aa
+                                                                            {item.taskcomplexity}dd
                                                                         </h6>
                                                                         <div
                                                                             className="task-priority d-flex flex-column align-items-center justify-content-center">

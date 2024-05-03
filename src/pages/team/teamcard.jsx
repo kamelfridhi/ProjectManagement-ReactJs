@@ -3,6 +3,8 @@ import UpdateTeam from "./updateteams.jsx";
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {addMemberToTeam, addMemberToTeam2} from "../../_services/TeamService.jsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEnvelope} from "@fortawesome/free-solid-svg-icons";
 
 export default function Teamcard ({ team ,fetchTeams}){
     const [usersInfo, setUsersInfo] = useState([]);
@@ -249,16 +251,17 @@ export default function Teamcard ({ team ,fetchTeams}){
                                                                     <span className="text-muted">{user.email}</span> {/* Replace 'email' with the appropriate property that holds the user's email */}
                                                                 </div>
                                                                 <div className="members-action">
-                                                                    <span className="members-role">Admin</span>
+                                                                    <span className="members-role">{user.role.role}</span>
                                                                     <div className="btn-group">
                                                                         <button
                                                                             type="button"
-                                                                            className="btn bg-transparent dropdown-toggle"
+                                                                            className="btn bg-transparent "
                                                                             aria-expanded="false"
                                                                             onClick={() => handleAddMember(team._id, user._id)}
+
                                                                         >
-                                                                            Invite
-                                                                        </button>
+
+                                                                            <FontAwesomeIcon icon={faEnvelope} style={{color: "#564790",}}  width={"60px"} height={"60px"}/>                                                                     </button>
                                                                     </div>
                                                                 </div>
                                                             </div>

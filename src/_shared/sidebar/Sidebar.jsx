@@ -157,11 +157,6 @@ export default function Sidebar() {
                                             <span>Dashboard</span>
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link className="ms-link" to="/Home/project-dashboard">
-                                            <span>Project Dashboard</span>
-                                        </Link>
-                                    </li>
                                 </ul>
                             </li>
                             <li className="collapsed">
@@ -208,41 +203,10 @@ export default function Sidebar() {
                                             <span>Tickets View</span>
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link className="ms-link" to="/Home/ticket-details">
-                                            {" "}
-                                            <span>Ticket Detail</span>
-                                        </Link>
-                                    </li>
+
                                 </ul>
                             </li>
-                            <li className="collapsed">
-                                <a
-                                    className="m-link"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#client-Components"
-                                    href="#"
-                                >
-                                    <i className="icofont-user-male" /> <span>Our Clients</span>{" "}
-                                    <span className="arrow icofont-dotted-down ms-auto text-end fs-5" />
-                                </a>
-                                {/* Menu: Sub menu ul */}
-                                <ul className="sub-menu collapse" id="client-Components">
-                                    <li>
-                                        <Link className="ms-link" to="our-clients">
-                                            {" "}
-                                            <span>Clients</span>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <a className="ms-link" href="profile.html">
-                                            {" "}
-                                            <span>Client Profile</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="collapsed">
+                             <li className="collapsed">
                                 <a
                                     className="m-link"
                                     data-bs-toggle="collapse"

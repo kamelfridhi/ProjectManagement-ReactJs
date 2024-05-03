@@ -16,6 +16,36 @@
         const [users, setUsers] = useState([]);
         const [selectedUserId, setSelectedUserId] = useState('');
 
+        const [ticketImages, setTicketImages] = useState({});
+
+        useEffect(() => {
+            // Fetch image for each ticket when component mounts
+            tickets.forEach((ticket) => fetchTicketImage(ticket._id));
+        }, [tickets]);
+
+
+        const fetchTicketImage = async (ticketId) => {
+            try {
+                const response = await fetch(`http://localhost:3000/tickets/image/${ticketId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch ticket image');
+                }
+
+                const blob = await response.blob();
+                const reader = new FileReader();
+                reader.onload = () => {
+                    setTicketImages((prevImages) => ({
+                        ...prevImages,
+                        [ticketId]: reader.result,
+                    }));
+                };
+                reader.readAsDataURL(blob);
+            } catch (error) {
+                console.error('Error fetching ticket image:', error);
+            }
+        };
+
+
 
         useEffect(() => {
 
@@ -148,6 +178,8 @@
                                             <thead>
                                             <tr>
                                                 <th>Tickit Id</th>
+                                                <th>image tickit</th>
+
                                                 <th>Subject</th>
                                                 <th>Assigned</th>
                                                 <th>Created Date</th>
@@ -161,9 +193,19 @@
                                                     {ticket.assignPerson._id === currentUser._id && currentUser.role.role!== "admin" ? (
                                                         <tr>
                                                             <td>
-                                                                <a href={`ticket-detail.html/${ticket._id}`} className="fw-bold text-secondary">
+                                                                <a href={`/Home/ticket-details/${ticket._id}`} className="fw-bold text-secondary">
                                                                     #{ticket._id}
                                                                 </a>
+                                                            </td>
+                                                            <td>
+                                                                {ticketImages[ticket._id] && (
+                                                                    <img
+                                                                        src={ticketImages[ticket._id]}
+                                                                        alt="Ticket Image"
+                                                                        className="img-fluid"
+                                                                        style={{ width: '300', height: '300' }}
+                                                                    />
+                                                                )}
                                                             </td>
                                                             <td>{ticket.subject}</td>
                                                             <td>{ticket.assignPerson.firstName}</td>
@@ -186,6 +228,16 @@
                                                                 <a href={`ticket-detail.html/${ticket._id}`} className="fw-bold text-secondary">
                                                                     #{ticket._id}
                                                                 </a>
+                                                            </td>
+                                                            <td>
+                                                                {ticketImages[ticket._id] && (
+                                                                    <img
+                                                                        src={ticketImages[ticket._id]}
+                                                                        alt="Ticket Image"
+                                                                        className="img-fluid"
+                                                                        style={{ width: '300', height: '300' }}
+                                                                    />
+                                                                )}
                                                             </td>
                                                             <td>{ticket.subject}</td>
                                                             <td>{ticket.assignPerson.firstName}</td>

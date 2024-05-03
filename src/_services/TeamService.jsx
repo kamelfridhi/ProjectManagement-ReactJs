@@ -32,6 +32,17 @@ export const getTeamuser = async (userid) => {
         throw error;
     }
 };
+export const getUsersOfTeamProject = async (idProjecct) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/${idProjecct}/users`);
+        console.log("deheheh : "+response.data.users[0]._id)
+
+        return response.data.users;
+    } catch (error) {
+        console.error('Error getting user teams messages:', error);
+        throw error;
+    }
+};
     export const getAllteam = async () => {
     try {
         const response = await axios.get(`${API_BASE_URL}`);

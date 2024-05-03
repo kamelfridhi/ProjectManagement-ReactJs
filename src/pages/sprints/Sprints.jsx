@@ -185,7 +185,7 @@ export default function Sprints({id}) {
                                                         className="btn btn-dark w-sm-100"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#createsprint"
-                                                        style={{backgroundColor: '#343a40', color: '#ffffff'}}
+                                                        style={{backgroundColor: '#4c3575', color: '#ffffff'}}
                                                     >
                                                         <i className="icofont-plus-circle me-2 fs-6"/>
                                                         Create Sprint
@@ -213,17 +213,18 @@ export default function Sprints({id}) {
                                 {sprints.map((sprint) => (
                                     <tr key={sprint._id}>
                                         <td>
-                                            <Link to={`/Home/task/${sprint._id}`}>{sprint.sprintName}</Link>
+                                            <Link to={`/Home/task/${sprint._id}/${id}`}>{sprint.sprintName}</Link>
                                         </td>
                                         <td>{sprint.sprintDescription}</td>
                                         <td>{new Date(sprint.startDate).toLocaleDateString()}</td>
                                         <td>{new Date(sprint.endDate).toLocaleDateString()}</td>
                                         <td>
                                             <button
-                                                className="btn btn-danger"
+
                                                 onClick={() => handleRemoveSprint(sprint.sprintName)}
                                             >
-                                                Remove Sprint
+                                                <i className="icofont-ui-delete text-danger" />
+
                                             </button>
                                         </td>
                                     </tr>
@@ -316,14 +317,13 @@ export default function Sprints({id}) {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                Done
-                            </button>
+
                             <button
                                 type="button"
+                                data-bs-dismiss="modal"
                                 className="btn btn-primary"
                                 onClick={handleAddSprint}
-                                style={{ backgroundColor: '#007bff' }}
+                                style={{ backgroundColor: '#4c3575' }}
                             >
                                 Create
                             </button>

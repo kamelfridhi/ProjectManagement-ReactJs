@@ -17,8 +17,9 @@ import {useSelector} from "react-redux";
 import {selectUserObject} from "../../../redux/user/userSelector.js";
 import {Link, useParams} from "react-router-dom";
 import showTask from "../components/ShowTask.jsx";
+import {getUsersOfTeamProject} from "../../../_services/TeamService.jsx";
 export default function Task() {
-    const { id } = useParams( );
+    const { id,idP } = useParams( );
 
     const [tasks, setTasks] = useState([]);
     const [taskName, setTaskName] = useState('');
@@ -33,7 +34,6 @@ export default function Task() {
     const [selectedUserId, setSelectedUserId] = useState('');
     const [taskNameError, setTaskNameError] = useState('');
     const currentUser = useSelector(selectUserObject);
-
     // Autres états pour les autres champs du formulaire
     const handlePriorityChange = (e) => {
         setTaskPriority(e.target.value);
@@ -57,7 +57,7 @@ export default function Task() {
 
 
         const fetchUsers = async () => {
-            const data = await userservice.getAllUsers();
+            const data = await getUsersOfTeamProject(idP);
             setUsers(data);
         };
 
@@ -130,6 +130,7 @@ export default function Task() {
 
 
     const handleUserChange = (e) => {
+        console.log(e.target.value)
         setSelectedUserId(e.target.value);
     };
 
@@ -340,7 +341,7 @@ export default function Task() {
                                             value={selectedUserId}
                                             aria-label="Default select Priority"
                                         >
-                                            <option disabled>Select Person</option>
+                                            <option >Select Person</option>
                                             {users.map((user) => {
                                                 //console.log("deheeee:" + user.email);
                                                 return (user._id === currentUser._id) ? (

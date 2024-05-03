@@ -209,8 +209,9 @@ export default function Teams() {
                                 className="btn btn-secondary"
                                 data-bs-dismiss="modal"
                                 onClick={handleAddTeam}
+                                style={{backgroundColor : '#4c3575'}}
                             >
-                                Done
+                                Add Team
                             </button>
                         </div>
                     </div>

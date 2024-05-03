@@ -80,7 +80,9 @@ const StatusPage = (id) => {
                     onChange={(e) => setNewStatus(e.target.value)}
                     placeholder="Enter new status"
                 />
-                <button type="submit">Add Status</button>
+                <button  type="submit">Add Status</button>
+
+
             </form>
             <h2>Update Status</h2>
             <form onSubmit={handleUpdateStatus}>

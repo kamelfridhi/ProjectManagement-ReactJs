@@ -1,4 +1,52 @@
+import React, {useEffect, useRef, useState} from 'react';
+import {useParams} from "react-router-dom";
+
 export default function TicketDetails() {
+    const { id } = useParams();
+    const fileInputRef = useRef(null);
+    const [imageData, setImageData] = useState(null);
+
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = async (event) => {
+        const selectedFile = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setImageData(reader.result);
+        };
+
+        if (selectedFile) {
+            reader.readAsDataURL(selectedFile);
+            await handleSubmit(selectedFile);
+        }
+    };
+
+
+    const handleSubmit = async (selectedFile) => {
+        try {
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            const response = await fetch(`http://localhost:3000/tickets/upload/${id}`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload file');
+            }
+
+            const data = await response.json();
+            console.log('File uploaded successfully:', data);
+            setImageData(selectedFile);
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
+
     return(
         <>
             {/* main body area */}
@@ -91,209 +139,19 @@ export default function TicketDetails() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="row g-3">
-                                            <div className="col-lg-6 col-md-6">
-                                                <div className="card">
-                                                    <div className="card-body">
-                                                        <h6 className="fw-bold mb-3 text-danger">
-                                                            Bug Image Atteched
-                                                        </h6>
-                                                        <div className="flex-grow-1">
-                                                            <div className="py-2 d-flex align-items-center border-bottom">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-bug fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            Image3.jpg
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn light-danger-bg text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                            <div className="py-2 d-flex align-items-center border-bottom">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-bug fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            Image4.jpg
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn light-danger-bg text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                            <div className="py-2 d-flex align-items-center border-bottom">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-bug fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            Image6.jpg
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn light-danger-bg text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                            <div className="py-2 d-flex align-items-center border-bottom">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-bug fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            Image11.jpg
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn light-danger-bg text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                            <div className="py-2 d-flex align-items-center">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg light-danger-bg rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-bug fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            Image5.jpg
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn light-danger-bg text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                        <div>
+                                            <h2>Upload File</h2>
+                                            <form style={{ display: 'none' }}>
+                                                <input type="file" onChange={handleFileChange} ref={fileInputRef} style={{ display: 'none' }} />
+                                            </form>
+
+                                            <a href="#" onClick={handleImageClick}>upload
+                                                <div>
+                                                    {imageData && (
+                                                        <img className="rounded-5" width={200} src={imageData} alt="User" />
+                                                    )}
                                                 </div>
-                                            </div>
-                                            <div className="col-lg-6 col-md-6">
-                                                <div className="card">
-                                                    <div className="card-body">
-                                                        <h6 className="fw-bold mb-3 text-danger">
-                                                            Bug File Atteched
-                                                        </h6>
-                                                        <div className="flex-grow-1">
-                                                            <div className="py-2 d-flex align-items-center border-bottom">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg bg-lightgreen rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-file-pdf fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            file1.pdf
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn bg-lightgreen text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                            <div className="py-2 d-flex align-items-center border-bottom">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg bg-lightgreen rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-file-pdf fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            file2.pdf
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn bg-lightgreen text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                            <div className="py-2 d-flex align-items-center border-bottom">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg bg-lightgreen rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-file-pdf fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            file3.pdf
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn bg-lightgreen text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                            <div className="py-2 d-flex align-items-center border-bottom">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg bg-lightgreen rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-file-pdf fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            file4.pdf
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn bg-lightgreen text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                            <div className="py-2 d-flex align-items-center">
-                                                                <div className="d-flex ms-3 align-items-center flex-fill">
-                              <span className="avatar lg bg-lightgreen rounded-circle text-center d-flex align-items-center justify-content-center">
-                                <i className="icofont-file-pdf fs-5" />
-                              </span>
-                                                                    <div className="d-flex flex-column ps-3">
-                                                                        <h6 className="fw-bold mb-0 small-14">
-                                                                            file5.pdf
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn bg-lightgreen text-end"
-                                                                >
-                                                                    Download
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>{" "}
@@ -310,7 +168,7 @@ export default function TicketDetails() {
                                                         <div className="post">
                           <textarea
                               className="form-control"
-                              placeholder="Post"
+                              placeholder="Chat"
                               rows={4}
                               defaultValue={""}
                           />
@@ -336,91 +194,6 @@ export default function TicketDetails() {
                                                     </div>
                                                 </div>{" "}
                                                 {/* .Card End */}
-                                                <ul className="list-unstyled res-set">
-                                                    <li className="card mb-2">
-                                                        <div className="card-body">
-                                                            <div className="d-flex mb-3 pb-3 border-bottom">
-                                                                <img
-                                                                    className="avatar rounded-circle"
-                                                                    src="assets/images/xs/avatar1.jpg"
-                                                                    alt=""
-                                                                />
-                                                                <div className="flex-fill ms-3 text-truncate">
-                                                                    <h6 className="mb-0">
-                                                                        <span>Nellie Maxwell</span>{" "}
-                                                                        <span className="text-muted small">
-                                  posted a status
-                                </span>
-                                                                    </h6>
-                                                                    <span className="text-muted">3 hours ago</span>
-                                                                </div>
-                                                            </div>
-                                                            <div className="timeline-item-post">
-                                                                <h6>Internet Not Working for Last 2 Days</h6>
-                                                                <p>
-                                                                    On the other hand, if the Internet doesn't work on
-                                                                    other devices too, then the problem is most likely
-                                                                    with the router or the Internet connection itself
-                                                                </p>
-                                                                <div className="mb-2 mt-4">
-                                                                    <a className="me-lg-4 me-2 text-primary" href="#">
-                                                                        <i className="icofont-speech-comments" />{" "}
-                                                                        Comment (2)
-                                                                    </a>
-                                                                </div>
-                                                                <div>
-                                                                    <div className="d-flex mt-3 pt-3 border-top">
-                                                                        <img
-                                                                            className="avatar rounded-circle"
-                                                                            src="assets/images/xs/avatar2.jpg"
-                                                                            alt=""
-                                                                        />
-                                                                        <div className="flex-fill ms-3 text-truncate">
-                                                                            <p className="mb-0">
-                                                                                <span>Zoe Wright</span>{" "}
-                                                                                <small className="msg-time">
-                                                                                    1 hour ago
-                                                                                </small>
-                                                                            </p>
-                                                                            <span className="text-muted">
-                                    One good way to fix the router is to restart
-                                    it.
-                                  </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="d-flex mt-3 pt-3 border-top">
-                                                                        <img
-                                                                            className="avatar rounded-circle"
-                                                                            src="assets/images/xs/avatar3.jpg"
-                                                                            alt=""
-                                                                        />
-                                                                        <div className="flex-fill ms-3 text-truncate">
-                                                                            <p className="mb-0">
-                                                                                <span>Diane Fisher</span>{" "}
-                                                                                <small className="msg-time">
-                                                                                    1 hour ago
-                                                                                </small>
-                                                                            </p>
-                                                                            <span className="text-muted">
-                                    Turn on the modem and one minute later turn
-                                    on the router. Wait for a few minutes and
-                                    check”
-                                  </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="mt-4">
-                            <textarea
-                                className="form-control"
-                                placeholder="Replay"
-                                defaultValue={""}
-                            />
-                                                            </div>
-                                                        </div>
-                                                    </li>{" "}
-                                                    {/* .Card End */}
-                                                </ul>
                                             </div>
                                         </div>
                                     </div>

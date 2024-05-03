@@ -40,6 +40,17 @@ export const getAllUsers = async() => {
         throw error;
     }
 };
+
+export const getAlllUsers = async() => {
+    try {
+        return (await axios.get(`${API_BASE_URL}/alll`)).data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 export const getUsersWithEtat = async(etat) => {
     try {
         return((await axios.get(`${API_BASE_URL}/getUsersEtat/${etat}`)).data.data);

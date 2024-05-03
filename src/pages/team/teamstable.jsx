@@ -134,7 +134,7 @@ export default function Teamstable({id}) {
                                                         className="btn btn-dark w-sm-100"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#affectteam"
-                                                        style={{backgroundColor: '#343a40', color: '#ffffff'}}
+                                                        style={{backgroundColor: '#4c3575', color: '#ffffff'}}
                                                     >
                                                         <i className="icofont-plus-circle me-2 fs-6"/>
                                                         Affect Team

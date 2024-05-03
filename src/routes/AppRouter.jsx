@@ -66,13 +66,13 @@ const AppRouter = () => {
 
                     <Route path="team-leader" element={<TeamLeader />} />
                     <Route path="ticket" element={<Ticket />} />
-                    <Route path="ticket-details" element={<TicketDetails />} />
+                    <Route path="ticket-details/:id" element={<TicketDetails />} />
                     <Route path="our-clients" element={<OurClients />} />
                     <Route path="our-teams" element={<Teams />} />
                     <Route path="userteams" element={<UserTeams />} />
                     <Route path="showtask/:id" element={<ShowTasks />} />
                     <Route path="teams-members/:id" element={<TeamMembers />} />
-                    <Route path="task/:id" element={<Task />} />
+                    <Route path="task/:id/:idP" element={<Task />} />
                     <Route path="Chat/:id" element={<TeamChat />} />
                     <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<UserProfile />} />

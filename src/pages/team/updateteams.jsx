@@ -130,8 +130,8 @@ export default function UpdateTeam({ id,fetchTeams }) {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleUpdate}>
-                                Done
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleUpdate} style={{backgroundColor : '#4c3575'}}>
+                                Update Team
                             </button>
                         </div>
                     </div>

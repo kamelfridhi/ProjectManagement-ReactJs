@@ -32,9 +32,9 @@ export default function StatusBoard({ refresh,id,handle }) {
             }));
 
             for (const task of tasks) {
-                console.log(task.status)
-                const columnId = getColumnIdByStatus(task.status[task.status.length ].status, mappedColumns);
-                console.log("tekhdem")
+
+                const columnId = getColumnIdByStatus(task.status[task.status.length-1].status, mappedColumns);
+                console.log("tekhdem",columnId)
                 if(users.length === 0 && task.taskcomplexity) {
                    UserService.getUserById(task.assignPerson).then(user => {
                        console.log(user.data.data);
@@ -68,7 +68,7 @@ export default function StatusBoard({ refresh,id,handle }) {
                         priority: task.priority,
                         taskcomplexity: task.taskcomplexity,
                         dueDate: task.creationDate,
-                        status: task.status.length > 0 ? task.status[task.status.length ].status : 'Aucun statut',
+                        status: task.status.length > 0 ? task.status[task.status.length-1 ].status : 'Aucun statut',
                     });
                 }
             }
@@ -244,7 +244,7 @@ export default function StatusBoard({ refresh,id,handle }) {
                         onChange={(e) => setNewStatus(e.target.value)}
                         placeholder="Enter new status"
                     />
-                    <button type="submit" className="btn btn-dark btn-set-task w-sm-100"
+                    <button  disabled={!newStatus}  type="submit" className="btn btn-dark btn-set-task w-sm-100"
 
 
                             style={{ backgroundColor: '#4c3575' , marginLeft: 50 , marginTop: 8 }}><i className="icofont-plus-circle me-2 fs-6" /> Add Status</button>

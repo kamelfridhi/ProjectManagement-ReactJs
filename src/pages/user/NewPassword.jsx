@@ -1,14 +1,15 @@
-import {Link, useNavigate} from "react-router-dom";
-import React, {useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
-export default function ChangePassword(){
+export default function ChangePassword() {
     const [formData, setFormData] = useState({})
+    const [passwordsMatch, setPasswordsMatch] = useState(false);
 
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setFormData({...formData, [e.target.id]: e.target.value });
+        setFormData({ ...formData, [e.target.id]: e.target.value });
     }
     const handleSubmit = async (e) => {
         e.preventDefault(); // Stop the refresh of the page
@@ -36,10 +37,14 @@ export default function ChangePassword(){
         }
     }
 
-
+    // Check if passwords match whenever formData or its properties change
+    React.useEffect(() => {
+        const { password, repeatPassword } = formData;
+        setPasswordsMatch(password === repeatPassword && password !== '');
+    }, [formData]);
     console.log(formData)
 
-    return(
+    return (
         <>
             <ToastContainer />
 
@@ -78,10 +83,10 @@ export default function ChangePassword(){
                                         </div>
                                     </div>
                                 </div>
-                                <div style={{backgroundColor:"#4C3575"}} className="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100">
+                                <div style={{ backgroundColor: "#4C3575" }} className="col-lg-6 d-flex justify-content-center align-items-center border-0 rounded-lg auth-h100">
                                     <div
                                         className="w-100 p-3 p-md-5 card border-0 bg-dark text-light"
-                                        style={{maxWidth: "32rem"}}
+                                        style={{ maxWidth: "32rem" }}
                                     >
                                         {/* Form */}
                                         <form onSubmit={handleSubmit} className="row g-1 p-3 p-md-4">
@@ -93,9 +98,9 @@ export default function ChangePassword(){
                                                 />
                                                 <h1>Add new password</h1>
                                                 <span>
-                    Enter the email address you used when you joined and we'll
-                    send you instructions to reset your password.
-                  </span>
+                                                    Enter the email address you used when you joined and we'll
+                                                    send you instructions to reset your password.
+                                                </span>
                                             </div>
                                             <div className="col-12">
                                                 <div className="mb-2">
@@ -109,7 +114,7 @@ export default function ChangePassword(){
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="col-12">
+                                            <div className="col-6">
                                                 <div className="mb-2">
                                                     <label className="form-label">New Password</label>
                                                     <input
@@ -121,23 +126,38 @@ export default function ChangePassword(){
                                                     />
                                                 </div>
                                             </div>
+                                            <div className="col-6">
+                                                <div className="mb-2">
+                                                    <label className="form-label">repeat Password</label>
+                                                    <input
+                                                        type="password"
+                                                        className="form-control form-control-lg"
+                                                        placeholder="new password"
+                                                        onChange={handleChange}
+                                                        id="repeatPassword"
+                                                    />
+                                                </div>
+                                            </div>
                                             <div className="col-12 text-center mt-4">
-                                                <button
-                                                    type="submit"
-                                                    className="btn btn-lg btn-block btn-light lift text-uppercase"
-                                                    alt="SIGNUP"
-                                                >
-UPDATE PASSWORD
-                                                </button>
+                                                <div className="col-12 text-center mt-4">
+                                                    <button
+                                                        type="submit"
+                                                        className="btn btn-lg btn-block btn-light lift text-uppercase"
+                                                        disabled={!passwordsMatch} // Disable button if passwords don't match
+                                                        alt="SIGNUP"
+                                                    >
+                                                        UPDATE PASSWORD
+                                                    </button>
+                                                </div>
                                             </div>
 
                                         </form>
                                         <div className="col-12 text-center mt-4">
-                  <span className="text-muted">
-                    <Link to="/signup" className="text-secondary">
-                      Back to Sign in
-                    </Link>
-                  </span>
+                                            <span className="text-muted">
+                                                <Link to="/signup" className="text-secondary">
+                                                    Back to Sign in
+                                                </Link>
+                                            </span>
                                         </div>
                                         {/* End Form */}
                                     </div>

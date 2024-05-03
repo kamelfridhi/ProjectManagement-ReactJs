@@ -28,13 +28,14 @@ export default function StatusBoard({ refresh }) {
                 items: [],
             }));
 
-            for (const task of data) {
-                const columnId = getColumnIdByStatus(task.status[task.status.length - 1].status, mappedColumns);
-
+            for (const task of tasks) {
+                console.log(task.status)
+                const columnId = getColumnIdByStatus(task.status[task.status.length ].status, mappedColumns);
+                console.log("tekhdem")
                 if(users.length === 0 && task.taskcomplexity) {
                    UserService.getUserById(task.assignPerson).then(user => {
-                       console.log(user.data.data.firstName);
-                       users.push({name:user.data.data.firstName,number:task.taskcomplexity})
+                       console.log(user.data.data);
+                       users.push({id:user.data.data._id,image:user.photo,name:user.data.data.firstName,number:task.taskcomplexity})
                        complexity+= task.taskcomplexity
                    })
                     //hne tfarekess ala user
@@ -64,7 +65,7 @@ export default function StatusBoard({ refresh }) {
                         priority: task.priority,
                         taskcomplexity: task.taskcomplexity,
                         dueDate: task.creationDate,
-                        status: task.status.length > 0 ? task.status[task.status.length - 1].status : 'Aucun statut',
+                        status: task.status.length > 0 ? task.status[task.status.length ].status : 'Aucun statut',
                     });
                 }
             }

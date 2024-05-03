@@ -12,8 +12,8 @@ import Swal from 'sweetalert2';
 import * as userservice from "../../../_services/UserService.jsx";
 import user from "../../../_models/User.jsx";
 import data from "bootstrap/js/src/dom/data.js";
-import {useSelector} from "react-redux";
-import {selectUserObject} from "../../../redux/user/userSelector.js";
+import { useSelector } from "react-redux";
+import { selectUserObject } from "../../../redux/user/userSelector.js";
 export default function Task() {
 
     const [tasks, setTasks] = useState([]);
@@ -78,7 +78,7 @@ export default function Task() {
                 category: taskCategory,
                 description: taskDescription,
                 priority: taskpriority,
-                taskcomplexity:taskcomplexity,
+                taskcomplexity: taskcomplexity,
                 startDate: taskStartDate,
                 endDate: taskEndDate,
                 assignPerson: selectedUserId,
@@ -136,17 +136,17 @@ export default function Task() {
 
 
             {/* Mirrored from pixelwibes.com/template/my-pages/html/dist/pages.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Feb 2024 11:38:38 GMT */}
-            <meta charSet="utf-8"/>
-            <meta httpEquiv="X-UA-Compatible" content="IE=Edge"/>
+            <meta charSet="utf-8" />
+            <meta httpEquiv="X-UA-Compatible" content="IE=Edge" />
             <meta
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"
             />
             <title>:: My-Task:: Task </title>
-            <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+            <link rel="icon" href="favicon.ico" type="image/x-icon" />
             {/* Favicon*/}
             {/* plugin css file  */}
-            <link rel="stylesheet" href="../../../../public/assets/plugin/nestable/jquery-nestable.css"/>
+            <link rel="stylesheet" href="../../../../public/assets/plugin/nestable/jquery-nestable.css" />
             {/* project css file  */}
 
 
@@ -168,9 +168,9 @@ export default function Task() {
                                         className="btn btn-dark btn-set-task"
                                         data-bs-toggle="modal"
                                         data-bs-target="#createtask"
-                                        style={{backgroundColor: '#4c3575'}}
+                                        style={{ backgroundColor: '#4c3575' }}
                                     >
-                                        <i className="icofont-plus-circle me-2 fs-6"/>
+                                        <i className="icofont-plus-circle me-2 fs-6" />
                                         Create Task
                                     </button>
                                 </div>
@@ -182,13 +182,13 @@ export default function Task() {
                         <div className="row clearfix  g-3">
                             <div className="col-lg-12 col-md-12 flex-column">
                                 <div className="row g-3 row-deck" onMouseEnter={handleRefresh}>
-                                    <TaskManagement refresh={refresh}/>
+                                    <TaskManagement refresh={refresh} />
 
 
-                                    <RecentActivity/>
-                                    <AllocatedTaskMembers/>
+                                    <RecentActivity />
+                                    <AllocatedTaskMembers />
                                 </div>
-                                <StatusBoard refresh={refresh}/>
+                                <StatusBoard refresh={refresh} />
                             </div>
                         </div>
                     </div>
@@ -236,16 +236,16 @@ export default function Task() {
                                 <div className="mb-3">
                                     <label className="form-label">Task Name</label>
                                     <input type="text" className="form-control" value={taskName}
-                                           onChange={(e) => setTaskName(e.target.value)} placeholder="Task Name"
+                                        onChange={(e) => setTaskName(e.target.value)} placeholder="Task Name"
 
-                                           onBlur={() => {
-                                               // Vérifiez si le champ "Task Name" est vide lorsqu'il perd le focus
-                                               if (taskName.trim() === '') {
-                                                   setTaskNameError('Task Name is required');
-                                               } else {
-                                                   setTaskNameError('');
-                                               }
-                                           }}
+                                        onBlur={() => {
+                                            // Vérifiez si le champ "Task Name" est vide lorsqu'il perd le focus
+                                            if (taskName.trim() === '') {
+                                                setTaskNameError('Task Name is required');
+                                            } else {
+                                                setTaskNameError('');
+                                            }
+                                        }}
 
 
                                     />
@@ -319,11 +319,18 @@ export default function Task() {
                                             value={selectedUserId}
                                             aria-label="Default select Priority"
                                         >
-                                            <option selected="">Select Person</option>
-                                            {users.map((user) => (
+                                            <option disabled>Select Person</option>
+                                            {users.map((user) => {
+                                                //console.log("deheeee:" + user.email);
+                                                return (user._id === currentUser._id) ? (
 
-                                                <option key={user._id} value={user._id}>{user.username}</option>
-                                            ))}
+                                                    <option key={user._id} value={user._id}>{user.firstName}</option>
+                                                ) : (currentUser.role.role === "admin" || currentUser.role.role === "projectManager") && (
+                                                    <option key={user._id} value={user._id}>{user.firstName}</option>
+                                                );
+
+                                            })}
+
                                         </select>
                                     </div>
                                 </div>
@@ -384,7 +391,7 @@ export default function Task() {
                             </div>
                             <div className="modal-footer">
                                 <button
-                                    style={{backgroundColor: '#4c3575'}}
+                                    style={{ backgroundColor: '#4c3575' }}
                                     type="button"
                                     className="btn btn-secondary"
                                     data-bs-dismiss="modal"

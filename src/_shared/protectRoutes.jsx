@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import * as UserService from "../_services/UserService.jsx";
 import io from "socket.io-client";
 import { updateUserStatus } from "../redux/user/userSlice.js";
-let socket = io('ws://nestpiteamsphere-production.up.railway.app');
+let socket = io('nestpiteamsphere-production.up.railway.app');
 
 
 

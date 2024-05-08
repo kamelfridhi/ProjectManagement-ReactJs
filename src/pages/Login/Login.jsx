@@ -51,7 +51,7 @@ const [formData, setFormData] = useState({})
         }
 try {
     dispatch(signInStart());
-        const res = await fetch(`/auth/login`,{
+        const res = await fetch(`https://nestpiteamsphere-production.up.railway.app/auth/login`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

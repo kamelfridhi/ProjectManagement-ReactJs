@@ -100,15 +100,6 @@ export default function Dashboard() {
                                 <div className="col-md-6">
                                     <div className="card">
                                         <div className="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                            <h6 className="mb-0 fw-bold ">Employees Availability</h6>
-                                        </div>
-                                        <h2>Age Distribution</h2>
-                                        {ageData && <Doughnut data={ageData} />}
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="card">
-                                        <div className="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                             <h6 className="mb-0 fw-bold ">Total Employees</h6>
                                             <h4 className="mb-0 fw-bold ">{userCount}</h4>
                                         </div>

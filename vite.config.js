@@ -8,7 +8,7 @@ export default defineConfig({
       proxy: {
           '/auth':{
             target: 'https://nestpiteamsphere-production.up.railway.app',
-              secure: false,
+              secure: true,
           }
       }
   }

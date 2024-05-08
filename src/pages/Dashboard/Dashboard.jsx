@@ -79,22 +79,14 @@ export default function Dashboard() {
                     <div className="row clearfix g-3">
                         <div className="col-xl-8 col-lg-12 col-md-12 flex-column">
                             <div className="row g-3">
-                                <div className="col-md-12">
+
+                                <div className="col-md-6">
                                     <div className="card">
-
-                                        <div className="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0" >
-                                            <i className="icofont-briefcase" style={{ width: "500px" , height: "500px"}}/>
-                                            <i className="icofont-ticket" style={{ width: "500px" , height: "500px"}}/>
-                                            <i className="icofont-users-alt-5" style={{ width: "500px!important" , height: "500px!important"}}/>
-
-
+                                        <div className="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                            <h6 className="mb-0 fw-bold ">Employees Availability</h6>
                                         </div>
-                                        <div className="card-body">
-                                            <div
-                                                className="ac-line-transparent"
-                                                id="apex-emplyoeeAnalytics"
-                                            />
-                                        </div>
+                                        <h2>Age Distribution</h2>
+                                        {ageData && <Doughnut data={ageData} />}
                                     </div>
                                 </div>
                                 <div className="col-md-6">

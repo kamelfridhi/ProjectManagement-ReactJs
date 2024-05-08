@@ -333,10 +333,10 @@ export default function Sidebar() {
                                         >
                                             <div>
                                                 { emailPic ?  (
-                                                    <img className="rounded-5" width={100} height={100} src={emailPic}
+                                                    <img className="rounded-5" width={70} height={70} src={emailPic}
                                                          alt="User"/>
                                                 ) : (
-                                                    <img className="rounded-5" width={100} height={100}
+                                                    <img className="rounded-5" width={70} height={70}
                                                          src={imageData}
                                                          alt="User"/>
                                                 )}

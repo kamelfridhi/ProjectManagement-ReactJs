@@ -26,7 +26,7 @@ const UpdateUserModal = () => {
     const fetchUserData = async () => {
         try {
             // Make a GET request to fetch user data from the backend
-            const response = await fetch(`http://localhost:3000/user/${currentUser._id}`); // Update the URL with your backend endpoint
+            const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/${currentUser._id}`); // Update the URL with your backend endpoint
             if (!response.ok) {
                 throw new Error('Failed to fetch user data');
             }
@@ -47,7 +47,7 @@ const UpdateUserModal = () => {
 
     const handleUpdateProfile = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/user/updateMe/${currentUser._id}`, {
+            const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/updateMe/${currentUser._id}`, {
                 method: 'PATCH', // Use PATCH or PUT based on your backend API
                 headers: {
                     'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ export default function ChangePassword() {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         try {
-            const res = await fetch(`http://localhost:3000/user/resetPassword?token=${token}`, {
+            const res = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/resetPassword?token=${token}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

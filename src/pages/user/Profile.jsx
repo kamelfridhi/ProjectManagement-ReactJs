@@ -51,7 +51,7 @@ export default function UserProfile(){
             };
 
             console.log(requestBody);
-            const response = await fetch(`http://localhost:3000/user/importPhotoFromEmail/${currentUser._id}`, {
+            const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/importPhotoFromEmail/${currentUser._id}`, {
                 method: 'PATCH', // Use PATCH method for updating user data
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export default function UserProfile(){
             const formData = new FormData();
             formData.append('image', selectedFile);
 
-            const response = await fetch(`http://localhost:3000/user/upload/${currentUser._id}`, {
+            const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/upload/${currentUser._id}`, {
                 method: 'POST',
                 body: formData,
             });
@@ -99,7 +99,7 @@ export default function UserProfile(){
     useEffect(() => {
         const fetchImageData = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/user/image/${currentUser._id}`);
+                const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/image/${currentUser._id}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch user image');

@@ -11,7 +11,7 @@ const API_BASE_URL = BACK_END_URL + 'user';
 
 export const handleSignOut = async (userId,dispatch,navigate) => {
     try {
-        const response = await fetch(`http://localhost:3000/auth/logout/${userId}`, {
+        const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/auth/logout/${userId}`, {
             method: 'POST',
         });
         if (response.ok) {
@@ -151,7 +151,7 @@ export const UpdateUserLocalStorage = async (currentUser) => {
     //dispatch(signOut());
 
     try {
-        const response = await fetch(`http://localhost:3000/user/${currentUser._id}`, {
+        const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/${currentUser._id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

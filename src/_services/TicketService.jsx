@@ -3,7 +3,7 @@
 import axios from 'axios';
 import BACK_END_URL from '../config';
 
-const API_URL = 'http://localhost:3000'; // Remplacez l'URL par l'URL de votre back-end
+const API_URL = 'https://nestpiteamsphere-production.up.railway.app'; // Remplacez l'URL par l'URL de votre back-end
 
 
     export const getAllTickets = async () => {

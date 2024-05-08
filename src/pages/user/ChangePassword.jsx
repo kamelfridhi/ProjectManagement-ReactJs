@@ -15,7 +15,7 @@ export default function ChangePassword(){
         try {
             //await schema.validate(formData, { abortEarly: false });
 
-            const res = await fetch(`http://localhost:3000/user/forgotPassword`,{
+            const res = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/forgotPassword`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

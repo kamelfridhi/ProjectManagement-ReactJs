@@ -30,7 +30,7 @@ export default function TicketDetails() {
             const formData = new FormData();
             formData.append('image', selectedFile);
 
-            const response = await fetch(`http://localhost:3000/tickets/upload/${id}`, {
+            const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/tickets/upload/${id}`, {
                 method: 'POST',
                 body: formData,
             });

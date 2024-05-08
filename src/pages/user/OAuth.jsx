@@ -17,7 +17,7 @@ export default function OAuth() {
             const { email, displayName: username, photoURL: photo } = result.user;
 
             // Send user profile information to your backend for further processing
-            const res = await fetch("http://localhost:3000/auth/OAuth", {
+            const res = await fetch("https://nestpiteamsphere-production.up.railway.app/auth/OAuth", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

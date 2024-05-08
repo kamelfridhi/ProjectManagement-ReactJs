@@ -68,7 +68,7 @@ export default function Sidebar() {
     useEffect(() => {
         const fetchImageData = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/user/image/${currentUser._id}`);
+                const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/image/${currentUser._id}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch user image');

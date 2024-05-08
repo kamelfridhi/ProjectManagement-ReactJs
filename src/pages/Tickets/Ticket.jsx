@@ -26,7 +26,7 @@
 
         const fetchTicketImage = async (ticketId) => {
             try {
-                const response = await fetch(`http://localhost:3000/tickets/image/${ticketId}`);
+                const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/tickets/image/${ticketId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch ticket image');
                 }

@@ -1,2 +1,2 @@
-const BACK_END_URL = 'http://localhost:3000/';
+const BACK_END_URL = 'https://nestpiteamsphere-production.up.railway.app/';
 export default BACK_END_URL;

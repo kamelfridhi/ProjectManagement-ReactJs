@@ -15,7 +15,7 @@ export default function Dashboard() {
     const [userCount, setUserCount] = useState(0);
     const [genderData, setGenderData] = useState(null);
     const [ageData, setAgeData] = useState(null);
-    const url = "http://localhost:3000/user/";
+    const url = "https://nestpiteamsphere-production.up.railway.app/user/";
     useEffect(() => {
         const fetchData = async () => {
             // Fetch user count
@@ -32,7 +32,7 @@ export default function Dashboard() {
         const userCountResponse = axios.get(`${url}count`);
         setUserCount(userCountResponse.data);
         // Fetch gender distribution data from API
-        axios.get('http://localhost:3000/user/gender-distribution')
+        axios.get('https://nestpiteamsphere-production.up.railway.app/user/gender-distribution')
             .then(response => {
                 const { male, female } = response.data;
                 setGenderData({
@@ -49,7 +49,7 @@ export default function Dashboard() {
             });
 
         // Fetch age distribution data from API
-        axios.get('http://localhost:3000/user/age-distribution')
+        axios.get('https://nestpiteamsphere-production.up.railway.app/user/age-distribution')
             .then(response => {
                 const ageDistribution = response.data;
                 setAgeData({

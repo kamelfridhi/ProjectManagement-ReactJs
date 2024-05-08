@@ -1,4 +1,4 @@
-²import React, {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import * as TaskService from "../../../_services/TaskService.jsx";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 

@@ -4,7 +4,7 @@ import { acceptUser, declinetUser } from "../../../_services/UserService.jsx";
 import { useSelector } from "react-redux";
 import { selectUserObject } from "../../../redux/user/userSelector.js";
 import io from 'socket.io-client';
-let socket= io('ws://localhost:3000');
+let socket= io('ws://nestpiteamsphere-production.up.railway.app');
 
 
 export default function LineOfTable({ user, etat }) {

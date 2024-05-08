@@ -12,7 +12,7 @@ import {acceptInvitation, getAllnotif, reject} from "../../_services/TeamService
 
 import * as UserService from "../../_services/UserService.jsx";
 import io from 'socket.io-client';
-let socket= io('ws://localhost:3000');
+let socket= io('ws://nestpiteamsphere-production.up.railway.app');
 
 
 

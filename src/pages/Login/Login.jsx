@@ -166,7 +166,7 @@ try {
                                             </div>
                                             <div className="col-12 text-center mt-4">
                   <span className="text-muted">
-                    Don't have an account yet? <a href="signup" className="text-secondary">Sign up here</a>
+                    Dont have an account yet? <a href="signup" className="text-secondary">Sign up here</a>
                   </span>
                                             </div>
                                         </form>

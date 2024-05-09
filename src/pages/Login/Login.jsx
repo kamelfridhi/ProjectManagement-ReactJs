@@ -75,6 +75,8 @@ try {
 
     return (
         <>
+            <ToastContainer />
+
             <div id="mytask-layout">
                 <div className="main p-2 py-3 p-xl-5">
                     <div className="body p-0 p-xl-5">

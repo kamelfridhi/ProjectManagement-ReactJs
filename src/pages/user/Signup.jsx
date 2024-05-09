@@ -18,7 +18,7 @@ export default function Signup() {
         try {
             await schema.validate(formData, { abortEarly: false });
 
-            const res = await fetch(`/auth`,{
+            const res = await fetch(`https://nestpiteamsphere-production.up.railway.app/auth`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

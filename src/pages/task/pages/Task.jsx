@@ -152,7 +152,7 @@ export default function Task() {
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"
             />
-            <title>:: My-Task:: Task </title>
+            <title>:: TeamSphere:: Task </title>
             <link rel="icon" href="favicon.ico" type="image/x-icon" />
             {/* Favicon*/}
             {/* plugin css file  */}

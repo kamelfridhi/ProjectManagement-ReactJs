@@ -83,7 +83,7 @@ try {
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"
             />
-            <title>:: My-Task:: Signin</title>
+            <title>:: TeamSphere:: Signin</title>
             <link rel="icon" href="../favicon.ico" type="image/x-icon" /> {/* Favicon*/}
             {/* project css file  */}
             <link rel="stylesheet" href="/assets/css/my-task.style.min.css" />

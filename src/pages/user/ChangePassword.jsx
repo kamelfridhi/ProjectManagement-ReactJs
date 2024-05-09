@@ -66,7 +66,7 @@ export default function ChangePassword(){
                                         </div>
                                         <div className="mb-5">
                                             <h2 className="color-900 text-center">
-                                                My-Task Let's Management Better
+                                                TeamSphere Let's Management Better
                                             </h2>
                                         </div>
                                         {/* Image block */}

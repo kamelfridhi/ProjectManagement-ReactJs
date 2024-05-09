@@ -135,7 +135,7 @@ export default function Sidebar() {
                   viewBox="0 0 16 16"
                 ></svg>
               </span>
-              <span className="logo-text">My-Task</span>
+              <span className="logo-text">TeamSphere</span>
             </a>
             {/* Menu: main ul */}
             <ul className="menu-list flex-grow-1 mt-3">

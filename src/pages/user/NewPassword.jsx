@@ -31,6 +31,7 @@ export default function ChangePassword() {
                 const data = await res.json();
                 toast.error(data.message); // Display error message if available
             }
+            navigate('/');
         } catch (error) {
             toast.error("An error occurred while resetting password."); // Display generic error message
             console.error("Error resetting password:", error);
@@ -74,7 +75,7 @@ export default function ChangePassword() {
                                         </div>
                                         <div className="mb-5">
                                             <h2 className="color-900 text-center">
-                                                My-Task Let's Management Better
+                                                TeamSphere Let's Management Better
                                             </h2>
                                         </div>
                                         {/* Image block */}

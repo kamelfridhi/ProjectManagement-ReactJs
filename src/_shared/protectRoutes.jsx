@@ -87,7 +87,7 @@ const AccountNotVerified = () => {
                     <div className="row align-items-center">
                         <div className="border-0 mb-4">
                             <div className="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h3 className="fw-bold mb-0">Tickets Detail</h3>
+                                <h3 className="fw-bold mb-0">Welcome to TeamSphere {currentUser.firstName}</h3>
                             </div>
                         </div>
                     </div>{" "}

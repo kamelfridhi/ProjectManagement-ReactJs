@@ -4,7 +4,7 @@ import { acceptUser, declinetUser } from "../../../_services/UserService.jsx";
 import { useSelector } from "react-redux";
 import { selectUserObject } from "../../../redux/user/userSelector.js";
 import io from 'socket.io-client';
-let socket= io('nestpiteamsphere-production.up.railway.app');
+let socket= io('http://localhost:3000');
 
 
 export default function LineOfTable({ user, etat }) {
@@ -35,7 +35,7 @@ export default function LineOfTable({ user, etat }) {
 
     const updateRole = async (role) => {
         try {
-            const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/setRole/${user._id}`, {
+            const response = await fetch(`http://localhost:3000/user/setRole/${user._id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ export default function LineOfTable({ user, etat }) {
     useEffect(() => {
         const fetchImageData = async () => {
             try {
-                const response = await fetch(`https://nestpiteamsphere-production.up.railway.app/user/image/${user._id}`);
+                const response = await fetch(`http://localhost:3000/user/image/${user._id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch user image');
                 }

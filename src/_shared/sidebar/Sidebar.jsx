@@ -16,7 +16,7 @@ import {
 
 import * as UserService from "../../_services/UserService.jsx";
 import io from "socket.io-client";
-let socket = io("ws://nestpiteamsphere-production.up.railway.app");
+let socket = io('http://localhost:3000');
 
 export default function Sidebar() {
   const [notifications, setNotifications] = useState([]);
@@ -68,7 +68,7 @@ export default function Sidebar() {
     const fetchImageData = async () => {
       try {
         const response = await fetch(
-          `https://nestpiteamsphere-production.up.railway.app/user/image/${currentUser._id}`
+          `http://localhost:3000/user/image/${currentUser._id}`
         );
 
         if (!response.ok) {

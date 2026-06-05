@@ -7,8 +7,8 @@ export default defineConfig({
   server: {
       proxy: {
           '/auth':{
-            target: 'https://nestpiteamsphere-production.up.railway.app',
-              secure: true,
+            target: 'http://localhost:3000',
+              secure: false,
           }
       }
   }
